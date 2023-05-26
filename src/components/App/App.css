@@ -1,0 +1,26 @@
+:root {
+  --page-width: 98%;
+  --header-font: 18px;
+  --main-font: 15px;
+  --header-font: 1.2em;
+  --transition: all 0.3s;
+  --main-gap: 55px;
+  --top-gap: 25px;
+  --light-grey: #bebebe;
+}
+
+.page {
+  font-family: 'Noto Sans Display', Sans-serif, Arial, Helvetica;
+  font-weight: 300;
+  font-size: var(--main-font);
+}
+
+.page__wrapper {
+  margin: auto;
+  width: var(--page-width);
+  max-width: 1300px;
+  min-height: 100vh;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
