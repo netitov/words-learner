@@ -31,6 +31,7 @@
   margin-right: 7px;
   font-size: 1.2em;
   transition: var(--transition);
+  border-bottom: 1px solid transparent;
 }
 
 .promo__btn:hover > p {
@@ -38,19 +39,35 @@
   border-bottom: 1px solid #000;
 }
 
-.promo__arrow {
-  border: solid var(--black-secodary);
-  border-width: 0 2px 2px 0;
-  display: inline-block;
-  padding: 3px;
-  transform: rotate(45deg);
-  -webkit-transform: rotate(45deg);
-  transition: var(--transition);
+.arrow {
+	cursor: pointer;
+	position: relative;
+	width: 19px;
+	height: 13px;
+
+	&::before {
+		transform: rotate(-135deg);
+	}
+
+	&::after {
+		transform: rotate(135deg);
+	}
 }
 
-.promo__btn_active > .promo__arrow {
-  transform: rotate(-135deg);
-  -webkit-transform: rotate(-135deg);
+.arrow::before, .arrow::after  {
+  content: '';
+  left: 8px;
+  width: 1.7px;
+  height: 9px;
+  position: absolute;
+  border-bottom: 10.7px solid var(--black-secodary);
+  transition: transform .2s ease;
 }
 
+.promo__btn_active .arrow::before {
+  transform: translateY(-8px) rotate(-45deg);
+}
 
+.promo__btn_active .arrow::after {
+  transform: translateY(-8px) rotate(45deg);
+}

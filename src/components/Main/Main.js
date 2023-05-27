@@ -18,7 +18,7 @@ function Main() {
           <p>Find and learn common english words and track your progress.</p>
           <button className={`promo__btn${btnActive ? ' promo__btn_active' : ''}`} type="button" onClick={handleBtn}>
             <p>Watch more</p>
-            <span className='promo__arrow'></span>
+            <div class="promo__arrow arrow"></div>
           </button>
         </div>
       </div>
