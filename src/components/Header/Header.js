@@ -6,7 +6,7 @@ function Header() {
   const [activeMenu, setActiveMenu] = useState(false);
   return (
     <header>
-      <nav className="nav header__nav">
+      <nav className='nav header__nav'>
         <ul className={`nav__ul${activeMenu ? ' nav__ul_active' : ''}`}>
 
           <li className={`nav__li`}>

@@ -1,0 +1,56 @@
+
+
+.main__promo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.promo__img {
+  max-height: 300px;
+}
+
+.promo__container p {
+  font-size: 1.4em;
+}
+
+.promo__btn {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  margin: 5px 0 0;
+  background: 0;
+  border: 0;
+  font-weight: 300;
+  color: var(--black-secodary);
+  cursor: pointer;
+}
+
+.promo__btn > p {
+  margin-right: 7px;
+  font-size: 1.2em;
+  transition: var(--transition);
+}
+
+.promo__btn:hover > p {
+  color: #000;
+  border-bottom: 1px solid #000;
+}
+
+.promo__arrow {
+  border: solid var(--black-secodary);
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 3px;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  transition: var(--transition);
+}
+
+.promo__btn_active > .promo__arrow {
+  transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+}
+
+

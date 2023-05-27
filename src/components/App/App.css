@@ -5,8 +5,10 @@
   --header-font: 1.2em;
   --transition: all 0.3s;
   --main-gap: 55px;
-  --top-gap: 25px;
+  --top-gap: 35px;
   --light-grey: #bebebe;
+  --black-secodary: #0000007a;
+  --main-green: #127386;
 }
 
 .page {
@@ -21,6 +23,6 @@
   max-width: 1300px;
   min-height: 100vh;
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   flex-direction: column;
 }
