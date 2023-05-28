@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import promoImg from '../../images/Picture.svg';
+import Translate from '../Translator/Translator';
 
 function Main() {
 
@@ -18,10 +19,12 @@ function Main() {
           <p>Find and learn common english words and track your progress.</p>
           <button className={`promo__btn${btnActive ? ' promo__btn_active' : ''}`} type="button" onClick={handleBtn}>
             <p>Watch more</p>
-            <div class="promo__arrow arrow"></div>
+            <div className="promo__arrow arrow"></div>
           </button>
         </div>
       </div>
+      <Translate />
+
     </main>
   )
 }

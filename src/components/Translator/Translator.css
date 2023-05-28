@@ -1,0 +1,143 @@
+.translator-wrapper {
+  margin-bottom: var(--main-gap);
+}
+
+.translator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.translator__swap-btn {
+  padding: 5px;
+  cursor: pointer;
+}
+
+.translator__swap-btn > svg {
+  fill: var(--middle-green);
+  width: 35px;
+  transition: var(--transition);
+}
+
+.translator__swap-btn:hover > svg {
+  transform: rotateY(180deg);
+  fill: var(--main-green);
+}
+
+
+
+.translator__box {
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.translator__lang {
+  background: var(--light-green);
+  border-bottom: 1px solid #12738638;
+  padding: 12px 0;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.translator__lang:hover {
+  background: #12738659;
+}
+
+.translator__lang_input {
+  background: var(--super-light-green);
+}
+
+.translator__container {
+  height: 150px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  justify-content: space-between;
+  position: relative;
+}
+
+.translator__container > span {
+  display: flex;
+  align-self: flex-end;
+  font-size: 0.9em;
+  color: var(--black-secodary);
+}
+
+.translator__container_input {
+  background: var(--super-light-green);
+}
+
+.translator__container_output {
+  background: var(--light-green);
+}
+
+.translator__text {
+  resize: none;
+  outline: none;
+  border: none;
+  width: calc(100% - 50px);
+  height: 75%;
+  box-sizing: border-box;
+  background: transparent;
+  font-size: 1.2em;
+  font-weight: 300;
+}
+
+.translator__btn {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 10px;
+  border-radius: 50%;
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.btn-cross {
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+
+}
+
+.translator__btn:hover {
+  background: var(--light-green);
+}
+
+.btn-cross svg {
+  display: block;
+  transform: rotate(45deg);
+  width: 14px;
+}
+
+.btn-cross svg line {
+  stroke: var(--black-secodary);
+  stroke-width: 8;
+}
+
+.error {
+  bottom: 5px;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 100%);
+  -moz-transform: translate(-50%, 100%);
+  padding: 5px;
+  background: var(--light-red);
+  border-radius: 10px;
+  color: #fff;
+  visibility: hidden;
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.error_active {
+  visibility: visible;
+  opacity: 1;
+  transform: translate(-50%, 0);
+  -moz-transform: translate(-50%, 0);
+}

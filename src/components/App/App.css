@@ -9,12 +9,17 @@
   --light-grey: #bebebe;
   --black-secodary: #757575;
   --main-green: #127386;
+  --light-green: #12738638;
+  --super-light-green: #1273860f;
+  --middle-green: #7da1a9;
+  --light-red: #ff9671;
 }
 
 .page {
   font-family: 'Noto Sans Display', Sans-serif, Arial, Helvetica;
   font-weight: 300;
   font-size: var(--main-font);
+
 }
 
 .page__wrapper {

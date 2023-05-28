@@ -11,6 +11,7 @@
  html {
   line-height: 1.15; /* 1 */
   -webkit-text-size-adjust: 100%; /* 2 */
+  box-sizing: border-box;
 }
 
 /* Sections
@@ -190,6 +191,8 @@ input { /* 1 */
 button,
 select { /* 1 */
   text-transform: none;
+  background: none;
+  border: none;
 }
 
 /**
