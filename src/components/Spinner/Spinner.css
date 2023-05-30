@@ -1,0 +1,29 @@
+.spinner {
+  border: 2px solid transparent;
+  border-top: 3px solid var(--main-green);
+  border-right: 3px solid var(--main-green);
+  border-radius: 50%;
+  width: 27px;
+  height: 27px;
+  animation: spin 0.8s linear infinite;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  display: none;
+}
+
+.spinner_active {
+  display: block;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

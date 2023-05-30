@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import promoImg from '../../images/Picture.svg';
 import Translate from '../Translator/Translator';
 
-function Main() {
+function Main(props) {
 
   const [btnActive, setBtnActive] = useState(false);
 
@@ -23,7 +23,14 @@ function Main() {
           </button>
         </div>
       </div>
-      <Translate />
+      <Translate
+        translate={props.translate}
+        isLoading={props.isLoading}
+        translation={props.translation}
+        handleClear={props.handleClear}
+        chars={props.chars}
+        setChars={props.setChars}
+      />
 
     </main>
   )

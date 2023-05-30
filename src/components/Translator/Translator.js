@@ -1,19 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { charsLimit, tooltipOption } from '../../utils/constants';
 import { BsBookmarks } from 'react-icons/bs';
 import Tooltip from '@mui/material/Tooltip';
+import Spinner from '../Spinner/Spinner';
 
-function Translate() {
-
-  const [chars, setChars] = useState('');
-
-  function handleTranslate(e) {
-    setChars(e.target.value);
-  }
-
-  function handleClear() {
-    setChars('');
-  }
+function Translate(props) {
 
   return (
     <div className='translator-wrapper'>
@@ -23,15 +14,15 @@ function Translate() {
           <button className='translator__lang translator__lang_input'>English</button>
           <div className='translator__container translator__container_input'>
             <textarea
-              className='translator__text'
+              className={`translator__text${props.chars.length > 0 ? '' : ' translator__text_inactive'}`}
               placeholder='Start typing'
-              onChange={handleTranslate}
-              value={chars}
+              onChange={e => props.setChars(e.target.value)}
+              value={props.chars}
             >
             </textarea>
-            <span>{chars.length} / {charsLimit}</span>
-            <Tooltip title='delete the text' componentsProps={{ tooltip: { sx: tooltipOption, } }}>
-              <button className='btn-cross translator__btn' type='button' onClick={handleClear}>
+            <span>{props.chars.length} / {charsLimit}</span>
+            <Tooltip title='delete text' componentsProps={{ tooltip: { sx: tooltipOption, } }}>
+              <button className='btn-cross translator__btn' type='button' onClick={props.handleClear}>
                 <svg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'>
                   <line x1='0' x2='100' y1='0' y2='100' />
                   <line x1='0' x2='100' y1='100' y2='0' />
@@ -40,13 +31,13 @@ function Translate() {
             </Tooltip>
           </div>
 
-          <div className={`error${chars.length > charsLimit ? ' error_active' : ''}`}>
+          <div className={`error${props.chars.length > charsLimit ? ' error_active' : ''}`}>
             <p>Sorry, only up to {charsLimit} characters</p>
           </div>
         </div>
 
         <Tooltip title='swap out the languages' componentsProps={{ tooltip: { sx: tooltipOption, } }}>
-          <button className='translator__swap-btn' type='button' onClick={handleClear}>
+          <button className='translator__swap-btn' type='button'>
             <svg id='_Слой_1' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 288.33 145.4'>
               <defs></defs>
               <rect className='cls-1' y='33.28' width='263.84' height='4.08'/>
@@ -60,14 +51,18 @@ function Translate() {
         <div className='translator__box'>
           <button className='translator__lang'>Russian</button>
           <div className='translator__container translator__container_output'>
-            <div className='translator__text'>Translation will be here</div>
+            <p className={`translator__text${props.chars.length > 0 ? '' : ' translator__text_inactive'}`}>
+              {props.chars.length > 0 ? props.translation : 'Translation will be here'}
+            </p>
             <div></div>
             <Tooltip title='add to the learning list' componentsProps={{ tooltip: { sx: tooltipOption, } }}>
-              <button className='translator__btn' type='button' onClick={handleClear}>
+              <button className='translator__btn' type='button' onClick={props.handleClear}>
                 <BsBookmarks size='20' color='#757575'/>
               </button>
             </Tooltip>
-
+            <Spinner
+              isLoading={props.isLoading}
+            />
           </div>
         </div>
 
