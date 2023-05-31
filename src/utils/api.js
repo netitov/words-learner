@@ -1,3 +1,4 @@
+import { SERVER_API } from './config';
 
 export async function translate({ translateTo, text }) {
   try {
@@ -6,9 +7,20 @@ export async function translate({ translateTo, text }) {
     );
     const result = await response.json();
     return result;
-
   } catch (err) {
     console.error(err);
   }
+}
 
+export async function getLanguages() {
+  try {
+    const response = await fetch(`${SERVER_API}/languages`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    const result = await response.json();
+    return result;
+  } catch (err) {
+    console.error(err);
+  }
 }
