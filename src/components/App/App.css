@@ -10,9 +10,14 @@
   --black-secodary: #757575;
   --main-green: #127386;
   --light-green: #12738638;
-  --super-light-green: #1273860f;
+  --super-light-green: #dbecec;
   --middle-green: #7da1a9;
+  --hover-green: #bedcdf;
+  --main-blue: #aacdd4;
   --light-red: #ff9671;
+  --white: #f5f9f9;
+  --lang-btn-height: 42px;
+  --translate-radius: 10px;
 }
 
 .page {

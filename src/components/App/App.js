@@ -9,6 +9,8 @@ function App() {
   const [translation, setTranslation] = useState('');
   const [chars, setChars] = useState('');
   const [availLang, setAvailLang] = useState([]);
+  const [langListActive, setLangListActive] = useState(false);
+  const [activeLang, setActiveLang] = useState('Russian');
 
   //getLanguages();
 
@@ -19,7 +21,9 @@ function App() {
     ])
       .then(([lang]) => {
         //localStorage.setItem('standings', JSON.stringify(st));
-        setAvailLang(lang);
+
+        const sortedLangs = lang.sort((a, b) => a.language.localeCompare(b.language));
+        setAvailLang(sortedLangs);
       })
       .catch((err) => {
         console.log(err);
@@ -49,8 +53,36 @@ function App() {
     }
   }, [chars]);
 
-  function test() {
-    console.log(availLang)
+
+  //close popup on esc and overlay click
+  useEffect(() => {
+    function handleEscClose(e) {
+      if (e.key === 'Escape') {
+        setLangListActive(false);
+      }
+    }
+    function handleOverlayClose (e) {
+      if (!e.target.classList.contains('languages') && !e.target.classList.contains('translator__lang')
+        && !e.target.classList.contains('languages__search')) {
+        setLangListActive(false);
+      }
+    }
+    document.addEventListener('keyup', handleEscClose);
+    document.addEventListener('click', handleOverlayClose);
+  }, [])
+
+  //open popup available languages list
+  function openLangList() {
+    setLangListActive(!langListActive);
+  }
+
+  //select language for translation
+  function selectLang(data) {
+    setActiveLang(data)
+  }
+
+  function test(e) {
+
   }
 
   return (
@@ -64,6 +96,11 @@ function App() {
           handleClear={deleteText}
           chars={chars}
           setChars={setChars}
+          languages={availLang}
+          isActive={langListActive}
+          openLangList={openLangList}
+          selectLang={selectLang}
+          activeLang={activeLang}
         />
 
       </div>

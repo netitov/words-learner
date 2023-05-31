@@ -30,6 +30,11 @@ function Main(props) {
         handleClear={props.handleClear}
         chars={props.chars}
         setChars={props.setChars}
+        languages={props.languages}
+        isActive={props.isActive}
+        openLangList={props.openLangList}
+        selectLang={props.selectLang}
+        activeLang={props.activeLang}
       />
 
     </main>

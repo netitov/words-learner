@@ -1,16 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { charsLimit, tooltipOption } from '../../utils/constants';
 import { BsBookmarks } from 'react-icons/bs';
 import Tooltip from '@mui/material/Tooltip';
 import Spinner from '../Spinner/Spinner';
+import Languages from '../Languages/Languages';
 
 function Translate(props) {
 
+
+
   return (
-    <div className='translator-wrapper'>
+    <div className='translator-wrapper' >
       <div className='translator'>
 
-        <div className='translator__box'>
+        <div className='translator__box translator__box_input'>
           <button className='translator__lang translator__lang_input'>English</button>
           <div className='translator__container translator__container_input'>
             <textarea
@@ -36,7 +39,7 @@ function Translate(props) {
           </div>
         </div>
 
-        <Tooltip title='swap out the languages' componentsProps={{ tooltip: { sx: tooltipOption, } }}>
+        <Tooltip title='swap languages' componentsProps={{ tooltip: { sx: tooltipOption, } }}>
           <button className='translator__swap-btn' type='button'>
             <svg id='_Слой_1' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 288.33 145.4'>
               <defs></defs>
@@ -48,8 +51,8 @@ function Translate(props) {
           </button>
         </Tooltip>
 
-        <div className='translator__box'>
-          <button className='translator__lang'>Russian</button>
+        <div className='translator__box translator__box_output'>
+          <button className={`translator__lang`} onClick={props.openLangList}>{props.activeLang}</button>
           <div className='translator__container translator__container_output'>
             <p className={`translator__text${props.chars.length > 0 ? '' : ' translator__text_inactive'}`}>
               {props.chars.length > 0 ? props.translation : 'Translation will be here'}
@@ -65,6 +68,13 @@ function Translate(props) {
             />
           </div>
         </div>
+
+        <Languages
+          languages={props.languages}
+          isActive={props.isActive}
+          selectLang={props.selectLang}
+          activeLang={props.activeLang}
+        />
 
       </div>
     </div>

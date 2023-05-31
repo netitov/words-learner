@@ -1,22 +1,24 @@
 .translator-wrapper {
-  margin-bottom: var(--main-gap);
+  max-width: 1200px;
+  margin: auto;
 }
 
 .translator {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
+  position: relative;
 }
 
 .translator__swap-btn {
-  padding: 5px;
+  padding: 0;
   cursor: pointer;
 }
 
 .translator__swap-btn > svg {
   fill: var(--middle-green);
-  width: 35px;
+  width: 30px;
   transition: var(--transition);
 }
 
@@ -26,26 +28,36 @@
 }
 
 .translator__box {
-  width: 45%;
+  width: 50%;
   display: flex;
   flex-direction: column;
   position: relative;
+  border-radius: var(--translate-radius);
+}
+
+.translator__box_input {
+  background: var(--white);
+  box-shadow: 0px 0px 10px 3px #e3ebeb;
+
+}
+
+.translator__box_output {
+  background: var(--super-light-green);
+  box-shadow: 0px 0px 10px 3px #e3ebeb;
 }
 
 .translator__lang {
-  background: var(--light-green);
   border-bottom: 1px solid #12738638;
-  padding: 12px 0;
+  padding: 0;
+  height: var(--lang-btn-height);
+  box-sizing: border-box;
   cursor: pointer;
   transition: var(--transition);
+  border-radius: var(--translate-radius) var(--translate-radius) 0 0;
 }
 
 .translator__lang:hover {
-  background: #12738659;
-}
-
-.translator__lang_input {
-  background: var(--super-light-green);
+  background: var(--hover-green);
 }
 
 .translator__container {
@@ -63,14 +75,6 @@
   align-self: flex-end;
   font-size: 0.9em;
   color: var(--black-secodary);
-}
-
-.translator__container_input {
-  background: var(--super-light-green);
-}
-
-.translator__container_output {
-  background: var(--light-green);
 }
 
 .translator__text {
@@ -105,11 +109,10 @@
 .btn-cross {
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
-
 }
 
 .translator__btn:hover {
-  background: var(--light-green);
+  background: var(--hover-green);
 }
 
 .btn-cross svg {
