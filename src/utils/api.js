@@ -24,3 +24,16 @@ export async function getLanguages() {
     console.error(err);
   }
 }
+
+export async function getDictionary() {
+  try {
+    const response = await fetch(`${SERVER_API}/dictionary`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    const result = await response.json();
+    return result;
+  } catch (err) {
+    console.error(err);
+  }
+}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
-import { translate, getLanguages } from '../../utils/api';
+import { translate, getLanguages, getDictionary } from '../../utils/api';
 
 function App() {
 
@@ -13,22 +13,26 @@ function App() {
   const [activeLang, setActiveLang] = useState('Russian');
   const [filteredLang, setFilteredLang] = useState([]);
   const [inputText, setInputText] = useState('');
+  const [dictionary, setDictionary] = useState([]);
 
-  //create new array for filtered languages and use them!
 
-  //getLanguages();
-
+  //take once, than grab from local storage
   //get data from server
   useEffect(() => {
     Promise.all([
-      getLanguages()
+      getLanguages(),
+      getDictionary()
     ])
-      .then(([lang]) => {
+      .then(([lang, dict]) => {
         //localStorage.setItem('standings', JSON.stringify(st));
 
+        //list of languages for translation
         const sortedLangs = lang.sort((a, b) => a.language.localeCompare(b.language));
         setAvailLang(sortedLangs);
         setFilteredLang(sortedLangs);
+
+        //list of languages for translation
+        setDictionary(dict);
       })
       .catch((err) => {
         console.log(err);
