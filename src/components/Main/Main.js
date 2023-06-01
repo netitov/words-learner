@@ -35,6 +35,8 @@ function Main(props) {
         openLangList={props.openLangList}
         selectLang={props.selectLang}
         activeLang={props.activeLang}
+        searchLang={props.searchLang}
+        inputText={props.inputText}
       />
 
     </main>

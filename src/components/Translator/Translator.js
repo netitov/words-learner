@@ -74,6 +74,8 @@ function Translate(props) {
           isActive={props.isActive}
           selectLang={props.selectLang}
           activeLang={props.activeLang}
+          searchLang={props.searchLang}
+          inputText={props.inputText}
         />
 
       </div>

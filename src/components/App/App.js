@@ -11,6 +11,10 @@ function App() {
   const [availLang, setAvailLang] = useState([]);
   const [langListActive, setLangListActive] = useState(false);
   const [activeLang, setActiveLang] = useState('Russian');
+  const [filteredLang, setFilteredLang] = useState([]);
+  const [inputText, setInputText] = useState('');
+
+  //create new array for filtered languages and use them!
 
   //getLanguages();
 
@@ -24,6 +28,7 @@ function App() {
 
         const sortedLangs = lang.sort((a, b) => a.language.localeCompare(b.language));
         setAvailLang(sortedLangs);
+        setFilteredLang(sortedLangs);
       })
       .catch((err) => {
         console.log(err);
@@ -54,7 +59,7 @@ function App() {
   }, [chars]);
 
 
-  //close popup on esc and overlay click
+  //close popup available languages list on esc and overlay click
   useEffect(() => {
     function handleEscClose(e) {
       if (e.key === 'Escape') {
@@ -63,7 +68,7 @@ function App() {
     }
     function handleOverlayClose (e) {
       if (!e.target.classList.contains('languages') && !e.target.classList.contains('translator__lang')
-        && !e.target.classList.contains('languages__search')) {
+        && !e.target.classList.contains('languages__search') && !e.target.classList.contains('languages__list')) {
         setLangListActive(false);
       }
     }
@@ -71,9 +76,14 @@ function App() {
     document.addEventListener('click', handleOverlayClose);
   }, [])
 
-  //open popup available languages list
+  //open/close popup available languages list on lang btn click
   function openLangList() {
     setLangListActive(!langListActive);
+    //drop previous data before opening
+    if (!langListActive) {
+      setInputText('');
+      setFilteredLang(availLang);
+    }
   }
 
   //select language for translation
@@ -81,8 +91,15 @@ function App() {
     setActiveLang(data)
   }
 
-  function test(e) {
+  //search language through translator
+  function searchLang(data) {
+    setInputText(data);
+    const text = data.toLowerCase();
+    const filteredArr = availLang.filter((i) => i.language.toLowerCase().includes(text));
+    setFilteredLang(filteredArr);
+  }
 
+  function test(e) {
   }
 
   return (
@@ -96,11 +113,13 @@ function App() {
           handleClear={deleteText}
           chars={chars}
           setChars={setChars}
-          languages={availLang}
+          languages={filteredLang}
           isActive={langListActive}
           openLangList={openLangList}
           selectLang={selectLang}
           activeLang={activeLang}
+          searchLang={searchLang}
+          inputText={inputText}
         />
 
       </div>
