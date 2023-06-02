@@ -43,9 +43,11 @@ function App() {
   //get translation; switch the spinner
   async function getTranslation(text) {
     const langs = activeLangInput.code + '-' + activeLangOutput.code;
-    const translation = await translate({ langs, text });
+    const inDictionary = dictionary.some((i) => i.languages === langs);
+    const response = await translate({ langs, text, inDictionary });
     setIsLoading(false);
-    setTranslation(translation.text[0]);
+    const translation = response.text === undefined ? response[0].tr[0].text : response.text[0];
+    setTranslation(translation);
   }
 
   //clear the text input
@@ -128,7 +130,6 @@ function App() {
   }
 
   function test() {
-
   }
 
   return (
