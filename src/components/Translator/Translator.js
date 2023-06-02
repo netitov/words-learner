@@ -7,14 +7,27 @@ import Languages from '../Languages/Languages';
 
 function Translate(props) {
 
+  const [activeBtn, setActiveBtn] = useState({
+    lang: '', type: ''
+  });
 
+  function handleLangClick(e) {
+    setActiveBtn({ lang: e.target.textContent, type: e.target.dataset.type });
+    props.openLangList(e.target.dataset.type);
+  }
 
   return (
     <div className='translator-wrapper' >
       <div className='translator'>
 
         <div className='translator__box translator__box_input'>
-          <button className='translator__lang translator__lang_input'>English</button>
+          <button
+            className='translator__lang translator__lang_input'
+            onClick={handleLangClick}
+            data-type='input'
+          >
+            {props.activeLangInput.lang}
+          </button>
           <div className='translator__container translator__container_input'>
             <textarea
               className={`translator__text${props.chars.length > 0 ? '' : ' translator__text_inactive'}`}
@@ -52,7 +65,13 @@ function Translate(props) {
         </Tooltip>
 
         <div className='translator__box translator__box_output'>
-          <button className={`translator__lang`} onClick={props.openLangList}>{props.activeLang}</button>
+          <button
+            className={`translator__lang`}
+            onClick={handleLangClick}
+            data-type='output'
+          >
+            {props.activeLangOutput.lang}
+          </button>
           <div className='translator__container translator__container_output'>
             <p className={`translator__text${props.chars.length > 0 ? '' : ' translator__text_inactive'}`}>
               {props.chars.length > 0 ? props.translation : 'Translation will be here'}
@@ -73,7 +92,7 @@ function Translate(props) {
           languages={props.languages}
           isActive={props.isActive}
           selectLang={props.selectLang}
-          activeLang={props.activeLang}
+          activeBtn={activeBtn}
           searchLang={props.searchLang}
           inputText={props.inputText}
         />

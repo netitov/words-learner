@@ -34,9 +34,10 @@ function Main(props) {
         isActive={props.isActive}
         openLangList={props.openLangList}
         selectLang={props.selectLang}
-        activeLang={props.activeLang}
+        activeLangOutput={props.activeLangOutput}
         searchLang={props.searchLang}
         inputText={props.inputText}
+        activeLangInput={props.activeLangInput}
       />
 
     </main>

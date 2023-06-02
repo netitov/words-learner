@@ -1,3 +1,4 @@
+
 .languages-wrapper {
   position: absolute;
   top: var(--lang-btn-height);
@@ -7,11 +8,12 @@
   min-height: 755px;
   opacity: 0;
   transition: visibility 0.2s linear, opacity 0.2s linear;
+
 }
 
 .languages-wrapper_active {
   visibility: visible;
-  opacity: 1
+  opacity: 1;
 }
 
 .languages {
@@ -21,6 +23,11 @@
   padding: 10px;
   z-index: 2;
   min-height: 150px;
+  transition: var(--transition);
+}
+
+.languages_input {
+  background: var(--white);
 }
 
 .languages__search {
@@ -33,6 +40,11 @@
   background: var(--white);
   outline: none;
   padding: 5px 10px;
+  transition: var(--transition);
+}
+
+.languages__search_input {
+  background: var(--super-light-green);
 }
 
 .languages__list {
@@ -61,12 +73,17 @@
   color: var(--main-green);
 }
 
-.languages__item > svg {
+.languages__mark {
+  min-width: 31px;
+  display: flex;
+}
+
+.languages__item svg {
   padding: 0 8px;
   visibility: hidden;
 }
 
-.languages__item_active > svg {
+.languages__item_active svg {
   visibility: visible;
 }
 

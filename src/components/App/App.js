@@ -9,14 +9,15 @@ function App() {
   const [translation, setTranslation] = useState('');
   const [chars, setChars] = useState('');
   const [availLang, setAvailLang] = useState([]);
-  const [langListActive, setLangListActive] = useState(false);
-  const [activeLang, setActiveLang] = useState('Russian');
+  const [langListActive, setLangListActive] = useState({ type: '', value: false });
+  const [activeLangInput, setActiveLangInput] = useState({ lang: 'English', code: 'en' });
+  const [activeLangOutput, setActiveLangOutput] = useState({ lang: 'Russian', code: 'ru' });
   const [filteredLang, setFilteredLang] = useState([]);
   const [inputText, setInputText] = useState('');
   const [dictionary, setDictionary] = useState([]);
 
 
-  //take once, than grab from local storage
+  //take once, than grab from local storage. How to update it?
   //get data from server
   useEffect(() => {
     Promise.all([
@@ -40,10 +41,11 @@ function App() {
   }, []);
 
   //get translation; switch the spinner
-  async function getTranslation(data) {
-    const translation = await translate({ text: data });
+  async function getTranslation(text) {
+    const langs = activeLangInput.code + '-' + activeLangOutput.code;
+    const translation = await translate({ langs, text });
     setIsLoading(false);
-    setTranslation(translation.text[0]);
+    //setTranslation(translation.text[0]);
   }
 
   //clear the text input
@@ -59,21 +61,22 @@ function App() {
       return () => clearTimeout(timeOutId);
     } else {
       setTranslation('');
+      setIsLoading(false);
     }
-  }, [chars]);
+  }, [chars, activeLangInput, activeLangOutput]);
 
 
   //close popup available languages list on esc and overlay click
   useEffect(() => {
     function handleEscClose(e) {
       if (e.key === 'Escape') {
-        setLangListActive(false);
+        setLangListActive({ value: false });
       }
     }
     function handleOverlayClose (e) {
       if (!e.target.classList.contains('languages') && !e.target.classList.contains('translator__lang')
         && !e.target.classList.contains('languages__search') && !e.target.classList.contains('languages__list')) {
-        setLangListActive(false);
+        setLangListActive({ value: false });
       }
     }
     document.addEventListener('keyup', handleEscClose);
@@ -81,18 +84,34 @@ function App() {
   }, [])
 
   //open/close popup available languages list on lang btn click
-  function openLangList() {
-    setLangListActive(!langListActive);
+  function openLangList(type) {
+
+    if (type === langListActive.type) {
+      setLangListActive({ type: '', value: false });
+    } else {
+      dropSearch();
+      setLangListActive({ type: type, value: true });
+    }
     //drop previous data before opening
-    if (!langListActive) {
-      setInputText('');
-      setFilteredLang(availLang);
+    if (!langListActive.value) {
+      dropSearch();
     }
   }
 
   //select language for translation
-  function selectLang(data) {
-    setActiveLang(data)
+  function selectLang(lang, type, code) {
+    if (type === 'input') {
+      //setActiveLangInput(lang);
+      setActiveLangInput({ lang, code });
+    } else {
+      //setActiveLangOutput(lang);
+      setActiveLangOutput({ lang, code });
+    }
+  }
+
+  function dropSearch() {
+    setInputText('');
+    setFilteredLang(availLang);
   }
 
   //search language through translator
@@ -103,7 +122,8 @@ function App() {
     setFilteredLang(filteredArr);
   }
 
-  function test(e) {
+  function test() {
+
   }
 
   return (
@@ -121,9 +141,10 @@ function App() {
           isActive={langListActive}
           openLangList={openLangList}
           selectLang={selectLang}
-          activeLang={activeLang}
+          activeLangOutput={activeLangOutput}
           searchLang={searchLang}
           inputText={inputText}
+          activeLangInput={activeLangInput}
         />
 
       </div>

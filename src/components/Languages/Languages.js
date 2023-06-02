@@ -3,11 +3,14 @@ import { VscCheck } from 'react-icons/vsc';
 
 function Languages(props) {
 
+  const activityClass = props.isActive.value ? ' languages_active' : '';
+  const typeClass = props.activeBtn.type === 'input' ? ' languages_input' : '';
+
   return (
-    <div className={`languages-wrapper${props.isActive ? ' languages-wrapper_active' : ''}`}>
-      <div className={`languages${props.isActive ? ' languages_active' : ''}`}>
+    <div className={`languages-wrapper${props.isActive.value ? ' languages-wrapper_active' : ''}`}>
+      <div className={`languages${activityClass}${typeClass}`}>
         <input
-          className='languages__search'
+          className={`languages__search${props.activeBtn.type === 'input' ? ' languages__search_input' : ''}`}
           type='text'
           placeholder='Search language'
           onChange={(e) => props.searchLang(e.target.value)}
@@ -18,12 +21,15 @@ function Languages(props) {
           {props.languages.map((i) => {
             return (
               <li
-                className={`languages__item ${props.activeLang === i.language ? ' languages__item_active' : ''}`}
+                className={`languages__item ${props.activeBtn.lang === i.language ? ' languages__item_active' : ''}`}
                 data-code={i.code}
                 key={i.code}
-                onClick={() => props.selectLang(i.language)}
+                onClick={() => props.selectLang(i.language, props.activeBtn.type, i.code)}
               >
-                <VscCheck />
+                <div className='languages__mark'>
+                  {props.activeBtn.lang === i.language ? <VscCheck /> : ''}
+                </div>
+
                 <span>{i.language}</span>
               </li>
             )
