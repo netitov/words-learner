@@ -38,6 +38,7 @@ function Main(props) {
         searchLang={props.searchLang}
         inputText={props.inputText}
         activeLangInput={props.activeLangInput}
+        swapLangs={props.swapLangs}
       />
 
     </main>

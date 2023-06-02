@@ -45,7 +45,7 @@ function App() {
     const langs = activeLangInput.code + '-' + activeLangOutput.code;
     const translation = await translate({ langs, text });
     setIsLoading(false);
-    //setTranslation(translation.text[0]);
+    setTranslation(translation.text[0]);
   }
 
   //clear the text input
@@ -57,7 +57,7 @@ function App() {
   useEffect(() => {
     if(chars.length > 0) {
       setIsLoading(true);
-      const timeOutId = setTimeout(() => getTranslation(chars), 1500);
+      const timeOutId = setTimeout(() => getTranslation(chars), 1500);//delay before start translating
       return () => clearTimeout(timeOutId);
     } else {
       setTranslation('');
@@ -101,10 +101,8 @@ function App() {
   //select language for translation
   function selectLang(lang, type, code) {
     if (type === 'input') {
-      //setActiveLangInput(lang);
       setActiveLangInput({ lang, code });
     } else {
-      //setActiveLangOutput(lang);
       setActiveLangOutput({ lang, code });
     }
   }
@@ -120,6 +118,13 @@ function App() {
     const text = data.toLowerCase();
     const filteredArr = availLang.filter((i) => i.language.toLowerCase().includes(text));
     setFilteredLang(filteredArr);
+  }
+
+  function swapLangs() {
+    setActiveLangInput(activeLangOutput);
+    setActiveLangOutput(activeLangInput);
+    setChars(translation);
+    setTranslation(chars);
   }
 
   function test() {
@@ -145,6 +150,7 @@ function App() {
           searchLang={searchLang}
           inputText={inputText}
           activeLangInput={activeLangInput}
+          swapLangs={swapLangs}
         />
 
       </div>

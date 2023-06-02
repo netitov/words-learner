@@ -53,7 +53,7 @@ function Translate(props) {
         </div>
 
         <Tooltip title='swap languages' componentsProps={{ tooltip: { sx: tooltipOption, } }}>
-          <button className='translator__swap-btn' type='button'>
+          <button className='translator__swap-btn' type='button' onClick={props.swapLangs}>
             <svg id='_Слой_1' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 288.33 145.4'>
               <defs></defs>
               <rect className='cls-1' y='33.28' width='263.84' height='4.08'/>

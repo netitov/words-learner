@@ -3,7 +3,7 @@ import { SERVER_API } from './config';
 export async function translate({ langs, text }) {
   console.log('translated')
   console.log({ langs, text })
-  /* try {
+  try {
     const response = await fetch(`https://translate.yandex.net/api/v1.5/tr.json/translate?key=${process.env.REACT_APP_YTRANSL_KEY}&text=${text}&lang=${langs}`,
     { method: 'POST' }
     );
@@ -11,7 +11,7 @@ export async function translate({ langs, text }) {
     return result;
   } catch (err) {
     console.error(err);
-  } */
+  }
 }
 
 export async function getLanguages() {
