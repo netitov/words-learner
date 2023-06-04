@@ -39,6 +39,7 @@ function Main(props) {
         inputText={props.inputText}
         activeLangInput={props.activeLangInput}
         swapLangs={props.swapLangs}
+        otherTransl={props.otherTransl}
       />
 
     </main>

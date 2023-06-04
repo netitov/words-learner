@@ -1,0 +1,102 @@
+.dictionary {
+  grid-column: 3;
+  padding: 10px;
+  visibility: hidden;
+  transform: scaleY(0);
+  -webkit-transform: scaleY(0);
+  transform-origin: top;
+  -webkit-transform-origin: top;
+  transition: visibility 0.2s ease, transform 0.3s ease;
+}
+
+.dictionary_active {
+  visibility: visible;
+  transform: scaleY(1);
+  -webkit-transform: scaleY(1);
+}
+
+.dictionary__heading {
+  margin: 0;
+  font-weight: 400;
+  font-size: 1.25em;
+}
+
+.dictionary__translations {
+  margin-top: 20px;
+}
+
+.dictionary__pos-card  {
+  margin-top: 13px;
+}
+
+.dictionary__pos {
+  font-weight: 400;
+  font-size: 1.1em;
+  margin: 0px 0 7px 0;
+}
+
+.dictionary__ul {
+  padding: 0;
+  display: flex;
+  margin: 0;
+  flex-wrap: wrap;
+}
+
+.dictionary__item {
+  margin: 0 5px 10px 5px;
+  padding: 4px 7px;
+  background: var(--super-light-green);
+  border-radius: var(--translate-radius);
+}
+
+
+/* .table {
+  display: grid;
+  grid-template-columns: auto 1fr 1fr;
+  justify-items: stretch;
+  align-items: stretch;
+  grid-column-gap: 10px;
+  grid-row-gap: 20px;
+} */
+
+table {
+  border-spacing: 0;
+  width: 100%;
+}
+
+th {
+  font-weight: 400;
+}
+
+td {
+  border-top: 1px solid #bebebe6e;
+}
+
+.table__data_transl {
+  width: 50%;
+}
+
+.table__block {
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  flex-wrap: wrap;
+  padding: 10px;
+}
+
+.table__block > span {
+  padding: 3px 9px;
+  border-radius: 10px;
+  margin: 5px;
+}
+
+.table__block_transl > span {
+  background: var(--super-light-green);
+}
+
+.table__block_syn > span {
+  background: var(--white);
+}
+
+
+

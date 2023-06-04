@@ -4,6 +4,7 @@ import { BsBookmarks } from 'react-icons/bs';
 import Tooltip from '@mui/material/Tooltip';
 import Spinner from '../Spinner/Spinner';
 import Languages from '../Languages/Languages';
+import Dictionary from '../Dictionary/Dictionary';
 
 function Translate(props) {
 
@@ -95,6 +96,10 @@ function Translate(props) {
           activeBtn={activeBtn}
           searchLang={props.searchLang}
           inputText={props.inputText}
+        />
+
+        <Dictionary
+          otherTransl={props.otherTransl}
         />
 
       </div>

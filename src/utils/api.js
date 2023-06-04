@@ -20,6 +20,7 @@ async function checkDictionary({ langs, text }) {
     { method: 'GET' }
     );
     const result = await response.json();
+    console.log(result)
     return result.def;
   } catch (err) {
     console.error(err);

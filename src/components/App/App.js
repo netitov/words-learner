@@ -15,6 +15,7 @@ function App() {
   const [filteredLang, setFilteredLang] = useState([]);
   const [inputText, setInputText] = useState('');
   const [dictionary, setDictionary] = useState([]);
+  const [otherTransl, setOtherTransl] = useState([]);
 
 
   //take once, than grab from local storage. How to update it?
@@ -46,8 +47,11 @@ function App() {
     const inDictionary = dictionary.some((i) => i.languages === langs);
     const response = await translate({ langs, text, inDictionary });
     setIsLoading(false);
+
     const translation = response.text === undefined ? response[0].tr[0].text : response.text[0];
+    const otherTranslations = (response.text === undefined && response.length > 0) ? response : [];
     setTranslation(translation);
+    setOtherTransl(otherTranslations);
   }
 
   //clear the text input
@@ -63,6 +67,7 @@ function App() {
       return () => clearTimeout(timeOutId);
     } else {
       setTranslation('');
+      setOtherTransl([]);
       setIsLoading(false);
     }
   }, [chars, activeLangInput, activeLangOutput]);
@@ -152,6 +157,7 @@ function App() {
           inputText={inputText}
           activeLangInput={activeLangInput}
           swapLangs={swapLangs}
+          otherTransl={otherTransl}
         />
 
       </div>
