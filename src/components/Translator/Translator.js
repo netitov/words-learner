@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { charsLimit, tooltipOption } from '../../utils/constants';
 import { BsBookmarks } from 'react-icons/bs';
+import { AiOutlineQuestionCircle } from 'react-icons/ai';
 import Tooltip from '@mui/material/Tooltip';
 import Spinner from '../Spinner/Spinner';
 import Languages from '../Languages/Languages';
 import Dictionary from '../Dictionary/Dictionary';
+import ColumnChart from '../ColumnChart/ColumnChart';
 
 function Translate(props) {
 
@@ -37,7 +39,37 @@ function Translate(props) {
               value={props.chars}
             >
             </textarea>
-            <span>{props.chars.length} / {charsLimit}</span>
+
+            <div className='translator__secondary-container'>
+              <div
+                className={`translator__freq-box${props.frequency.text.length > 0
+                  && props.activeLangInput.lang === 'English' ? ' translator__freq-box_active' : ''}`
+                }
+              >
+                <ColumnChart value={props.frequency.value}/>
+                <span>{props.frequency.text} frequency</span>
+                <Tooltip
+                  componentsProps={{ tooltip: { sx: tooltipOption, } }}
+                  title={
+                    <p>Word frequencies based on subtitles of British television programs.&nbsp;
+                      <a
+                        href='http://crr.ugent.be/papers/van_Heuven_et_al_SUBTLEX-UK.pdf'
+                        target='_blank'
+                        rel='noreferrer'
+                        className='translator__tlt-link'
+                      >Learn more</a>
+                    </p>
+                  }
+                >
+                  <button className='translator__tlt-btn'>
+                    <AiOutlineQuestionCircle size='15' color='#757575' />
+                  </button>
+
+                </Tooltip>
+              </div>
+              <span>{props.chars.length} / {charsLimit}</span>
+            </div>
+
             <Tooltip title='delete text' componentsProps={{ tooltip: { sx: tooltipOption, } }}>
               <button className='btn-cross translator__btn' type='button' onClick={props.handleClear}>
                 <svg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'>
@@ -77,7 +109,35 @@ function Translate(props) {
             <p className={`translator__text${props.chars.length > 0 ? '' : ' translator__text_inactive'}`}>
               {props.chars.length > 0 ? props.translation : 'Translation will be here'}
             </p>
-            <div></div>
+
+            <div className='translator__secondary-container'>
+              <div
+                className={`translator__freq-box${props.frequency.text.length > 0
+                  && props.activeLangOutput.lang === 'English' ? ' translator__freq-box_active' : ''}`
+                }
+              >
+                <ColumnChart value={props.frequency.value}/>
+                <span>{props.frequency.text} frequency</span>
+                <Tooltip
+                  componentsProps={{ tooltip: { sx: tooltipOption, } }}
+                  title={
+                    <p>Word frequencies based on subtitles of British television programs.&nbsp;
+                      <a
+                        href='http://crr.ugent.be/papers/van_Heuven_et_al_SUBTLEX-UK.pdf'
+                        target='_blank'
+                        rel='noreferrer'
+                        className='translator__tlt-link'
+                      >Learn more</a>
+                    </p>
+                  }
+                >
+                  <button className='translator__tlt-btn'>
+                    <AiOutlineQuestionCircle size='15' color='#757575' />
+                  </button>
+                </Tooltip>
+              </div>
+            </div>
+
             <Tooltip title='add to the learning list' componentsProps={{ tooltip: { sx: tooltipOption, } }}>
               <button className='translator__btn' type='button' onClick={props.handleClear}>
                 <BsBookmarks size='20' color='#757575'/>

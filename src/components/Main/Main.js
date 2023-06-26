@@ -40,6 +40,7 @@ function Main(props) {
         activeLangInput={props.activeLangInput}
         swapLangs={props.swapLangs}
         otherTransl={props.otherTransl}
+        frequency={props.frequency}
       />
 
     </main>

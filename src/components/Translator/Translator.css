@@ -72,11 +72,44 @@
   position: relative;
 }
 
-.translator__container > span {
+.translator__secondary-container {
   display: flex;
-  align-self: flex-end;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.translator__secondary-container span {
   font-size: 0.9em;
   color: var(--black-secodary);
+  margin: 0 7px;
+}
+
+.translator__freq-box {
+  display: flex;
+  align-items: end;
+  visibility: hidden;
+}
+
+.translator__freq-box_active {
+  visibility: visible;
+}
+
+.translator__tlt-link {
+  text-decoration: underline;
+  transition: var(--transition);
+}
+
+.translator__tlt-link:hover {
+  opacity: 0.6;
+}
+
+.translator__tlt-btn {
+  padding: 3px 3px 0 3px;
+  cursor: pointer;
+}
+
+.translator__tlt-btn > svg {
+  display: block;
 }
 
 .translator__text {

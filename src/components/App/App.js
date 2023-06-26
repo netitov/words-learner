@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
-import { translate, getLanguages, getDictionary } from '../../utils/api';
+import { translate, getLanguages, getDictionary, checkFrequency } from '../../utils/api';
 
 function App() {
 
@@ -16,6 +16,7 @@ function App() {
   const [inputText, setInputText] = useState('');
   const [dictionary, setDictionary] = useState([]);
   const [otherTransl, setOtherTransl] = useState([]);
+  const [frequency, setFrequency] = useState({ value: 0, text: '' });
 
 
   //take once, than grab from local storage. How to update it?
@@ -43,15 +44,42 @@ function App() {
 
   //get translation; switch the spinner
   async function getTranslation(text) {
+    //get translation
     const langs = activeLangInput.code + '-' + activeLangOutput.code;
     const inDictionary = dictionary.some((i) => i.languages === langs);
     const response = await translate({ langs, text, inDictionary });
     setIsLoading(false);
 
+    //use translation
     const translation = response.text === undefined ? response[0].tr[0].text : response.text[0];
     const otherTranslations = (response.text === undefined && response.length > 0) ? response : [];
     setTranslation(translation);
     setOtherTransl(otherTranslations);
+
+    //get frequency if english is selected
+    if (chars.split(' ').length === 1) {
+      if (activeLangInput.lang === 'English') {
+        getFrequency(chars);
+      } else if (activeLangOutput.lang === 'English') {
+        getFrequency(translation);
+      } else setFrequency({ value: 0, text: '' });
+    }
+  }
+
+  //get word frequency
+  async function getFrequency(word) {
+    const resonse = await checkFrequency(word);
+
+    const getText = () => {
+      if (resonse.fr < 2) {
+        return 'very low';
+      } else if (resonse.fr < 4) {
+        return 'low';
+      } else if (resonse.fr < 6) {
+        return 'high';
+      } else return 'very high';
+    }
+    setFrequency({ value: resonse.fr, text: getText() });
   }
 
   //clear the text input
@@ -63,12 +91,13 @@ function App() {
   useEffect(() => {
     if(chars.length > 0) {
       setIsLoading(true);
-      const timeOutId = setTimeout(() => getTranslation(chars), 1500);//delay before start translating
+      const timeOutId = setTimeout(() => getTranslation(chars),1500);//delay before start translating
       return () => clearTimeout(timeOutId);
     } else {
       setTranslation('');
       setOtherTransl([]);
       setIsLoading(false);
+      setFrequency({ value: 0, text: '' });
     }
   }, [chars, activeLangInput, activeLangOutput]);
 
@@ -158,6 +187,7 @@ function App() {
           activeLangInput={activeLangInput}
           swapLangs={swapLangs}
           otherTransl={otherTransl}
+          frequency={frequency}
         />
 
       </div>
