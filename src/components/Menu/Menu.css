@@ -1,0 +1,52 @@
+.menu {
+  position: absolute;
+  top: 0;
+  background-color: #000000bf;
+  opacity: 0;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  box-shadow: 0px 0px 5px 3px #393d3d42;
+  visibility: hidden;
+  transform: scaleY(0);
+  -webkit-transform: scaleY(0);
+  transform-origin: top;
+  -webkit-transform-origin: top;
+  transition: visibility 0.2s ease, transform 0.3s ease, opacity 0.3s;
+  z-index: 2;
+  color: #fff;
+  border-radius: 8px;
+  min-width: 200px;
+}
+
+.menu_active {
+  visibility: visible;
+  transform: scaleY(1);
+  opacity: 1;
+  -webkit-transform: scaleY(1);
+}
+
+.menu__ul {
+  margin: 0;
+  padding: 8px 0;
+}
+
+.menu__li {
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.menu__li:hover {
+  background: #5f5f5f;
+}
+
+.menu__li > svg {
+  /* margin-right: 10px; */
+}
+
+.menu__li > span {
+  padding-left: 10px;
+}

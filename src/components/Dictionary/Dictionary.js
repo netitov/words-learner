@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import Menu from '../Menu/Menu';
 
 function Dictionary(props) {
 
   const [otherTransl, setOtherTransl] = useState([]);
+  const [activeMenu, setActiveMenu] = useState(null);
 
   useEffect(() => {
     if(props.otherTransl.length > 0) {
@@ -17,6 +19,31 @@ function Dictionary(props) {
     }
   }, [props.otherTransl])
 
+  function openMenu(data) {
+    setActiveMenu(data);
+  }
+
+  useEffect(() => {
+    function handleEscClose(e) {
+      if (e.key === 'Escape') {
+        setActiveMenu(null);
+      }
+    }
+
+    function handleOutsideClose (e) {
+      if (!e.target.classList.contains('menu__ul') && !e.target.classList.contains('table__btn')) {
+        setActiveMenu(null);
+      }
+    }
+
+    document.addEventListener('keyup', handleEscClose);
+    document.addEventListener('click', handleOutsideClose);
+
+    return () => {
+      document.removeEventListener('keyup', handleEscClose);
+      document.removeEventListener('click', handleOutsideClose);
+    };
+  }, [])
 
   return (
     <div className={`dictionary${props.otherTransl.length > 0 ? ' dictionary_active' : ''}`}>
@@ -34,15 +61,21 @@ function Dictionary(props) {
           </thead>
 
           <tbody>
-            {otherTransl.map((i, index) => (
-              <tr key={index}>
+            {otherTransl.map((i) => (
+              <tr key={i.text}>
                 <td>{i.pos}</td>
 
                 <td>
                   <div className='table__block table__block_transl'>
-                    <span>{i.text}</span>
+                    <div className='table__btn-word'>
+                      <button className='table__btn table__btn_transl' onClick={() => openMenu(i.text)}>{i.text}</button>
+                      <Menu menuActive={activeMenu === i.text ? true : false}/>
+                    </div>
                     {i.syn?.map((s) => (
-                        <span key={s.text}>{s.text}</span>
+                      <div className='table__btn-word' key={s.text}>
+                        <button className='table__btn table__btn_transl' onClick={() => openMenu(s.text)}>{s.text}</button>
+                        <Menu menuActive={activeMenu === s.text ? true : false}/>
+                      </div>
                     ))}
                   </div>
                 </td>
@@ -52,7 +85,7 @@ function Dictionary(props) {
                     {
                       i.mean ?
                       i.mean?.map((m) => (
-                        <span key={m.text}>{m.text}</span>
+                        <button className='table__btn table__btn_syn' key={m.text}>{m.text}</button>
                       )) : <span>-</span>
                     }
                   </div>

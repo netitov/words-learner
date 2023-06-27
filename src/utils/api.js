@@ -2,7 +2,6 @@ import { SERVER_API } from './config';
 
 //CHANGE THAT. ALL THOSE REQUEST MUST BE FROM SERVER, NOT CLIENT
 async function getTranslation({ langs, text }) {
-  console.log('translated')
   try {
     const response = await fetch(`https://translate.yandex.net/api/v1.5/tr.json/translate?key=${process.env.REACT_APP_YTRANSL_KEY}&text=${text}&lang=${langs}`,
     { method: 'POST' }

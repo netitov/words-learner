@@ -117,6 +117,11 @@ function App() {
     }
     document.addEventListener('keyup', handleEscClose);
     document.addEventListener('click', handleOverlayClose);
+
+    return () => {
+      document.removeEventListener('keyup', handleEscClose);
+      document.removeEventListener('click', handleOverlayClose);
+    };
   }, [])
 
   //open/close popup available languages list on lang btn click

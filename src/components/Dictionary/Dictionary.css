@@ -84,19 +84,40 @@ td {
   padding: 10px;
 }
 
-.table__block > span {
+/* .table__block > span {
   padding: 3px 9px;
   border-radius: 10px;
   margin: 5px;
+} */
+
+.table__btn {
+  padding: 3px 9px;
+  border-radius: 10px;
+  margin: 5px;
+  font-weight: 300;
+  transition: var(--transition);
+  cursor: pointer;
 }
 
-.table__block_transl > span {
+.table__btn_transl {
   background: var(--super-light-green);
 }
 
-.table__block_syn > span {
+.table__btn_transl:hover {
+  background: #bbdcdc;
+  color: var(--main-green);
+}
+
+.table__btn_syn {
   background: var(--white);
 }
 
+.table__btn_syn:hover {
+  background: #e2e9e9;
+  color: var(--main-green);
+}
 
+.table__btn-word {
+  position: relative;
+}
 
