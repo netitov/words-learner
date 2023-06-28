@@ -1,0 +1,30 @@
+.chart-wrapper {
+  grid-row: 2;
+  padding: 10px;
+  visibility: hidden;
+  transform: scaleY(0);
+  -webkit-transform: scaleY(0);
+  transform-origin: top;
+  -webkit-transform-origin: top;
+  transition: visibility 0.2s ease, transform 0.3s ease;
+}
+
+.chart-wrapper_active {
+  visibility: visible;
+  transform: scaleY(1);
+  -webkit-transform: scaleY(1);
+}
+
+.chart-wrapper__heading {
+  margin: 0;
+  font-weight: 400;
+  font-size: 1.25em;
+}
+
+.horizontal-chart {
+  min-height: 150px;
+  /* display: flex;
+  justify-content: center; */
+  width: 90%;
+  margin-top: 20px;
+}

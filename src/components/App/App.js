@@ -16,7 +16,8 @@ function App() {
   const [inputText, setInputText] = useState('');
   const [dictionary, setDictionary] = useState([]);
   const [otherTransl, setOtherTransl] = useState([]);
-  const [frequency, setFrequency] = useState({ value: 0, text: '' });
+  const [frequency, setFrequency] = useState({ word: '', fr: 0, text: '' });
+  const [translFreqs, setTranslFreqs] = useState([]);
 
 
   //take once, than grab from local storage. How to update it?
@@ -55,6 +56,7 @@ function App() {
     const otherTranslations = (response.text === undefined && response.length > 0) ? response : [];
     setTranslation(translation);
     setOtherTransl(otherTranslations);
+    setTranslFreqs([]);
 
     //get frequency if english is selected
     if (chars.split(' ').length === 1) {
@@ -62,24 +64,25 @@ function App() {
         getFrequency(chars);
       } else if (activeLangOutput.lang === 'English') {
         getFrequency(translation);
-      } else setFrequency({ value: 0, text: '' });
+      } else setFrequency({ word: '', fr: 0, text: '' });
     }
   }
 
   //get word frequency
   async function getFrequency(word) {
-    const resonse = await checkFrequency(word);
+    const response = await checkFrequency(word);
+    const obj = response[0];
 
     const getText = () => {
-      if (resonse.fr < 2) {
+      if (obj.fr < 2) {
         return 'very low';
-      } else if (resonse.fr < 4) {
+      } else if (obj.fr < 4) {
         return 'low';
-      } else if (resonse.fr < 6) {
+      } else if (obj.fr < 6) {
         return 'high';
       } else return 'very high';
     }
-    setFrequency({ value: resonse.fr, text: getText() });
+    setFrequency({ word, fr: obj.fr, text: getText() })
   }
 
   //clear the text input
@@ -97,7 +100,9 @@ function App() {
       setTranslation('');
       setOtherTransl([]);
       setIsLoading(false);
-      setFrequency({ value: 0, text: '' });
+      setFrequency({ word: '', fr: 0, text: '' });
+      setTranslFreqs([]);
+
     }
   }, [chars, activeLangInput, activeLangOutput]);
 
@@ -168,7 +173,40 @@ function App() {
     setTranslation(chars);
   }
 
+  //translate on word click
+  function addTranslate(text, swap) {
+    setChars(text);
+    setTranslation('');
+    if (swap) {
+      setActiveLangInput(activeLangOutput);
+      setActiveLangOutput(activeLangInput);
+    }
+  }
+
+  function addToList() {
+
+  }
+
+  //compare words frequency
+  async function compareFreq(data, translation) {
+    const wordsArr = [];
+
+    if (translation) {
+      wordsArr.push(data.text);
+      data.syn?.forEach((i) => wordsArr.push(i.text));
+    } else {
+      Array.isArray(data) ? data.forEach((obj) => wordsArr.push(obj.text)) : wordsArr.push(data);
+    }
+
+    const workdsStr = wordsArr.filter(i => !i.includes(' ')).join(',');
+    const response = await checkFrequency(workdsStr);
+
+    const foundFreqs = !response.some(i => i.word === frequency.word) ? [frequency, ...response] : response;
+    setTranslFreqs(foundFreqs);
+  }
+
   function test() {
+
   }
 
   return (
@@ -193,6 +231,10 @@ function App() {
           swapLangs={swapLangs}
           otherTransl={otherTransl}
           frequency={frequency}
+          addTranslate={addTranslate}
+          addToList={addToList}
+          compareFreq={compareFreq}
+          translFreqs={translFreqs}
         />
 
       </div>

@@ -41,6 +41,10 @@ function Main(props) {
         swapLangs={props.swapLangs}
         otherTransl={props.otherTransl}
         frequency={props.frequency}
+        addTranslate={props.addTranslate}
+        addToList={props.addToList}
+        compareFreq={props.compareFreq}
+        translFreqs={props.translFreqs}
       />
 
     </main>

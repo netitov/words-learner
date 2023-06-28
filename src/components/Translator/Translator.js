@@ -7,6 +7,7 @@ import Spinner from '../Spinner/Spinner';
 import Languages from '../Languages/Languages';
 import Dictionary from '../Dictionary/Dictionary';
 import ColumnChart from '../ColumnChart/ColumnChart';
+import HorizontalChart from '../HorizontalChart/HorizontalChart';
 
 function Translate(props) {
 
@@ -46,7 +47,7 @@ function Translate(props) {
                   && props.activeLangInput.lang === 'English' ? ' translator__freq-box_active' : ''}`
                 }
               >
-                <ColumnChart value={props.frequency.value}/>
+                <ColumnChart value={props.frequency.fr}/>
                 <span>{props.frequency.text} frequency</span>
                 <Tooltip
                   componentsProps={{ tooltip: { sx: tooltipOption, } }}
@@ -116,7 +117,7 @@ function Translate(props) {
                   && props.activeLangOutput.lang === 'English' ? ' translator__freq-box_active' : ''}`
                 }
               >
-                <ColumnChart value={props.frequency.value}/>
+                <ColumnChart value={props.frequency.fr}/>
                 <span>{props.frequency.text} frequency</span>
                 <Tooltip
                   componentsProps={{ tooltip: { sx: tooltipOption, } }}
@@ -160,8 +161,16 @@ function Translate(props) {
 
         <Dictionary
           otherTransl={props.otherTransl}
+          addTranslate={props.addTranslate}
+          addToList={props.addToList}
+          compareFreq={props.compareFreq}
+          outputLang={props.activeLangOutput.lang}
+          inputLang={props.activeLangInput.lang}
         />
 
+        <HorizontalChart
+          translFreqs={props.translFreqs}
+        />
       </div>
     </div>
   )

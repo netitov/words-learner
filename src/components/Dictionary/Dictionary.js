@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Menu from '../Menu/Menu';
 
 function Dictionary(props) {
@@ -69,12 +69,24 @@ function Dictionary(props) {
                   <div className='table__block table__block_transl'>
                     <div className='table__btn-word'>
                       <button className='table__btn table__btn_transl' onClick={() => openMenu(i.text)}>{i.text}</button>
-                      <Menu menuActive={activeMenu === i.text ? true : false}/>
+                      <Menu
+                        menuActive={activeMenu === i.text ? true : false}
+                        addTranslate={() => props.addTranslate(i.text, true)}
+                        addToList={props.addToList}
+                        compareFreq={() => props.compareFreq(i, true)}
+                        compareFreqActive={props.outputLang === 'English' ? true : false}
+                      />
                     </div>
                     {i.syn?.map((s) => (
                       <div className='table__btn-word' key={s.text}>
                         <button className='table__btn table__btn_transl' onClick={() => openMenu(s.text)}>{s.text}</button>
-                        <Menu menuActive={activeMenu === s.text ? true : false}/>
+                        <Menu
+                          menuActive={activeMenu === s.text ? true : false}
+                          addTranslate={() => props.addTranslate(i.text, true)}
+                          addToList={props.addToList}
+                          compareFreq={() => props.compareFreq(i, true)}
+                          compareFreqActive={props.outputLang === 'English' ? true : false}
+                        />
                       </div>
                     ))}
                   </div>
@@ -85,7 +97,16 @@ function Dictionary(props) {
                     {
                       i.mean ?
                       i.mean?.map((m) => (
-                        <button className='table__btn table__btn_syn' key={m.text}>{m.text}</button>
+                        <div className='table__btn-word' key={m.text}>
+                          <button className='table__btn table__btn_syn' onClick={() => openMenu(m.text)}>{m.text}</button>
+                          <Menu
+                            menuActive={activeMenu === m.text ? true : false}
+                            addTranslate={() => props.addTranslate(m.text, false)}
+                            addToList={() => props.addToList(m.text)}
+                            compareFreq={() => props.compareFreq(i.mean)}
+                            compareFreqActive={props.inputLang === 'English' ? true : false}
+                          />
+                        </div>
                       )) : <span>-</span>
                     }
                   </div>
