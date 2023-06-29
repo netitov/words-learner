@@ -121,3 +121,35 @@ td {
   position: relative;
 }
 
+.table__expand-btn {
+  padding: 7px;
+  border-radius: 10px;
+  width: 100%;
+  font-weight: 300;
+  border: 1px solid #bebebe6e;
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.table__expand-btn:hover {
+  background: var(--white);
+}
+
+.table__row {
+  visibility: visible;
+  transition: visibility 0.2s, transform 0.3s, opacity 0.3s;
+  height: auto;
+  /* transform: scaleY(1);
+  -webkit-transform: scaleY(1); */
+  transform-origin: top;
+  -webkit-transform-origin: top;
+  opacity: 1;
+}
+
+.table__row_hidden {
+  transform: scaleY(0);
+  -webkit-transform: scaleY(0);
+  opacity: 0;
+  visibility: collapse;
+}
+

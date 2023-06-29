@@ -5,9 +5,12 @@ function Dictionary(props) {
 
   const [otherTransl, setOtherTransl] = useState([]);
   const [activeMenu, setActiveMenu] = useState(null);
+  const [expandBtnActive, setExpandBtnActive] = useState(false);
+
+  const optionsLimit = 2;
 
   useEffect(() => {
-    if(props.otherTransl.length > 0) {
+    if (props.otherTransl.length > 0) {
       const newArr = [];
       props.otherTransl.filter((el) => el.pos).map((i) => {
         i.tr.forEach((t) => {
@@ -15,8 +18,10 @@ function Dictionary(props) {
         })
         return newArr;
       })
+      setExpandBtnActive(false);
       setOtherTransl(newArr);
     }
+
   }, [props.otherTransl])
 
   function openMenu(data) {
@@ -45,6 +50,10 @@ function Dictionary(props) {
     };
   }, [])
 
+  function handleExpandBtn() {
+    setExpandBtnActive(prevState => !prevState);
+  }
+
   return (
     <div className={`dictionary${props.otherTransl.length > 0 ? ' dictionary_active' : ''}`}>
       <h2 className='dictionary__heading'>All translations</h2>
@@ -61,8 +70,8 @@ function Dictionary(props) {
           </thead>
 
           <tbody>
-            {otherTransl.map((i) => (
-              <tr key={i.text}>
+            {otherTransl.map((i, index) => (
+              <tr key={i.text} className={`table__row${index > optionsLimit && !expandBtnActive ? ' table__row_hidden' : ''}`}>
                 <td>{i.pos}</td>
 
                 <td>
@@ -113,10 +122,13 @@ function Dictionary(props) {
                 </td>
               </tr>
             ))}
+
           </tbody>
 
         </table>
-
+        <button className='table__expand-btn' type='button' onClick={handleExpandBtn}>
+          Show {`${expandBtnActive ? 'fewer' : 'more'}`} options
+        </button>
       </div>
 
 
