@@ -3,6 +3,11 @@
   margin: auto;
 }
 
+.translator-wrapper > h2 {
+  font-weight: 400;
+  margin: 0 0 20px;
+}
+
 .translator {
   /* display: flex; */
   display: grid;
@@ -16,6 +21,8 @@
 .translator__swap-btn {
   padding: 7px 0;
   cursor: pointer;
+  height: auto;
+  align-self: center;
 }
 
 .translator__swap-btn > svg {

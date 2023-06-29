@@ -22,6 +22,7 @@ function Translate(props) {
 
   return (
     <div className='translator-wrapper' >
+      <h2>Translate and compare</h2>
       <div className='translator'>
 
         <div className='translator__box translator__box_input'>

@@ -16,6 +16,10 @@
   font-size: 1.4em;
 }
 
+.promo__container > h1 {
+  font-weight: 400;
+}
+
 .promo__btn {
   display: flex;
   align-items: center;
