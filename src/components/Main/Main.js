@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import promoImg from '../../images/Picture.svg';
 import Translate from '../Translator/Translator';
+import Frequency from '../Frequency/Frequency';
 
 function Main(props) {
 
@@ -45,6 +46,14 @@ function Main(props) {
         addToList={props.addToList}
         compareFreq={props.compareFreq}
         translFreqs={props.translFreqs}
+      />
+
+      <Frequency
+        setCharsFreq={props.setCharsFreq}
+        wordFrequency={props.wordFrequency}
+        frIsLoading={props.frIsLoading}
+        frNoData={props.frNoData}
+        addToList={props.addToList}
       />
 
     </main>

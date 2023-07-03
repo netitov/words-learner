@@ -6,13 +6,19 @@
   -webkit-transform: scaleY(0);
   transform-origin: top;
   -webkit-transform-origin: top;
+  height: 0;
   transition: visibility 0.2s ease, transform 0.3s ease;
 }
 
 .dictionary_active {
   visibility: visible;
   transform: scaleY(1);
+  height: auto;
   -webkit-transform: scaleY(1);
+}
+
+.dictionary_hidden {
+  display: none;
 }
 
 .dictionary__heading {
@@ -129,6 +135,10 @@ td {
   border: 1px solid #bebebe6e;
   transition: var(--transition);
   cursor: pointer;
+}
+
+.table__expand-btn_inactive {
+  display: none;
 }
 
 .table__expand-btn:hover {

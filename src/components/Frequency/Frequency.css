@@ -1,0 +1,138 @@
+.frequency {
+  max-width: 1200px;
+  margin: 0 auto var(--main-gap);
+}
+
+.frequency > h2 {
+  font-weight: 400;
+  margin: 0 0 var(--heading-gap);
+}
+
+.frequency__input {
+  & label.Mui-focused {
+    color: #127386;
+  }
+  & .MuiFilledInput-root:after {
+    border-bottom-color: #127386;
+  }
+  & .MuiFilledInput-root {
+    background-color: var(--white);
+  }
+}
+
+.frequency__input > .spinner {
+  right: -10%;
+  left: auto;
+}
+
+.frequency__card-box {
+  display: flex;
+  margin-top: 35px;
+  visibility: hidden;
+  transform: scaleX(0);
+  -webkit-transform: scaleX(0);
+  transform-origin: left;
+  -webkit-transform-origin: left;
+  opacity: 0;
+  transition: visibility 0.2s ease, transform 0.3s ease, opacity 0.3s;
+}
+
+.frequency__card-box_active {
+  visibility: visible;
+  transform: scaleX(1);
+  -webkit-transform: scaleX(1);
+  opacity: 1;
+}
+
+.frequency__card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-right: 35px;
+  background: #fee6b5a8;
+  max-width: 276px;
+  min-height: 120px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  padding: 5px;
+  position: relative;
+  flex: 1;
+}
+
+.frequency__card:last-of-type {
+  margin-right: 0;
+}
+
+.frequency__card > h3 {
+  margin: 0px 0 10px;
+  font-weight: 400;
+  font-size: 1.4em;
+}
+
+.frequency__card > h3 > span {
+  font-size: 16px;
+  font-weight: 300;
+}
+
+.frequency__card > p {
+  font-size: 0.9em;
+}
+
+.frequency__tlt-link {
+  text-decoration: underline;
+  transition: var(--transition);
+}
+
+.frequency__tlt-link:hover {
+  opacity: 0.6;
+}
+
+.frequency__tlt {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+}
+
+.frequency__not-found {
+  display: none;
+  position: absolute;
+  right: 0;
+  left: 0;
+  bottom: -50px;
+  margin-left: auto;
+  margin-right: auto;
+  min-width: 100px;
+  text-align: center;
+}
+
+.frequency__not-found_active {
+  display: block;
+}
+
+.frequency__lst-btn {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  right: -10%;
+  padding: 10px;
+  border-radius: 50%;
+  transition: var(--transition);
+  cursor: pointer;
+  visibility: hidden;
+  top: 50%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  opacity: 0;
+  transition: visibility 0.2s ease, opacity 0.3s, background 0.3s;
+}
+
+.frequency__lst-btn:hover {
+  background: var(--hover-green);
+}
+
+.frequency__lst-btn_active {
+  visibility: visible;
+  opacity: 1;
+}
+

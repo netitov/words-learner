@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
-import { translate, getLanguages, getDictionary, checkFrequency } from '../../utils/api';
+
+import { translate, getLanguages, getDictionary, checkFrequency, getRandomWords } from '../../utils/api';
 
 function App() {
 
@@ -16,8 +17,12 @@ function App() {
   const [inputText, setInputText] = useState('');
   const [dictionary, setDictionary] = useState([]);
   const [otherTransl, setOtherTransl] = useState([]);
-  const [frequency, setFrequency] = useState({ word: '', fr: 0, text: '' });
+  const [frequency, setFrequency] = useState({ word: '', fr: 0, text: '', filmPer: 0 });
   const [translFreqs, setTranslFreqs] = useState([]);
+  const [charsFreq, setCharsFreq] = useState('');
+  const [wordFreq, setWordFreq] = useState({ word: '', fr: 0, text: '', filmPer: 0 });
+  const [frIsLoading, setFrIsLoading] = useState(false);
+  const [frNoData, setFrNoData] = useState(false);
 
 
   //take once, than grab from local storage. How to update it?
@@ -69,20 +74,37 @@ function App() {
   }
 
   //get word frequency
-  async function getFrequency(word) {
+  async function getFrequency(word, onlyFreq) {
     const response = await checkFrequency(word);
-    const obj = response[0];
 
-    const getText = () => {
-      if (obj.fr < 2) {
-        return 'very low';
-      } else if (obj.fr < 4) {
-        return 'low';
-      } else if (obj.fr < 6) {
-        return 'high';
-      } else return 'very high';
+    if (response.length > 0) {
+      const obj = response[0];
+      const frequencyNumber = obj.fr;
+
+      const getText = () => {
+        if (frequencyNumber < 2) {
+          return 'very low';
+        } else if (frequencyNumber < 4) {
+          return 'low';
+        } else if (frequencyNumber < 6) {
+          return 'high';
+        } else return 'very high';
+      }
+
+      if (onlyFreq) {
+        //for feat search frequency (without translate)
+        setWordFreq({ word, fr: frequencyNumber, text: getText(), filmPer: obj.filmPer });
+      } else {
+        //for feat translate
+        setFrequency({ word, fr: frequencyNumber, text: getText(), filmPer: obj.filmPer });
+      }
+    } else if(onlyFreq) {
+      setWordFreq({ word: '', fr: 0, text: '', filmPer: 0 });
+      setFrNoData(true);
+    } else {
+      setFrequency({ word: '', fr: 0, text: '', filmPer: 0 });
     }
-    setFrequency({ word, fr: obj.fr, text: getText() })
+    setFrIsLoading(false);
   }
 
   //clear the text input
@@ -100,12 +122,30 @@ function App() {
       setTranslation('');
       setOtherTransl([]);
       setIsLoading(false);
-      setFrequency({ word: '', fr: 0, text: '' });
+      setFrequency({ word: '', fr: 0, text: '', filmPer: 0 });
       setTranslFreqs([]);
-
     }
   }, [chars, activeLangInput, activeLangOutput]);
 
+  //call search frequency function
+  useEffect(() => {
+    //drop error 'no data'
+    setFrNoData(false);
+
+    if(charsFreq.length > 0) {
+      //delay for spinner
+      const timeOutLoading = setTimeout(() => setFrIsLoading(true), 500);
+      //delay before api request
+      const timeOutRequest = setTimeout(() => getFrequency(charsFreq, true),1500);
+      return () => {
+        clearTimeout(timeOutRequest);
+        clearTimeout(timeOutLoading);
+      };
+    } else {
+      setFrIsLoading(false);
+      setWordFreq({ word: '', fr: 0, text: '', filmPer: 0 });
+    }
+  }, [charsFreq]);
 
   //close popup available languages list on esc and overlay click
   useEffect(() => {
@@ -206,7 +246,7 @@ function App() {
   }
 
   function test() {
-
+    //getRandomWords();
   }
 
   return (
@@ -235,6 +275,10 @@ function App() {
           addToList={addToList}
           compareFreq={compareFreq}
           translFreqs={translFreqs}
+          setCharsFreq={setCharsFreq}
+          wordFrequency={wordFreq}
+          frIsLoading={frIsLoading}
+          frNoData={frNoData}
         />
 
       </div>

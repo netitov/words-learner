@@ -1,11 +1,12 @@
 .translator-wrapper {
   max-width: 1200px;
   margin: auto;
+  margin-bottom: var(--main-gap);
 }
 
 .translator-wrapper > h2 {
   font-weight: 400;
-  margin: 0 0 20px;
+  margin: 0 0 var(--heading-gap);
 }
 
 .translator {

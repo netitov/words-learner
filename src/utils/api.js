@@ -1,10 +1,9 @@
 import { SERVER_API } from './config';
 
-//CHANGE THAT. ALL THOSE REQUEST MUST BE FROM SERVER, NOT CLIENT
-async function getTranslation({ langs, text }) {
+export async function checkFrequency(word) {
   try {
-    const response = await fetch(`https://translate.yandex.net/api/v1.5/tr.json/translate?key=${process.env.REACT_APP_YTRANSL_KEY}&text=${text}&lang=${langs}`,
-    { method: 'POST' }
+    const response = await fetch(`${SERVER_API}/word-data/${word}`,
+    { method: 'GET' }
     );
     const result = await response.json();
     return result;
@@ -13,25 +12,23 @@ async function getTranslation({ langs, text }) {
   }
 }
 
-//CHANGE THAT. ALL THOSE REQUEST MUST BE FROM SERVER, NOT CLIENT
-async function checkDictionary({ langs, text }) {
+export async function getRandomWords(filters) {
   try {
-    const response = await fetch(`https://dictionary.yandex.net/api/v1/dicservice.json/lookup?key=${process.env.REACT_APP_YDICT_KEY}&lang=${langs}&text=${text}`,
-    { method: 'GET' }
-    );
-    const result = await response.json();
-    return result.def;
-  } catch (err) {
-    console.error(err);
-  }
-}
 
-export async function checkFrequency(word) {
-  try {
-    const response = await fetch(`${SERVER_API}/freq/${word}`,
+    const filters = {
+      frSt: 4,
+      frEn: 5,
+      pos: 'Noun'
+    };
+
+    // Формирование строки запроса из объекта с фильтрами
+    const queryParams = new URLSearchParams(filters);
+
+    const response = await fetch(`${SERVER_API}/random-words?${queryParams}`,
     { method: 'GET' }
     );
     const result = await response.json();
+    console.log(result)
     return result;
   } catch (err) {
     console.error(err);
@@ -40,19 +37,16 @@ export async function checkFrequency(word) {
 
 //find word (and translate) in dictionary api, if text is shorter 3 words. Otherwise, use translation api
 export async function translate({ langs, text, inDictionary }) {
-  if (text.split(' ').length < 3 && inDictionary) {
-    const dictionary = await checkDictionary({ langs, text });
-
-    if (dictionary.length > 0) {
-      return dictionary;
-    } else {
-      return await getTranslation({ langs, text });
-    }
-
-
-
-  } else {
-    return await getTranslation({ langs, text });
+  try {
+    const response = await fetch(`${SERVER_API}/translate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ langs, text, inDictionary })
+    });
+    const result = await response.json();
+    return result;
+  } catch (err) {
+    console.error(err);
   }
 }
 

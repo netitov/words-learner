@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Menu from '../Menu/Menu';
+
 
 function Dictionary(props) {
 
   const [otherTransl, setOtherTransl] = useState([]);
   const [activeMenu, setActiveMenu] = useState(null);
   const [expandBtnActive, setExpandBtnActive] = useState(false);
+
+  const ref = useRef(null);
 
   const optionsLimit = 2;
 
@@ -21,6 +24,19 @@ function Dictionary(props) {
       setExpandBtnActive(false);
       setOtherTransl(newArr);
     }
+
+    //animate slide in/out
+    /* if (props.otherTransl.length > 0) {
+      ref.current.classList.remove('dictionary_hidden');
+      setTimeout(() => {
+        ref.current.classList.add('dictionary_active');
+      })
+    } else {
+      ref.current.classList.remove('dictionary_active');
+      setTimeout(() => {
+        ref.current.classList.add('dictionary_hidden');
+      }, 200)
+    } */
 
   }, [props.otherTransl])
 
@@ -54,8 +70,9 @@ function Dictionary(props) {
     setExpandBtnActive(prevState => !prevState);
   }
 
+
   return (
-    <div className={`dictionary${props.otherTransl.length > 0 ? ' dictionary_active' : ''}`}>
+    <div className={`dictionary${props.otherTransl.length > 0 ? ' dictionary_active' : ''}`} ref={ref}>
       <h2 className='dictionary__heading'>All translations</h2>
       <div className='dictionary__translations table-wrapper'>
 
@@ -126,7 +143,10 @@ function Dictionary(props) {
           </tbody>
 
         </table>
-        <button className='table__expand-btn' type='button' onClick={handleExpandBtn}>
+        <button
+          className={`table__expand-btn${otherTransl.length <= (optionsLimit + 1) ? ' table__expand-btn_inactive' : '' }`}
+          type='button'
+          onClick={handleExpandBtn}>
           Show {`${expandBtnActive ? 'fewer' : 'more'}`} options
         </button>
       </div>

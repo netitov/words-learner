@@ -23,7 +23,6 @@ function HorizontalChart(props) {
 
   ChartJS.defaults.font.family = "'Noto Sans Display', 'Sans-serif', 'Arial', 'Helvetica'";
 
-
   const options = {
     indexAxis: 'y',
     elements: {
@@ -82,8 +81,23 @@ function HorizontalChart(props) {
     ],
   };
 
+  /* useEffect(() => {
+    //animate slide in/out
+    if (props.translFreqs.length > 0) {
+      ref.current.classList.remove('chart-wrapper_hidden');
+      setTimeout(() => {
+        ref.current.classList.add('chart-wrapper_active');
+      })
+    } else {
+      ref.current.classList.remove('chart-wrapper_active');
+      setTimeout(() => {
+        ref.current.classList.add('chart-wrapper_hidden');
+      }, 200)
+    }
+  }, [props.translFreqs]) */
+
   return (
-    <div className={`chart-wrapper${props.translFreqs.length !== 0 ? ' chart-wrapper_active' : ''}`}>
+    <div className={`chart-wrapper${props.translFreqs.length > 0 ? ' chart-wrapper_active' : ''}`}>
       <h2 className='chart-wrapper__heading'>Frequency
       </h2>
       <div className='horizontal-chart'>

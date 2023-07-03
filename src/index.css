@@ -9,3 +9,5 @@
 @import url(/src/components/Dictionary/Dictionary.css);
 @import url(/src/components/Menu/Menu.css);
 @import url(/src/components/HorizontalChart/HorizontalChart.css);
+@import url(/src/components/Frequency/Frequency.css);
+@import url(/src/components/RefTooltip/RefTooltip.css);

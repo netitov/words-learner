@@ -6,13 +6,19 @@
   -webkit-transform: scaleY(0);
   transform-origin: top;
   -webkit-transform-origin: top;
+  height: 0;
   transition: visibility 0.2s ease, transform 0.3s ease;
 }
 
 .chart-wrapper_active {
   visibility: visible;
+  height: auto;
   transform: scaleY(1);
   -webkit-transform: scaleY(1);
+}
+
+.chart-wrapper_hidden {
+  display: none;
 }
 
 .chart-wrapper__heading {

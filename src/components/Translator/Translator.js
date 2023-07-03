@@ -53,9 +53,9 @@ function Translate(props) {
                 <Tooltip
                   componentsProps={{ tooltip: { sx: tooltipOption, } }}
                   title={
-                    <p>Word frequencies based on subtitles of British television programs.&nbsp;
+                    <p>Word frequency measure on the basis of American subtitles (51 million words in total).&nbsp;
                       <a
-                        href='http://crr.ugent.be/papers/van_Heuven_et_al_SUBTLEX-UK.pdf'
+                        href='https://www.ugent.be/pp/experimentele-psychologie/en/research/documents/subtlexus/overview.htm'
                         target='_blank'
                         rel='noreferrer'
                         className='translator__tlt-link'
@@ -123,9 +123,9 @@ function Translate(props) {
                 <Tooltip
                   componentsProps={{ tooltip: { sx: tooltipOption, } }}
                   title={
-                    <p>Word frequencies based on subtitles of British television programs.&nbsp;
+                    <p>Word frequency measure on the basis of American subtitles (51 million words in total).&nbsp;
                       <a
-                        href='http://crr.ugent.be/papers/van_Heuven_et_al_SUBTLEX-UK.pdf'
+                        href='https://www.ugent.be/pp/experimentele-psychologie/en/research/documents/subtlexus/overview.htm'
                         target='_blank'
                         rel='noreferrer'
                         className='translator__tlt-link'

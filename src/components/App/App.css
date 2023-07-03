@@ -4,7 +4,7 @@
   --main-font: 16px;
   --header-font: 1.2em;
   --transition: all 0.3s;
-  --main-gap: 55px;
+  --main-gap: 5.5em;
   --top-gap: 35px;
   --light-grey: #bebebe;
   --black-secodary: #757575;
@@ -16,8 +16,10 @@
   --main-blue: #aacdd4;
   --light-red: #ff9671;
   --white: #f5f9f9;
+  --yellow: #fcc5546e;
   --lang-btn-height: 42px;
   --translate-radius: 10px;
+  --heading-gap: 35px;
 }
 
 .page {
