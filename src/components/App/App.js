@@ -12,7 +12,7 @@ function App() {
   const [availLang, setAvailLang] = useState([]);
   const [langListActive, setLangListActive] = useState({ type: '', value: false });
   const [activeLangInput, setActiveLangInput] = useState({ lang: 'English', code: 'en' });
-  const [activeLangOutput, setActiveLangOutput] = useState({ lang: 'Russian', code: 'ru' });
+  const [activeLangOutput, setActiveLangOutput] = useState({ lang: '', code: '' });
   const [filteredLang, setFilteredLang] = useState([]);
   const [inputText, setInputText] = useState('');
   const [dictionary, setDictionary] = useState([]);
@@ -23,7 +23,49 @@ function App() {
   const [wordFreq, setWordFreq] = useState({ word: '', fr: 0, text: '', filmPer: 0 });
   const [frIsLoading, setFrIsLoading] = useState(false);
   const [frNoData, setFrNoData] = useState(false);
+  const [randomWords, setRandomWords] = useState([]);
 
+  //check key in local storage
+  function getStorageItem(storage, key) {
+    const item = storage.getItem(key);
+    return item !== null ? JSON.parse(item) : null;
+  }
+
+  function getUserLang() {
+    const userLang = navigator.language || navigator.userLanguage;
+    if (!userLang.includes('en')) {
+      return userLang.split('-')[0];
+    } else if (navigator.languages.some((i) => !i.includes('en'))) {
+      return navigator.languages.find((i) => !i.includes('en')).split('-')[0];
+    } else {
+      return 'es';
+    }
+  }
+
+  //set defalut user and add data to local storage
+  function setInitLang(arr) {
+    const userLang = getUserLang();
+    const foundLang = arr.find((i) => i.code === userLang);
+    const activeLangOutput = foundLang
+      ? { lang: foundLang.language, code: foundLang.code }
+      : { lang: 'Spanish', code: 'es' };
+
+    setActiveLangOutput(activeLangOutput);
+
+    //save to local storage
+    localStorage.setItem('userLang', JSON.stringify(activeLangOutput));
+  }
+
+  //add frequency category
+  function getFreqCat(fr) {
+    if (fr < 2) {
+      return 'very low';
+    } else if (fr < 4) {
+      return 'low';
+    } else if (fr < 6) {
+      return 'high';
+    } else return 'very high';
+  }
 
   //take once, than grab from local storage. How to update it?
   //get data from server
@@ -40,6 +82,15 @@ function App() {
         setAvailLang(sortedLangs);
         setFilteredLang(sortedLangs);
 
+        //set init lang
+        const userLang = getStorageItem(localStorage, 'userLang');
+
+        if (userLang) {
+          setActiveLangOutput(userLang);
+        } else {
+          setInitLang(sortedLangs);
+        }
+
         //list of languages for translation
         setDictionary(dict);
       })
@@ -47,6 +98,43 @@ function App() {
         console.log(err);
       })
   }, []);
+
+  //get inital list of random words
+  useEffect(() => {
+    const wordStorage = getStorageItem(sessionStorage, 'randomWords');
+
+    if (wordStorage) {
+      setRandomWords(wordStorage);
+    } else {
+      //api request if words are not in the session storage
+      async function requestRandomWords() {
+        const obj = { lang: activeLangOutput.code };
+        const response = await getRandomWords(obj);
+        const newObj = response.map((i) => {
+          const frCat = getFreqCat(i.fr)
+          return { ...i, frCat }
+        })
+        sessionStorage.setItem('randomWords', JSON.stringify(newObj));
+        setRandomWords(response);
+      }
+
+      let timer;
+
+      function delayedRequestRandomWords() {
+        timer = setTimeout(() => {
+          requestRandomWords();
+        }, 2000);
+      }
+
+      if (activeLangOutput.code !== '' && wordStorage === null) {
+        delayedRequestRandomWords();
+      }
+
+      return () => clearTimeout(timer);
+    }
+  }, [activeLangOutput, activeLangInput]);
+
+
 
   //get translation; switch the spinner
   async function getTranslation(text) {
@@ -81,22 +169,12 @@ function App() {
       const obj = response[0];
       const frequencyNumber = obj.fr;
 
-      const getText = () => {
-        if (frequencyNumber < 2) {
-          return 'very low';
-        } else if (frequencyNumber < 4) {
-          return 'low';
-        } else if (frequencyNumber < 6) {
-          return 'high';
-        } else return 'very high';
-      }
-
       if (onlyFreq) {
         //for feat search frequency (without translate)
-        setWordFreq({ word, fr: frequencyNumber, text: getText(), filmPer: obj.filmPer });
+        setWordFreq({ word, fr: frequencyNumber, text: getFreqCat(frequencyNumber), filmPer: obj.filmPer });
       } else {
         //for feat translate
-        setFrequency({ word, fr: frequencyNumber, text: getText(), filmPer: obj.filmPer });
+        setFrequency({ word, fr: frequencyNumber, text: getFreqCat(frequencyNumber), filmPer: obj.filmPer });
       }
     } else if(onlyFreq) {
       setWordFreq({ word: '', fr: 0, text: '', filmPer: 0 });
@@ -279,6 +357,7 @@ function App() {
           wordFrequency={wordFreq}
           frIsLoading={frIsLoading}
           frNoData={frNoData}
+          randomWords={randomWords}
         />
 
       </div>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import promoImg from '../../images/Picture.svg';
 import Translate from '../Translator/Translator';
 import Frequency from '../Frequency/Frequency';
+import RandomWords from '../RandomWords/RandomWords';
 
 function Main(props) {
 
@@ -14,7 +15,7 @@ function Main(props) {
   return (
     <main className='main'>
       <div className='main__promo promo'>
-        <img className='promo__img' src={promoImg} alt='people'></img>
+        {/* <img className='promo__img' src={promoImg} alt='people'></img> */}
         <div className='promo__container'>
           <h1>What is the idea?</h1>
           <p>Find and learn common english words and track your progress.</p>
@@ -54,6 +55,10 @@ function Main(props) {
         frIsLoading={props.frIsLoading}
         frNoData={props.frNoData}
         addToList={props.addToList}
+      />
+
+      <RandomWords
+        randomWords={props.randomWords}
       />
 
     </main>

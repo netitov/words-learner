@@ -70,7 +70,6 @@ function Dictionary(props) {
     setExpandBtnActive(prevState => !prevState);
   }
 
-
   return (
     <div className={`dictionary${props.otherTransl.length > 0 ? ' dictionary_active' : ''}`} ref={ref}>
       <h2 className='dictionary__heading'>All translations</h2>

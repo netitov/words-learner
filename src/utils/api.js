@@ -12,13 +12,14 @@ export async function checkFrequency(word) {
   }
 }
 
-export async function getRandomWords(filters) {
+export async function getRandomWords(obj) {
   try {
 
     const filters = {
-      frSt: 4,
-      frEn: 5,
-      pos: 'Noun'
+      frSt: 2,
+      frEn: 6,
+      pos: 'Noun',
+      lang: obj.lang
     };
 
     // Формирование строки запроса из объекта с фильтрами

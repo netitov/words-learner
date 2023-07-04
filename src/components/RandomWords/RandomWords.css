@@ -1,0 +1,15 @@
+.words {
+  max-width: 1200px;
+  margin: 0 auto var(--main-gap);
+}
+
+.words > h2 {
+  font-weight: 400;
+  margin: 0 0 var(--heading-gap);
+}
+
+.wtable__checkbox  {
+  &.Mui-checked {
+    color: #757575c2;
+  }
+}
