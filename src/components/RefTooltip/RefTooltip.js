@@ -10,7 +10,7 @@ function RefTooltip(props) {
       title={props.children}
     >
       <button className={`tooltop__btn ${props.class ? props.class : ''}`}>
-        <AiOutlineQuestionCircle size='15' color='#757575' />
+        <AiOutlineQuestionCircle size='15' color={props.color} />
       </button>
 
     </Tooltip>

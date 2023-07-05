@@ -1,28 +1,34 @@
 :root {
-  --page-width: 100%;
+  --page-width: 98%;
   --header-font: 18px;
   --main-font: 16px;
   --header-font: 1.2em;
   --transition: all 0.3s;
-  --main-gap: 5.5em;
+  --main-gap: 6em;
+  --bottom-gap: 4em;
   --top-gap: 35px;
   --light-grey: #bebebe;
   --black-secodary: #757575;
   --main-green: #127386;
   --prime-blue: #37636c;
   --darker-blue: #2e5760ab;
+  --light-blue: #dbecec70;
   --prime-yellow: #ffd987;
   --light-green: #12738638;
+
   --super-light-green: #dbecec;
   --middle-green: #7da1a9;
   --hover-green: #bedcdf;
   --main-blue: #aacdd4;
+
   --light-red: #ff9671;
   --white: #f5f9f9;
   --yellow: #fcc5546e;
   --lang-btn-height: 42px;
   --translate-radius: 10px;
-  --heading-gap: 35px;
+  --heading-gap: 2em;
+  --bck-svg-color: #dbecec70;
+  --max-width: 1300px;
 }
 
 .page {
@@ -34,10 +40,27 @@
 
 .page__wrapper {
   margin: auto;
-  width: var(--page-width);
+  /* width: var(--page-width); */
   /* max-width: 1300px; */
   min-height: 100vh;
   display: flex;
   /* justify-content: space-between; */
   flex-direction: column;
+}
+
+.heading2 {
+  font-weight: 300;
+  margin: 0 0 var(--heading-gap);
+  font-size: 2em;
+  color: var(--prime-blue);
+}
+
+.bck-svg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: -1;
+  height: 150px;
+  width: 150px;
+  fill: var(--light-blue);
 }

@@ -8,6 +8,7 @@ import Languages from '../Languages/Languages';
 import Dictionary from '../Dictionary/Dictionary';
 import ColumnChart from '../ColumnChart/ColumnChart';
 import HorizontalChart from '../HorizontalChart/HorizontalChart';
+import { MdTranslate } from 'react-icons/md';
 
 function Translate(props) {
 
@@ -22,7 +23,8 @@ function Translate(props) {
 
   return (
     <div className='translator-wrapper' >
-      <h2>Translate and compare</h2>
+      <h2 className='translator-wrapper__heading heading2'>Translate and compare</h2>
+
       <div className='translator'>
 
         <div className='translator__box translator__box_input'>
@@ -173,6 +175,8 @@ function Translate(props) {
           translFreqs={props.translFreqs}
         />
       </div>
+
+      <MdTranslate className='translator__bck-svg bck-svg'/>
     </div>
   )
 }

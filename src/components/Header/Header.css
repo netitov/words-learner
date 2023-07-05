@@ -16,7 +16,7 @@
   /* gap: 40px; */
   transition: all 0.4s ease-in-out;
   font-size: var(--header-font);
-  margin-bottom: var(--main-gap);
+  /* margin-bottom: var(--main-gap); */
   color: #fff;
 }
 

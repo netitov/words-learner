@@ -1,22 +1,44 @@
-.frequency {
-  max-width: 1200px;
-  margin: 0 auto var(--main-gap);
+.frequency-wrapper {
+  background: var(--prime-blue);
 }
 
-.frequency > h2 {
-  font-weight: 400;
-  margin: 0 0 var(--heading-gap);
+.frequency {
+  max-width: var(--max-width);
+  width: var(--page-width);
+  /* margin: 0 auto var(--main-gap); */
+  padding-top: var(--main-gap);
+  padding-bottom: var(--bottom-gap);
+  margin: auto;
+  position: relative;
+}
+
+.frequency__heading {
+  color: #fff;
+}
+
+.frequency__input input {
+  font-size: 1.15em;
 }
 
 .frequency__input {
   & label.Mui-focused {
-    color: #127386;
+    color: var(--prime-blue);
   }
   & .MuiFilledInput-root:after {
-    border-bottom-color: #127386;
+    border-bottom-color: var(--prime-yellow);
+    border-bottom-width: 2px;
   }
   & .MuiFilledInput-root {
     background-color: var(--white);
+  }
+  & .MuiFilledInput-root.Mui-focused {
+    background-color: var(--super-light-green);
+  }
+}
+
+.frequency__input:hover {
+  & .MuiFilledInput-root {
+    background-color: var(--super-light-green);
   }
 }
 
@@ -50,9 +72,10 @@
   justify-content: center;
   align-items: center;
   margin-right: 35px;
-  background: #fee6b5a8;
-  max-width: 276px;
-  min-height: 120px;
+  background: var(--darker-blue);
+  color:#fff;
+  max-width: 300px;
+  min-height: 140px;
   box-sizing: border-box;
   border-radius: 10px;
   padding: 5px;
@@ -66,8 +89,8 @@
 
 .frequency__card > h3 {
   margin: 0px 0 10px;
-  font-weight: 400;
-  font-size: 1.4em;
+  font-weight: 300;
+  font-size: 1.8em;
 }
 
 .frequency__card > h3 > span {
@@ -92,6 +115,10 @@
   position: absolute;
   top: 7px;
   right: 7px;
+}
+
+.frequency__tlt > svg {
+  color: var(--super-light-green)
 }
 
 .frequency__not-found {
@@ -128,11 +155,21 @@
 }
 
 .frequency__lst-btn:hover {
-  background: var(--hover-green);
+  background: var(--darker-blue);
 }
 
 .frequency__lst-btn_active {
   visibility: visible;
   opacity: 1;
+}
+
+.frequency__bck-svg {
+  z-index: 0;
+  /* fill: var(--darker-blue); */
+  /* fill: var(--light-blue); */
+}
+
+.frequency__svg {
+  color: var(--super-light-green)
 }
 

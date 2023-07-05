@@ -1,12 +1,15 @@
 .words {
   max-width: 1200px;
-  margin: 0 auto var(--main-gap);
+ /*  margin: 0 auto var(--main-gap); */
+  padding-top: var(--main-gap);
+  padding-bottom: var(--main-gap);
+  margin: auto;
 }
 
-.words > h2 {
+/* .words > h2 {
   font-weight: 400;
   margin: 0 0 var(--heading-gap);
-}
+} */
 
 .wtable__checkbox  {
   &.Mui-checked {

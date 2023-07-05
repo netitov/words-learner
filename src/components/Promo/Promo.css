@@ -3,7 +3,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-bottom: var(--main-gap);
+  /* margin-bottom: var(--main-gap); */
 
   min-height: 100vh;
   color: #fff;

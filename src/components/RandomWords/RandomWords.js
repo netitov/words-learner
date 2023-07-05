@@ -8,7 +8,7 @@ function RandomWords(props) {
 
   return (
     <div className='words'>
-      <h2>Find and learn</h2>
+      <h2 className='words__heading heading2'>Find and learn</h2>
 
       <div className='words__table-wrapper'>
 

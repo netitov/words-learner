@@ -9,12 +9,14 @@ import RefTooltip from '../RefTooltip/RefTooltip';
 import { BsBookmarks } from 'react-icons/bs';
 import Tooltip from '@mui/material/Tooltip';
 import { tooltipOption } from '../../utils/constants';
+import { BsCheck2All } from 'react-icons/bs';
 
 function Frequency(props) {
 
   return (
+    <div className='frequency-wrapper'>
     <div className='frequency'>
-      <h2>Check the word frequency</h2>
+      <h2 className='frequency__heading heading2'>Check the word frequency</h2>
       <div className='frequency__input-box'>
         <FormControl
           sx={{ m: 1, maxWidth: '577px', width: '100%', margin: 0 }}
@@ -43,7 +45,7 @@ function Frequency(props) {
               type='button'
               onClick={props.addToList}
             >
-              <BsBookmarks size='20' color='#757575'/>
+              <BsBookmarks size='20' className='frequency__svg'/>
             </button>
             </Tooltip>
         </FormControl>
@@ -53,7 +55,7 @@ function Frequency(props) {
         <div className='frequency__card'>
           <h3>{props.wordFrequency.text}</h3>
           <p>Frequency</p>
-          <RefTooltip class='frequency__tlt'>
+          <RefTooltip class='frequency__tlt' color='#dbecec'>
             <p>Word frequency measure on the basis of American subtitles (51 million words in total).&nbsp;
               <a
                 href='https://www.ugent.be/pp/experimentele-psychologie/en/research/documents/subtlexus/overview.htm'
@@ -70,7 +72,7 @@ function Frequency(props) {
         <div className='frequency__card'>
           <h3>{props.wordFrequency.fr.toFixed(1)}<span> / 7</span></h3>
           <p>Frequency rate</p>
-          <RefTooltip  class='frequency__tlt'>
+          <RefTooltip  class='frequency__tlt' color='#dbecec'>
             <p>Сategorical scale of the word frequency in Zipf format.&nbsp;
               <a
                 href='http://crr.ugent.be/archives/1352'
@@ -87,12 +89,14 @@ function Frequency(props) {
         <div className='frequency__card'>
           <h3>{props.wordFrequency.filmPer.toFixed(1)}%</h3>
           <p>Film percent</p>
-          <RefTooltip  class='frequency__tlt'>
+          <RefTooltip  class='frequency__tlt' color='#dbecec'>
             <p>Indicates in how many percent of films the word appears</p>
           </RefTooltip>
         </div>
 
       </div>
+      <BsCheck2All className='frequency__bck-svg bck-svg'/>
+    </div>
     </div>
   )
 }
