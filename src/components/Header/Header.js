@@ -23,7 +23,7 @@ function Header() {
 
           <li className={`nav__li nav__li_logo`}>
             <Link to='/'>
-              <span>WORDS</span> Helper
+              <span>WORDS</span> Learner
               <img className="nav__img" src={arrows} alt="arrows"></img>
             </Link>
           </li>

@@ -1,5 +1,5 @@
 :root {
-  --page-width: 98%;
+  --page-width: 100%;
   --header-font: 18px;
   --main-font: 16px;
   --header-font: 1.2em;
@@ -9,6 +9,9 @@
   --light-grey: #bebebe;
   --black-secodary: #757575;
   --main-green: #127386;
+  --prime-blue: #37636c;
+  --darker-blue: #2e5760ab;
+  --prime-yellow: #ffd987;
   --light-green: #12738638;
   --super-light-green: #dbecec;
   --middle-green: #7da1a9;
@@ -32,7 +35,7 @@
 .page__wrapper {
   margin: auto;
   width: var(--page-width);
-  max-width: 1300px;
+  /* max-width: 1300px; */
   min-height: 100vh;
   display: flex;
   /* justify-content: space-between; */

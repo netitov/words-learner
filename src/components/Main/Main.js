@@ -3,6 +3,7 @@ import promoImg from '../../images/Picture.svg';
 import Translate from '../Translator/Translator';
 import Frequency from '../Frequency/Frequency';
 import RandomWords from '../RandomWords/RandomWords';
+import Promo from '../Promo/Promo';
 
 function Main(props) {
 
@@ -14,17 +15,9 @@ function Main(props) {
 
   return (
     <main className='main'>
-      <div className='main__promo promo'>
-        {/* <img className='promo__img' src={promoImg} alt='people'></img> */}
-        <div className='promo__container'>
-          <h1>What is the idea?</h1>
-          <p>Find and learn common english words and track your progress.</p>
-          <button className={`promo__btn${btnActive ? ' promo__btn_active' : ''}`} type="button" onClick={handleBtn}>
-            <p>Watch more</p>
-            <div className="promo__arrow arrow"></div>
-          </button>
-        </div>
-      </div>
+
+      <Promo />
+
       <Translate
         translate={props.translate}
         isLoading={props.isLoading}
