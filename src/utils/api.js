@@ -3,7 +3,7 @@ import { SERVER_API } from './config';
 export async function checkFrequency(word) {
   try {
     const response = await fetch(`${SERVER_API}/word-data/${word}`,
-    { method: 'GET' }
+      { method: 'GET' }
     );
     const result = await response.json();
     return result;
@@ -15,21 +15,14 @@ export async function checkFrequency(word) {
 export async function getRandomWords(obj) {
   try {
 
-    const filters = {
-      frSt: 2,
-      frEn: 6,
-      pos: 'Noun',
-      lang: obj.lang
-    };
-
-    // Формирование строки запроса из объекта с фильтрами
-    const queryParams = new URLSearchParams(filters);
+    const queryParams = new URLSearchParams(obj);
 
     const response = await fetch(`${SERVER_API}/random-words?${queryParams}`,
-    { method: 'GET' }
+      { method: 'GET' }
     );
+
     const result = await response.json();
-    console.log(result)
+    console.log('REQ')
     return result;
   } catch (err) {
     console.error(err);

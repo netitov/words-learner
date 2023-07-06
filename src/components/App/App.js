@@ -115,7 +115,7 @@ function App() {
           return { ...i, frCat }
         })
         sessionStorage.setItem('randomWords', JSON.stringify(newObj));
-        setRandomWords(response);
+        setRandomWords(newObj);
       }
 
       let timer;
@@ -323,6 +323,27 @@ function App() {
     setTranslFreqs(foundFreqs);
   }
 
+  //search random words
+  async function searchWords(pos, frValue, perValue) {
+    const filters = {
+      frSt: frValue[0],
+      frEn: frValue[1] === 7 ? 8 : frValue[1],
+      pos: pos,
+      lang: activeLangOutput.code === 'en' ? activeLangInput.code : activeLangOutput.code,
+      filmPerSt: perValue[0],
+      filmPerEn: perValue[1]
+    };
+
+    const response = await getRandomWords(filters);
+
+    const newObj = response.map((i) => {
+      const frCat = getFreqCat(i.fr)
+      return { ...i, frCat }
+    })
+    sessionStorage.setItem('randomWords', JSON.stringify(newObj));
+    setRandomWords(newObj);
+  }
+
   function test() {
     //getRandomWords();
   }
@@ -358,6 +379,8 @@ function App() {
           frIsLoading={frIsLoading}
           frNoData={frNoData}
           randomWords={randomWords}
+          getFreqCat={getFreqCat}
+          searchWords={searchWords}
         />
 
       </div>

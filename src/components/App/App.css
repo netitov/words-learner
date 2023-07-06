@@ -10,6 +10,7 @@
   --light-grey: #bebebe;
   --black-secodary: #757575;
   --main-green: #127386;
+
   --prime-blue: #37636c;
   --darker-blue: #2e5760ab;
   --light-blue: #dbecec70;
@@ -35,7 +36,7 @@
   font-family: 'Noto Sans Display', Sans-serif, Arial, Helvetica;
   font-weight: 300;
   font-size: var(--main-font);
-
+  overflow: hidden;
 }
 
 .page__wrapper {

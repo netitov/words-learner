@@ -52,6 +52,8 @@ function Main(props) {
 
       <RandomWords
         randomWords={props.randomWords}
+        getFreqCat={props.getFreqCat}
+        searchWords={props.searchWords}
       />
 
     </main>
