@@ -4,13 +4,13 @@ import { VscCheck } from 'react-icons/vsc';
 function Languages(props) {
 
   const activityClass = props.isActive.value ? ' languages_active' : '';
-  const typeClass = props.activeBtn.type === 'input' ? ' languages_input' : '';
+  const typeClass = props.activeBtn.type === 'input' || props.activeBtn.type === 'random' ? ' languages_input' : '';
 
   return (
     <div className={`languages-wrapper${props.isActive.value ? ' languages-wrapper_active' : ''}`}>
       <div className={`languages${activityClass}${typeClass}`}>
         <input
-          className={`languages__search${props.activeBtn.type === 'input' ? ' languages__search_input' : ''}`}
+          className={`languages__search${props.activeBtn.type === 'input' || props.activeBtn.type === 'random' ? ' languages__search_input' : ''}`}
           type='text'
           placeholder='Search language'
           onChange={(e) => props.searchLang(e.target.value)}
@@ -40,6 +40,10 @@ function Languages(props) {
           className={`languages__not-found${props.languages.length < 1 ? ' languages__not-found_active' : ''}`}
         >
           No data &#128532;
+        </span>
+
+        <span className={`languages__comment${props.commentActive ? ' languages__comment_active' : ''}`}>
+          At the moment, this feature only supports the following languages.
         </span>
 
       </div>

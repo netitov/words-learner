@@ -3,6 +3,7 @@ import Header from '../Header/Header';
 import Main from '../Main/Main';
 
 import { translate, getLanguages, getDictionary, checkFrequency, getRandomWords } from '../../utils/api';
+import { defaultLang } from '../../utils/constants';
 
 function App() {
 
@@ -24,6 +25,10 @@ function App() {
   const [frIsLoading, setFrIsLoading] = useState(false);
   const [frNoData, setFrNoData] = useState(false);
   const [randomWords, setRandomWords] = useState([]);
+  const [wordsAreLoading, setWordsAreLoading] = useState(false);
+  const [enDicLangs, setEnDicLangs] = useState([]);//list of languages supporning dictionary translation from english
+  const [randomlangListActive, setRandomlangListActive] = useState({ type: 'input', value: false });
+  const [filters, setFilters] = useState({});
 
   //check key in local storage
   function getStorageItem(storage, key) {
@@ -48,7 +53,7 @@ function App() {
     const foundLang = arr.find((i) => i.code === userLang);
     const activeLangOutput = foundLang
       ? { lang: foundLang.language, code: foundLang.code }
-      : { lang: 'Spanish', code: 'es' };
+      : defaultLang;
 
     setActiveLangOutput(activeLangOutput);
 
@@ -82,7 +87,7 @@ function App() {
         setAvailLang(sortedLangs);
         setFilteredLang(sortedLangs);
 
-        //set init lang
+        //set initial user language
         const userLang = getStorageItem(localStorage, 'userLang');
 
         if (userLang) {
@@ -91,50 +96,66 @@ function App() {
           setInitLang(sortedLangs);
         }
 
-        //list of languages for translation
+        //list of languages for dictionary check
         setDictionary(dict);
+
+        //list of languages for translation in feat RandomWords (available for dictionary from english)
+        const engDictionary = dict.filter((i) => i.languages.includes('en-'));
+        const filteredLangs = sortedLangs.filter((i) => {
+          return engDictionary.some((el) => i.code === el.languages.split('-')[1])
+        })
+        setEnDicLangs(filteredLangs);
       })
       .catch((err) => {
         console.log(err);
       })
   }, []);
 
-  //get inital list of random words
+  async function requestRandomWords(filters) {
+    const response = await getRandomWords(filters);
+    const lang = filters.lang;
+    const newObj = response.map((i) => {
+      const frCat = getFreqCat(i.fr)
+      return { ...i, frCat, lang }
+    })
+    sessionStorage.setItem('randomWords', JSON.stringify(newObj));
+    setRandomWords(newObj);
+    setWordsAreLoading(false);
+  }
+
+  // get inital list of random words
   useEffect(() => {
     const wordStorage = getStorageItem(sessionStorage, 'randomWords');
 
-    if (wordStorage) {
+    const currLang = JSON.parse(localStorage.getItem('userLang'));
+
+    if (wordStorage?.some((i) => i.lang === currLang.code)) {
       setRandomWords(wordStorage);
+
     } else {
+      setWordsAreLoading(true);
       //api request if words are not in the session storage
-      async function requestRandomWords() {
-        const obj = { lang: activeLangOutput.code };
-        const response = await getRandomWords(obj);
-        const newObj = response.map((i) => {
-          const frCat = getFreqCat(i.fr)
-          return { ...i, frCat }
-        })
-        sessionStorage.setItem('randomWords', JSON.stringify(newObj));
-        setRandomWords(newObj);
+
+      //use current filters, but update the language
+      const newFilters = {
+        ...filters,
+        lang: currLang.code
       }
 
       let timer;
 
       function delayedRequestRandomWords() {
         timer = setTimeout(() => {
-          requestRandomWords();
+          requestRandomWords(newFilters);
         }, 2000);
       }
 
-      if (activeLangOutput.code !== '' && wordStorage === null) {
-        delayedRequestRandomWords();
-      }
+      delayedRequestRandomWords();
+      setFilters(newFilters);
 
       return () => clearTimeout(timer);
     }
   }, [activeLangOutput, activeLangInput]);
-
-
 
   //get translation; switch the spinner
   async function getTranslation(text) {
@@ -234,8 +255,10 @@ function App() {
     }
     function handleOverlayClose (e) {
       if (!e.target.classList.contains('languages') && !e.target.classList.contains('translator__lang')
-        && !e.target.classList.contains('languages__search') && !e.target.classList.contains('languages__list')) {
-        setLangListActive({ value: false });
+        && !e.target.classList.contains('languages__search') && !e.target.classList.contains('languages__list')
+        && !e.target.classList.contains('wtable__th_btn')) {
+        //if lang list open from random words than close it, ohterwise close list in translation
+        randomlangListActive.value ? setRandomlangListActive({ value: false }) : setLangListActive({ value: false });
       }
     }
     document.addEventListener('keyup', handleEscClose);
@@ -245,29 +268,57 @@ function App() {
       document.removeEventListener('keyup', handleEscClose);
       document.removeEventListener('click', handleOverlayClose);
     };
-  }, [])
+  }, [randomlangListActive, langListActive])
 
   //open/close popup available languages list on lang btn click
   function openLangList(type) {
-
     if (type === langListActive.type) {
       setLangListActive({ type: '', value: false });
-    } else {
+    }
+    else {
       dropSearch();
       setLangListActive({ type: type, value: true });
+      setRandomlangListActive({ value: false })
     }
+
     //drop previous data before opening
     if (!langListActive.value) {
       dropSearch();
     }
   }
 
+   //open/close popup available languages list on lang btn click from table Random words
+  function openLangListWords(type) {
+    if (type === randomlangListActive.type) {
+      setRandomlangListActive({ type: '', value: false });
+    }
+    else {
+      dropSearch();
+      setRandomlangListActive({ type: type, value: true });
+      setLangListActive({ type: '', value: false });
+    }
+
+    //drop previous data before opening
+    if (!randomlangListActive.value) {
+      dropSearch();
+    }
+  }
+
   //select language for translation
   function selectLang(lang, type, code) {
-    if (type === 'input') {
+
+    //if lang list is opened from block random words
+    if (randomlangListActive.value) {
+      activeLangOutput.code === 'en' ? setActiveLangInput({ lang, code }) : setActiveLangOutput({ lang, code });
+    } else if (type === 'input') {
       setActiveLangInput({ lang, code });
     } else {
       setActiveLangOutput({ lang, code });
+    }
+
+    //update/save user language on local storage
+    if (code !== 'en') {
+      localStorage.setItem('userLang', JSON.stringify({ lang, code }));
     }
   }
 
@@ -301,8 +352,8 @@ function App() {
     }
   }
 
-  function addToList() {
-
+  function handleLearnList(data) {
+    console.log(data)
   }
 
   //compare words frequency
@@ -325,27 +376,28 @@ function App() {
 
   //search random words
   async function searchWords(pos, frValue, perValue) {
-    const filters = {
-      frSt: frValue[0],
-      frEn: frValue[1] === 7 ? 8 : frValue[1],
-      pos: pos,
-      lang: activeLangOutput.code === 'en' ? activeLangInput.code : activeLangOutput.code,
-      filmPerSt: perValue[0],
-      filmPerEn: perValue[1]
-    };
+    if (!wordsAreLoading) {
+      const currLang = JSON.parse(localStorage.getItem('userLang'));
 
-    const response = await getRandomWords(filters);
+      setWordsAreLoading(true);
+      const filters = {
+        frSt: frValue[0],
+        frEn: frValue[1] === 7 ? 8 : frValue[1],
+        pos: pos,
+        lang: currLang.code,
+        filmPerSt: perValue[0],
+        filmPerEn: perValue[1]
+      };
+      setFilters(filters);
 
-    const newObj = response.map((i) => {
-      const frCat = getFreqCat(i.fr)
-      return { ...i, frCat }
-    })
-    sessionStorage.setItem('randomWords', JSON.stringify(newObj));
-    setRandomWords(newObj);
+      requestRandomWords(filters);
+
+    }
   }
 
   function test() {
     //getRandomWords();
+    //console.log(filters)
   }
 
   return (
@@ -371,7 +423,7 @@ function App() {
           otherTransl={otherTransl}
           frequency={frequency}
           addTranslate={addTranslate}
-          addToList={addToList}
+          handleLearnList={handleLearnList}
           compareFreq={compareFreq}
           translFreqs={translFreqs}
           setCharsFreq={setCharsFreq}
@@ -381,6 +433,10 @@ function App() {
           randomWords={randomWords}
           getFreqCat={getFreqCat}
           searchWords={searchWords}
+          wordsAreLoading={wordsAreLoading}
+          enDicLangs={enDicLangs}
+          randomlangListActive={randomlangListActive}
+          openLangListWords={openLangListWords}
         />
 
       </div>

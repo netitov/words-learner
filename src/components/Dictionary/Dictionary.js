@@ -97,7 +97,7 @@ function Dictionary(props) {
                       <Menu
                         menuActive={activeMenu === i.text ? true : false}
                         addTranslate={() => props.addTranslate(i.text, true)}
-                        addToList={props.addToList}
+                        handleLearnList={props.handleLearnList}
                         compareFreq={() => props.compareFreq(i, true)}
                         compareFreqActive={props.outputLang === 'English' ? true : false}
                       />
@@ -108,7 +108,7 @@ function Dictionary(props) {
                         <Menu
                           menuActive={activeMenu === s.text ? true : false}
                           addTranslate={() => props.addTranslate(i.text, true)}
-                          addToList={props.addToList}
+                          handleLearnList={props.handleLearnList}
                           compareFreq={() => props.compareFreq(i, true)}
                           compareFreqActive={props.outputLang === 'English' ? true : false}
                         />
@@ -127,7 +127,7 @@ function Dictionary(props) {
                           <Menu
                             menuActive={activeMenu === m.text ? true : false}
                             addTranslate={() => props.addTranslate(m.text, false)}
-                            addToList={() => props.addToList(m.text)}
+                            handleLearnList={() => props.handleLearnList(m.text)}
                             compareFreq={() => props.compareFreq(i.mean)}
                             compareFreqActive={props.inputLang === 'English' ? true : false}
                           />

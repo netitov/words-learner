@@ -43,7 +43,7 @@ function Frequency(props) {
             <button
               className={`frequency__lst-btn${props.wordFrequency.text !== '' ? ' frequency__lst-btn_active' : ''}`}
               type='button'
-              onClick={props.addToList}
+              onClick={props.handleLearnList}
             >
               <BsBookmarks size='20' className='frequency__svg'/>
             </button>

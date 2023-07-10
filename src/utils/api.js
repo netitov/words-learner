@@ -14,6 +14,7 @@ export async function checkFrequency(word) {
 
 export async function getRandomWords(obj) {
   try {
+    console.log(obj)
 
     const queryParams = new URLSearchParams(obj);
 

@@ -165,7 +165,7 @@ function Translate(props) {
         <Dictionary
           otherTransl={props.otherTransl}
           addTranslate={props.addTranslate}
-          addToList={props.addToList}
+          handleLearnList={props.handleLearnList}
           compareFreq={props.compareFreq}
           outputLang={props.activeLangOutput.lang}
           inputLang={props.activeLangInput.lang}

@@ -24,6 +24,7 @@
   padding: 10px;
   min-height: 150px;
   transition: var(--transition);
+  border-radius: 0 0 10px 10px;
 }
 
 .languages_input {
@@ -49,6 +50,7 @@
 
 .languages__list {
   column-count: 4;
+
 }
 
 .languages__list_filtered {
@@ -99,5 +101,16 @@
 }
 
 .languages__not-found_active {
+  display: block;
+}
+
+.languages__comment {
+  display: none;
+  margin: 20px 0 10px;
+  text-align: center;
+  font-size: 0.9em;
+}
+
+.languages__comment_active {
   display: block;
 }

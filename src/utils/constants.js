@@ -10,3 +10,10 @@ export const tooltipOption = {
   WebkitBackdropFilter: 'blur(4px)',
   backdropFilter: 'blur(4px)'
 };
+
+
+export const defaultLang = {
+  lang: 'Spanish',
+  code: 'es'
+
+};

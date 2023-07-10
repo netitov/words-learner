@@ -37,7 +37,7 @@ function Main(props) {
         otherTransl={props.otherTransl}
         frequency={props.frequency}
         addTranslate={props.addTranslate}
-        addToList={props.addToList}
+        handleLearnList={props.handleLearnList}
         compareFreq={props.compareFreq}
         translFreqs={props.translFreqs}
       />
@@ -47,13 +47,23 @@ function Main(props) {
         wordFrequency={props.wordFrequency}
         frIsLoading={props.frIsLoading}
         frNoData={props.frNoData}
-        addToList={props.addToList}
+        handleLearnList={props.handleLearnList}
       />
 
       <RandomWords
         randomWords={props.randomWords}
         getFreqCat={props.getFreqCat}
         searchWords={props.searchWords}
+        handleLearnList={props.handleLearnList}
+        wordsAreLoading={props.wordsAreLoading}
+        activeLangOutput={props.activeLangOutput}
+        activeLangInput={props.activeLangInput}
+        enDicLangs={props.enDicLangs}
+        isActive={props.randomlangListActive}
+        inputText={props.inputText}
+        openLangList={props.openLangListWords}
+        selectLang={props.selectLang}
+        searchLang={props.searchLang}
       />
 
     </main>
