@@ -22,7 +22,7 @@
   width: 100%;
   box-sizing: border-box;
   padding: 10px;
-  min-height: 150px;
+  min-height: 170px;
   transition: var(--transition);
   border-radius: 0 0 10px 10px;
 }

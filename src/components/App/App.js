@@ -27,7 +27,8 @@ function App() {
   const [randomWords, setRandomWords] = useState([]);
   const [wordsAreLoading, setWordsAreLoading] = useState(false);
   const [enDicLangs, setEnDicLangs] = useState([]);//list of languages supporning dictionary translation from english
-  const [randomlangListActive, setRandomlangListActive] = useState({ type: 'input', value: false });
+  const [enDicLangsInit, setEnDicLangsInit] = useState([]);
+  const [randomlangListActive, setRandomlangListActive] = useState({ type: 'random', value: false });
   const [filters, setFilters] = useState({});
 
   //check key in local storage
@@ -105,6 +106,7 @@ function App() {
           return engDictionary.some((el) => i.code === el.languages.split('-')[1])
         })
         setEnDicLangs(filteredLangs);
+        setEnDicLangsInit(filteredLangs);
       })
       .catch((err) => {
         console.log(err);
@@ -325,14 +327,21 @@ function App() {
   function dropSearch() {
     setInputText('');
     setFilteredLang(availLang);
+    setEnDicLangs(enDicLangsInit);
   }
 
   //search language through translator
   function searchLang(data) {
+    const languages = randomlangListActive.value ? enDicLangsInit : availLang;
     setInputText(data);
     const text = data.toLowerCase();
-    const filteredArr = availLang.filter((i) => i.language.toLowerCase().includes(text));
-    setFilteredLang(filteredArr);
+    const filteredArr = languages.filter((i) => i.language.toLowerCase().includes(text));
+
+    if (randomlangListActive.value) {
+      setEnDicLangs(filteredArr);
+    } else {
+      setFilteredLang(filteredArr);
+    }
   }
 
   function swapLangs() {

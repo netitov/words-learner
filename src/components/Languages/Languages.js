@@ -42,7 +42,7 @@ function Languages(props) {
           No data &#128532;
         </span>
 
-        <span className={`languages__comment${props.commentActive ? ' languages__comment_active' : ''}`}>
+        <span className={`languages__comment${props.commentActive && props.inputText === '' ? ' languages__comment_active' : ''}`}>
           At the moment, this feature only supports the following languages.
         </span>
 
