@@ -30,6 +30,7 @@ function App() {
   const [enDicLangsInit, setEnDicLangsInit] = useState([]);
   const [randomlangListActive, setRandomlangListActive] = useState({ type: 'random', value: false });
   const [filters, setFilters] = useState({});
+  const [quizActive, setQuizActive] = useState(true);
 
   //check key in local storage
   function getStorageItem(storage, key) {
@@ -404,6 +405,37 @@ function App() {
     }
   }
 
+  function startQuiz() {
+    setQuizActive(true);
+  }
+
+  function closeQuiz(e) {
+    setQuizActive(false);
+  }
+
+   //close quiz on esc and overlay
+   useEffect(() => {
+    function handleEscClose(e) {
+      if (e.key === 'Escape') {
+        setQuizActive(false);
+      }
+    }
+
+    function handleOverlayClose(e) {
+      if (e.target.classList[0] === 'quiz') {
+        setQuizActive(false);
+      }
+    }
+    document.addEventListener('keyup', handleEscClose);
+    document.addEventListener('click', handleOverlayClose);
+
+    return () => {
+      document.removeEventListener('keyup', handleEscClose);
+      document.removeEventListener('click', handleOverlayClose);
+    };
+  }, [])
+
+
   function test() {
     //getRandomWords();
     //console.log(filters)
@@ -446,6 +478,9 @@ function App() {
           enDicLangs={enDicLangs}
           randomlangListActive={randomlangListActive}
           openLangListWords={openLangListWords}
+          quizActive={quizActive}
+          setQuizActive={startQuiz}
+          closeQuiz={closeQuiz}
         />
 
       </div>

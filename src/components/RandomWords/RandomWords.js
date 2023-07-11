@@ -45,7 +45,7 @@ function RandomWords(props) {
 
   const [pos, setPos] = useState([]); //props.randomWords
   const [words, setWords] = useState([]);
-  const [frValue, setFrValue] = useState([1.5, 7]);
+  const [frValue, setFrValue] = useState([4, 6]);
   const [perValue, setPerValue] = useState([0, 100]);
 
   useEffect(() => {

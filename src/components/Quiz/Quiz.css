@@ -1,0 +1,153 @@
+.quiz {
+  position: fixed;
+  width: 100%;
+  min-height: 100vh;
+  top: 0;
+  left: 0;
+  background-color: rgb(0 0 0 / 78%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0.2s, opacity 0.3s;
+}
+
+.quiz_active {
+  visibility: visible;
+  opacity: 1;
+}
+
+.quiz__container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  max-width: 700px;
+  min-height: 80vh;
+  justify-content: center;
+  background: #ffe9b8;
+  border-radius: 5%;
+  position: relative;
+}
+
+.quiz__quest {
+  min-width: 100%;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f9e1ab;
+}
+
+.quiz__quest > h3 {
+  font-size: 2.5em;
+  font-weight: 300;
+  margin: 0;
+}
+
+.quiz__options-box {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-gap: 15px;
+  margin-top: 30px;
+}
+
+.quiz__option {
+  font-weight: 300;
+  font-size: 1.3em;
+  padding: 10px;
+  border: 1px solid #dcb869;
+  border-radius: 20px;
+  min-width: 180px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.quiz__option:hover {
+  background-color: var(--yellow);
+}
+
+.quiz__option_correct {
+  background: #64b45770;
+}
+
+.quiz__option_incorrect {
+  background: #f3252540;
+}
+
+.quiz__btn-next {
+  position: absolute;
+  bottom: 5%;
+  right: 7%;
+  padding: 8px 22px;
+  border-radius: 10px;
+  background-color: var(--yellow);
+  font-weight: 300;
+  font-size: 1.1em;
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.quiz__btn-next:hover {
+  background-color: #ffb51c6e;
+}
+
+.quiz__progress {
+  width: 80%;
+  max-width: 250px;
+  height: 10px;
+  border-radius: 10px;
+  position: absolute;
+  z-index: 0;
+  top: 9%;
+  left: 5%;
+  border: 1px solid #dcb869;;
+}
+
+.quiz__progress-done {
+  width: 20%;
+  background: var(--yellow);
+  height: 100%;
+  border-radius: 10px 0 0 10px;
+
+}
+
+.quiz__progress > span {
+  position: absolute;
+  right: -40px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.9em;
+}
+
+.btn-cross {
+  border: none;
+  display: flex;
+  align-items: center;
+  padding: 14px;
+  border-radius: 50%;
+  transition: var(--transition);
+  position: absolute;
+  top: 2%;
+  right: 5%;
+}
+
+.btn-cross:hover {
+  background: #18181878;
+  cursor: pointer;
+}
+
+.btn-cross svg {
+  display: block;
+  transform: rotate(45deg);
+  width: 23px;
+}
+
+.btn-cross svg line {
+  stroke: #fff;
+  stroke-width: 5;
+}

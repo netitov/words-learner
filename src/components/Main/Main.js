@@ -4,6 +4,7 @@ import Translate from '../Translator/Translator';
 import Frequency from '../Frequency/Frequency';
 import RandomWords from '../RandomWords/RandomWords';
 import Promo from '../Promo/Promo';
+import Quiz from '../Quiz/Quiz';
 
 function Main(props) {
 
@@ -65,6 +66,21 @@ function Main(props) {
         selectLang={props.selectLang}
         searchLang={props.searchLang}
       />
+
+      <div className='main__quiz'>
+        <h2 className='main__heading heading2'>Learn and test yourself</h2>
+        <div className='main__quiz-container'>
+          <div className='main__block-disciption'>
+            <p>Take the tests and check your progress.</p>
+            <p>Use filters above to update the word list</p>
+          </div>
+          <button className='main__quiz-btn' type='button' onClick={props.setQuizActive}>Start test</button>
+        </div>
+        <Quiz
+          quizActive={props.quizActive}
+          closeQuiz={props.closeQuiz}
+        />
+      </div>
 
     </main>
   )

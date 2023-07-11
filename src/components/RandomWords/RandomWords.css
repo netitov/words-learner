@@ -2,7 +2,7 @@
   max-width: var(--max-width);
   width: var(--page-width);
   padding-top: var(--main-gap);
-  padding-bottom: var(--bottom-gap);
+  /* padding-bottom: var(--bottom-gap); */
   margin: auto;
   position: relative;
 }
