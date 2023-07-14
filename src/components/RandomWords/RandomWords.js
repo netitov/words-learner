@@ -45,7 +45,7 @@ function RandomWords(props) {
 
   const [pos, setPos] = useState([]); //props.randomWords
   const [words, setWords] = useState([]);
-  const [frValue, setFrValue] = useState([4, 6]);
+  const [frValue, setFrValue] = useState([3, 5.5]);
   const [perValue, setPerValue] = useState([0, 100]);
 
   useEffect(() => {
@@ -101,6 +101,20 @@ function RandomWords(props) {
     props.handleLearnList(updatedData.find((el) => el._id === i._id ));
   }
 
+  function handleSearch() {
+    //const currLang = JSON.parse(localStorage.getItem('userLang'));
+    const filters = {
+      frSt: frValue[0],
+      frEn: frValue[1] === 7 ? 8 : frValue[1],
+      pos: pos,
+      /* lang: currLang.code, */
+      filmPerSt: perValue[0],
+      filmPerEn: perValue[1]
+    };
+    props.searchWords(filters);
+  }
+
+
   const getActiveLanguage = useMemo(() => {
     const value = props.activeLangOutput.code !== 'en' ? props.activeLangOutput : props.activeLangInput;
     //if selected lang is not in dictionary, use the default one
@@ -128,7 +142,7 @@ function RandomWords(props) {
             <button
               className={`words__search-btn${props.wordsAreLoading ? ' words__search-btn_inactive' : ''}`}
               type='button'
-              onClick={() => props.searchWords(pos, frValue, perValue)}>
+              onClick={handleSearch}>
                 Search / update
             </button>
 

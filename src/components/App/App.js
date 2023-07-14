@@ -29,8 +29,12 @@ function App() {
   const [enDicLangs, setEnDicLangs] = useState([]);//list of languages supporning dictionary translation from english
   const [enDicLangsInit, setEnDicLangsInit] = useState([]);
   const [randomlangListActive, setRandomlangListActive] = useState({ type: 'random', value: false });
-  const [filters, setFilters] = useState({});
-  const [quizActive, setQuizActive] = useState(true);
+  const [filters, setFilters] = useState({
+    frSt: 3,
+    frEn: 5.5
+  });
+  const [quizActive, setQuizActive] = useState(false);
+  const [quizQuestions, setQuizQuestions] = useState([]);
 
   //check key in local storage
   function getStorageItem(storage, key) {
@@ -74,7 +78,6 @@ function App() {
     } else return 'very high';
   }
 
-  //take once, than grab from local storage. How to update it?
   //get data from server
   useEffect(() => {
     Promise.all([
@@ -126,18 +129,19 @@ function App() {
     setWordsAreLoading(false);
   }
 
-  // get inital list of random words
+  // get inital list of random words/ update word list of languages was changed
   useEffect(() => {
     const wordStorage = getStorageItem(sessionStorage, 'randomWords');
+    const quizStorage = getStorageItem(sessionStorage, 'quizQuestions');
 
     const currLang = JSON.parse(localStorage.getItem('userLang'));
 
+    //if language were not changed, use list of words from session storage
     if (wordStorage?.some((i) => i.lang === currLang.code)) {
       setRandomWords(wordStorage);
-
+      setQuizQuestions(quizStorage);
     } else {
       setWordsAreLoading(true);
-      //api request if words are not in the session storage
 
       //use current filters, but update the language
       const newFilters = {
@@ -148,12 +152,14 @@ function App() {
       let timer;
 
       function delayedRequestRandomWords() {
-        timer = setTimeout(() => {
-          requestRandomWords(newFilters);
+        timer = setTimeout(async() => {
+          await requestRandomWords(newFilters);
+          updateQuizQuestions();
         }, 2000);
       }
 
       delayedRequestRandomWords();
+
       setFilters(newFilters);
 
       return () => clearTimeout(timer);
@@ -384,24 +390,27 @@ function App() {
     setTranslFreqs(foundFreqs);
   }
 
+  function updateQuizQuestions() {
+    const quizArr = createQuizQuestions();
+    setQuizQuestions(quizArr);
+    sessionStorage.setItem('quizQuestions', JSON.stringify(quizArr));
+  }
+
   //search random words
-  async function searchWords(pos, frValue, perValue) {
+  async function searchWords(filters) {
+    //check of words are not already on loading
     if (!wordsAreLoading) {
       const currLang = JSON.parse(localStorage.getItem('userLang'));
+      const newFilters = {
+        ...filters,
+        lang: currLang.code
+      }
 
       setWordsAreLoading(true);
-      const filters = {
-        frSt: frValue[0],
-        frEn: frValue[1] === 7 ? 8 : frValue[1],
-        pos: pos,
-        lang: currLang.code,
-        filmPerSt: perValue[0],
-        filmPerEn: perValue[1]
-      };
-      setFilters(filters);
+      setFilters(newFilters);
+      await requestRandomWords(newFilters);
 
-      requestRandomWords(filters);
-
+      updateQuizQuestions();
     }
   }
 
@@ -412,6 +421,98 @@ function App() {
   function closeQuiz(e) {
     setQuizActive(false);
   }
+
+
+  //create questions and answers for quiz (from random words)
+  function createQuizQuestions() {
+    const wordStorage = getStorageItem(sessionStorage, 'randomWords');
+    const allWords = [];
+    const quizArr = [];
+    const mainWords = [];
+
+    wordStorage.forEach((i) => {
+      const obj = { word: i.translation, translation: i.word, pos: i.pos.toLowerCase() };
+      allWords.push(obj);
+      mainWords.push(obj);
+
+      i.otherTransl.forEach((o) => {
+
+        o.tr.forEach((el) => {
+           if(!allWords.some((word) => word.word === el.text)) {
+            const obj = { word: el.text, pos: el.pos, syn: i.translation };
+            allWords.push(obj);
+           }
+        })
+
+      })
+
+    })
+
+    mainWords.forEach((i) => {
+      const obj = {
+        question: i.translation,
+        correctAnswer: i.word,
+        pos: i.pos,
+        options: []
+      };
+
+      const filteredWords = allWords.filter((el) => {
+        return el.word !== obj.correctAnswer && el.syn !== obj.correctAnswer /* && el.pos === obj.pos */
+        }
+
+      );
+
+      while (obj.options.length < 3) {
+        const randomIndex = Math.floor(Math.random() * filteredWords.length);
+
+        const newOpt = filteredWords[randomIndex].word;
+
+        if (!obj.options.some((opt) => opt === newOpt)) {
+          obj.options.push(newOpt);
+        }
+      }
+
+      quizArr.push(obj);
+
+      const randomIndexinArr = Math.floor(Math.random() * 4);
+      obj.options.splice(randomIndexinArr, 0, obj.correctAnswer);
+
+    })
+
+    return quizArr;
+  }
+
+  //update quiz questions of randomWords were changed
+  /* useEffect(() => {
+    if (randomWords.length > 0) {
+
+      const quizStorage = JSON.parse(sessionStorage.getItem('quizQuestions'));
+
+      function compareArrays() {
+        if (quizStorage === null) {
+          return false;
+        }
+        if (randomWords.filter((i) => quizStorage?.some((q) => i.word === q.question)).length === quizStorage.length) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+
+      const arraysAreSame = compareArrays();
+
+      if (!arraysAreSame) {
+        const quizArr = createQuizQuestions();
+        setQuizQuestions(quizArr);
+        sessionStorage.setItem('quizQuestions', JSON.stringify(quizArr));
+      } else {
+        setQuizQuestions(quizStorage);
+      }
+    }
+
+    console.log('effect updated')
+
+  }, [randomWords]) */
 
    //close quiz on esc and overlay
    useEffect(() => {
@@ -437,8 +538,7 @@ function App() {
 
 
   function test() {
-    //getRandomWords();
-    //console.log(filters)
+
   }
 
   return (
@@ -481,6 +581,8 @@ function App() {
           quizActive={quizActive}
           setQuizActive={startQuiz}
           closeQuiz={closeQuiz}
+          quizQuestions={quizQuestions}
+          filters={filters}
         />
 
       </div>

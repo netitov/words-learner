@@ -23,7 +23,7 @@ export async function getRandomWords(obj) {
     );
 
     const result = await response.json();
-    console.log('REQ')
+    console.log(result)
     return result;
   } catch (err) {
     console.error(err);

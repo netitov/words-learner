@@ -79,6 +79,9 @@ function Main(props) {
         <Quiz
           quizActive={props.quizActive}
           closeQuiz={props.closeQuiz}
+          quizQuestions={props.quizQuestions}
+          searchWords={props.searchWords}
+          filters={props.filters}
         />
       </div>
 

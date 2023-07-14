@@ -28,7 +28,7 @@
   padding: 10px;
   background: var(--yellow);
   border-radius: 10px;
-  margin-left: 45px;
+  margin-left: 15%;
   cursor: pointer;
   transition: var(--transition);
 }
