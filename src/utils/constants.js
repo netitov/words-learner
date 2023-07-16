@@ -15,5 +15,8 @@ export const tooltipOption = {
 export const defaultLang = {
   lang: 'Spanish',
   code: 'es'
-
 };
+
+export const filterBtns = [
+  'common verbs', 'common nouns', 'in every movie', 'average frequency', 'low frequency'
+];

@@ -15,8 +15,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
 import Tooltip from '@mui/material/Tooltip';
-import { tooltipOption } from '../../utils/constants';
-import { defaultLang } from '../../utils/constants';
+import { tooltipOption, defaultLang, filterBtns } from '../../utils/constants';
 
 
 function RandomWords(props) {
@@ -47,6 +46,7 @@ function RandomWords(props) {
   const [words, setWords] = useState([]);
   const [frValue, setFrValue] = useState([3, 5.5]);
   const [perValue, setPerValue] = useState([0, 100]);
+  const [activeBtn, setActiveBtn] = useState('');
 
   useEffect(() => {
     setWords(props.randomWords);
@@ -101,16 +101,75 @@ function RandomWords(props) {
     props.handleLearnList(updatedData.find((el) => el._id === i._id ));
   }
 
+  function handleBtnFilter(e) {
+
+    let filters = {};
+
+    if (e.target.textContent === 'highest frequency') {
+      filters = {
+        frSt: 5,
+        frEn: 8,
+      };
+    };
+
+    if (e.target.textContent === 'common verbs') {
+      filters = {
+        frSt: 4,
+        frEn: 8,
+        pos: 'Verb'
+      };
+    };
+
+    if (e.target.textContent === 'common nouns') {
+      filters = {
+        frSt: 4,
+        frEn: 8,
+        pos: 'Noun'
+      };
+    };
+
+    if (e.target.textContent === 'in every movie') {
+      filters = {
+        filmPerSt: 70,
+        filmPerEn: 100
+      };
+    };
+
+    if (e.target.textContent === 'average frequency') {
+      filters = {
+        frSt: 2,
+        frEn: 3
+      };
+    };
+
+    if (e.target.textContent === 'low frequency') {
+      filters = {
+        frSt: 1,
+        frEn: 3
+      };
+    };
+
+    setActiveBtn(e.target.textContent);
+
+    //dropp other filters
+    setFrValue([0, 7]);
+    setPerValue([0, 100]);
+    setPos([]);
+
+    //search movie in DB
+    props.searchWords(filters);
+
+  }
+
   function handleSearch() {
-    //const currLang = JSON.parse(localStorage.getItem('userLang'));
     const filters = {
       frSt: frValue[0],
       frEn: frValue[1] === 7 ? 8 : frValue[1],
       pos: pos,
-      /* lang: currLang.code, */
       filmPerSt: perValue[0],
       filmPerEn: perValue[1]
     };
+    setActiveBtn('');
     props.searchWords(filters);
   }
 
@@ -133,6 +192,20 @@ function RandomWords(props) {
       </div>
 
       <div className='words__container'>
+
+        <div className='words__btn-box'>
+
+          {filterBtns.map((i) => (
+            <button
+              type='button'
+              className={`words__filter-btn${activeBtn === i ? ' words__filter-btn_active' : ''}`}
+              onClick={handleBtnFilter}
+              key={i}
+            >
+              {i}
+            </button>
+          ))}
+        </div>
 
         <div className='words__filter-box'>
 
@@ -258,7 +331,7 @@ function RandomWords(props) {
 
                 </th>
                 <th>frequency</th>
-                <th>film %</th>
+                {/* <th>film %</th> */}
 
 
 
@@ -284,7 +357,7 @@ function RandomWords(props) {
                   <td className='wtable__td'>
                     <span className={`wtable__fr-btn${i.fr >= 4 ? ' wtable__fr-btn_high' : ''}`}>{i.frCat}</span>
                   </td>
-                  <td>{i.filmPer.toFixed(1)}%</td>
+                  {/* <td>{i.filmPer.toFixed(1)}%</td> */}
 
                 </tr>
               ))}
