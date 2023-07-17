@@ -32,11 +32,13 @@ function HorizontalChart(props) {
     },
     responsive: true,
     plugins: {
-
       title: {
         display: false,
         text: 'Chart.js Horizontal Bar Chart',
       },
+      legend: {
+        display: false
+     },
     },
     scales: {
       y: {

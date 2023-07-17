@@ -183,7 +183,7 @@ function RandomWords(props) {
 
 
   return (
-    <div className='words'>
+    <div className='words' id='random'>
       <h2 className='words__heading heading2'>Find words</h2>
 
       <div className='words__dis-cont'>

@@ -14,7 +14,7 @@ import { BsCheck2All } from 'react-icons/bs';
 function Frequency(props) {
 
   return (
-    <div className='frequency-wrapper'>
+    <div className='frequency-wrapper' id='frequency'>
     <div className='frequency'>
       <h2 className='frequency__heading heading2'>Check the word frequency</h2>
       <div className='frequency__input-box'>

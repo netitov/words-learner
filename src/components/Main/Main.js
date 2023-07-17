@@ -5,6 +5,7 @@ import Frequency from '../Frequency/Frequency';
 import RandomWords from '../RandomWords/RandomWords';
 import Promo from '../Promo/Promo';
 import Quiz from '../Quiz/Quiz';
+import About from '../About/About';
 
 function Main(props) {
 
@@ -18,6 +19,8 @@ function Main(props) {
     <main className='main'>
 
       <Promo />
+
+      <About />
 
       <Translate
         translate={props.translate}
@@ -67,7 +70,7 @@ function Main(props) {
         searchLang={props.searchLang}
       />
 
-      <div className='main__quiz'>
+      <div className='main__quiz' id='quiz'>
         <h2 className='main__heading heading2'>Learn and test yourself</h2>
         <div className='main__quiz-container'>
           <div className='main__block-disciption'>

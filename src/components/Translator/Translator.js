@@ -22,7 +22,7 @@ function Translate(props) {
   }
 
   return (
-    <div className='translator-wrapper' >
+    <div className='translator-wrapper' id='translator'>
       <h2 className='translator-wrapper__heading heading2'>Translate and compare</h2>
 
       <div className='translator'>
