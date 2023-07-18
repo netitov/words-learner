@@ -7,6 +7,7 @@ import Promo from '../Promo/Promo';
 import Quiz from '../Quiz/Quiz';
 import About from '../About/About';
 
+
 function Main(props) {
 
   const [btnActive, setBtnActive] = useState(false);

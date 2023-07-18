@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
+import Footer from '../Footer/Footer';
 
 import { translate, getLanguages, getDictionary, checkFrequency, getRandomWords } from '../../utils/api';
 import { defaultLang } from '../../utils/constants';
@@ -584,6 +585,8 @@ function App() {
           quizQuestions={quizQuestions}
           filters={filters}
         />
+
+        <Footer />
 
       </div>
     </div>

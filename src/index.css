@@ -1,5 +1,6 @@
 @import url(/src/utils/normalize.css);
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Display:wght@200;300;400&display=swap');
+@import url(/src/components/Snackbar/Snackbar.css);
 @import url(/src/components/App/App.css);
 @import url(/src/components/Header/Header.css);
 @import url(/src/components/Main/Main.css);
@@ -15,3 +16,6 @@
 @import url(/src/components/RandomWords/RandomWords.css);
 @import url(/src/components/Quiz/Quiz.css);
 @import url(/src/components/About/About.css);
+@import url(/src/components/ContactForm/ContactForm.css);
+@import url(/src/components/Footer/Footer.css);
+

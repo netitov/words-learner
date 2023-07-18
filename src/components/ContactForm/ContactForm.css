@@ -1,0 +1,298 @@
+.contact {
+  position: fixed;
+  width: 100%;
+  min-height: 100vh;
+  top: 0;
+  left: 0;
+  background-color: rgb(0 0 0 / 78%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0.2s, opacity 0.2s;
+}
+
+.contact_active {
+  visibility: visible;
+  opacity: 1;
+}
+
+.contact__container {
+  /* min-height: 100vh; */
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  position: relative;
+}
+
+.contact__img-box {
+  display: flex;
+  align-items: center;
+  position: relative;
+  justify-content: center;
+  padding-top: 12em;
+  max-width: var(--max-width);
+  width: 100%;
+  overflow-x: hidden;
+  padding-bottom: 16px;
+  box-sizing: border-box;
+}
+
+.contact__img {
+  height: 47%;
+  bottom: 0%;
+  position: absolute;
+  margin: 0;
+  animation: fadeinFull 1s;
+}
+
+.contact__overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: #0000007d;
+}
+
+.contact__text {
+  font-size: 1.5em;
+  color: #fff;
+  margin: 0;
+}
+
+.contact__text_form {
+  position: absolute;
+  top: -39px;
+  left: 6px;
+}
+
+.contact__links {
+  z-index: 2;
+  padding: 35px 0 35px;
+  width: var(--content-width);
+}
+
+.contact__links  a {
+  color: #ddd;
+  font-size: 1.1em;
+  text-decoration: none;
+}
+
+.contact__links > div path {
+  fill: #ddd;
+}
+
+.contact__text_contact {
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.form {
+  max-width: 550px;
+  width: 90%;
+  background: var(--white);
+  display: flex;
+  justify-content: center;
+  /* box-shadow: 0 0 6px #0e0e0e2e; */
+  border-radius: 15px;
+  position: relative;
+  z-index: 3;
+
+}
+
+.form *{
+  outline: none;
+}
+
+.form__body {
+  width: 100%;
+  padding: 35px 30px 20px 30px;
+  color: #fff;
+
+}
+
+.form__item {
+  margin-bottom: 55px;
+  position: relative;
+}
+
+.form__title {
+  margin: 15px 0 35px;
+  font-size: 28px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.form__label {
+  display: block;
+  position: absolute;
+  transition: all 0.3s;
+  bottom: 7px;
+  color: #878787;
+}
+
+.form__label-area {
+  bottom: 15px;
+  transition: all 0.3s;
+}
+
+.form__input {
+  height: 30px;
+  width: 100%;
+  font-size: 1.1em;
+  transition: all 0.3s ease;
+  border: none;
+  background: none;
+  border-bottom: 1px solid #cccccc;
+  color: var(--prime-blue);
+}
+
+.form__input:focus {
+  border-bottom: 1px solid var(--prime-blue);
+}
+
+textarea.form__input {
+  min-height: 120px;
+  resize: none;
+  transition: all 0.3s;
+}
+
+.form__button {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50px;
+  background-color: var(--prime-blue);
+  border: none;
+  color: #fff;
+  border-radius: 15px;
+  margin-top: 40px;
+  transition: all 0.3s;
+  opacity: 0.5;
+}
+
+.form__button_active {
+  opacity: 1;
+}
+
+.form__button:hover {
+  cursor: not-allowed;
+}
+
+.form__button_active:hover {
+  cursor: pointer;
+  box-shadow: 0px 0px 11px 1px #696969;
+}
+
+.form__input:focus ~ .form__label, .form__input:valid ~ .form__label {
+  bottom: 100%;
+  color: #878787;
+  font-size: 14px;
+}
+
+.form__label_active {
+  bottom: 33px;
+  color: #fd9898;
+  font-size: 14px;
+}
+
+/*классы для Textarea при фокусировании, отдельно, т.к. поле больше*/
+.form__input:focus ~ .form__label-area, .form__input:valid ~ .form__label {
+  bottom: 100%;
+  color: #7b7b7b;
+  font-size: 14px;
+}
+
+.form__label-area_active {
+  bottom: 100%;
+  color: #ff5d5d;
+  font-size: 15px;
+}
+
+.form__close-btn {
+  border: none;
+  display: flex;
+  align-items: center;
+  padding: 14px;
+  border-radius: 50%;
+  transition: var(--transition);
+  position: absolute;
+  top: -16%;
+  right: -17%;
+}
+
+.form__close-btn:hover {
+  background: #18181878;
+  cursor: pointer;
+}
+
+.form__close-btn > svg {
+  display: block;
+  transform: rotate(45deg);
+  width: 23px;
+}
+
+.form__close-btn svg line {
+  stroke: #fff;
+  stroke-width: 5;
+}
+
+.contact__snack {
+  background: #36913f;
+  color: #fff;
+}
+
+.contact__snack-error {
+  background: #ff5353;
+  color: #fff;
+}
+
+@media (max-width: 930px) {
+  .contact__text_form {
+    top: -8%;
+    left: 2%;
+  }
+
+  .contact__text > br {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .form {
+    width: 95%;
+  }
+
+  .form__title {
+    margin: 15px 0 35px;
+    font-size: 25px;
+  }
+
+  .contact__img {
+    right: -23%;
+  }
+}
+
+@media (max-width: 370px) {
+  .contact__links .contacts {
+    justify-content: flex-start;
+  }
+
+}
+
+@keyframes opaccity {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

@@ -82,6 +82,20 @@ td {
   width: 50%;
 }
 
+.table__head-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.table__head-box > .table__tooltip {
+  display: none;
+}
+
+.table__head-box > .table__tooltip_active {
+  display: block;
+}
+
 .table__block {
   display: flex;
   align-items: center;

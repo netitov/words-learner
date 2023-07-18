@@ -259,17 +259,20 @@ div.words__select {
   flex: 1;
   white-space: nowrap;
   font-weight: 300;
-  border: 1px solid var(--prime-yellow);
+  border: 2px solid #c1c1c182;
   padding: 10px;
   border-radius: 20px;
-  color: #b87d00;
+  color: var(--black-secodary);
   font-size: 1.1em;
   transition: var(--transition);
   cursor: pointer;
 }
 
 .words__filter-btn:hover, .words__filter-btn_active {
-  background: #fee6b5;
+  /* background: #fee6b5; */
+  color: #936400;
+  border: 2px solid var(--prime-yellow);
+
 }
 
 

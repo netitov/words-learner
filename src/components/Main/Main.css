@@ -25,8 +25,8 @@
 .main__quiz-btn {
   font-size: 1.3em;
   font-weight: 300;
-  padding: 10px;
-  background: var(--yellow);
+  padding: 10px 25px;
+  background: var(--prime-yellow);
   border-radius: 10px;
   margin-left: 15%;
   cursor: pointer;
@@ -34,5 +34,5 @@
 }
 
 .main__quiz-btn:hover {
-  background: var(--prime-yellow);
+  background: var(--yellow);
 }

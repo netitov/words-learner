@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Menu from '../Menu/Menu';
+import RefTooltip from '../RefTooltip/RefTooltip';
 
 
 function Dictionary(props) {
@@ -80,8 +81,30 @@ function Dictionary(props) {
           <thead>
             <tr>
               <th>pos</th>
-              <th>translation</th>
-              <th>synonyms</th>
+              <th>
+                <div className='table__head-box'>
+                  <span>translation</span>
+                  <RefTooltip
+                    class={`table__tooltip${props.outputLang === 'English' ? ' table__tooltip_active' : ''}`}
+                    color='#757575'
+                  >
+                    <p>Сlick on the appropriate translation option to view more features
+                    </p>
+                  </RefTooltip>
+                </div>
+              </th>
+              <th>
+                <div className='table__head-box'>
+                  <span>synonyms</span>
+                  <RefTooltip
+                    class={`table__tooltip${props.inputLang === 'English' ? ' table__tooltip_active' : ''}`}
+                    color='#757575'
+                  >
+                    <p>Сlick on the appropriate synonym to view more features
+                    </p>
+                  </RefTooltip>
+                </div>
+              </th>
             </tr>
           </thead>
 
