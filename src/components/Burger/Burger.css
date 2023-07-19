@@ -1,0 +1,77 @@
+/* thanks for idea https://codepen.io/syrizaldev/details/QWmdGwe */
+
+.burger {
+  position: relative;
+  display: none;
+  cursor: pointer;
+  user-select: none;
+  order: -1;
+  z-index: 10;
+  width: 1.7rem;
+  height: 1.3rem;
+  border: none;
+  outline: none;
+  background: none;
+  visibility: visible;
+  transform: rotate(0deg);
+  transition: 0.35s ease;
+  padding: 0;
+  order: 2;
+}
+
+.burger-line {
+  position: absolute;
+  display: block;
+  right: 0;
+  width: 100%;
+  height: 2px;
+  border: none;
+  outline: none;
+  opacity: 1;
+  transform: rotate(0deg);
+  background-color: var(--white);
+  transition: 0.25s ease-in-out;
+
+}
+
+.burger_active .burger-line {
+  background-color: var(--light-grey);
+}
+
+.burger-line:nth-child(1) {
+  top: 0px;
+}
+
+.burger-line:nth-child(2) {
+  top: 0.6rem;
+  width: 75%;
+}
+
+.burger-line:nth-child(3) {
+  top: 1.2rem;
+}
+
+.burger_active .burger-line:nth-child(1) {
+  top: 0.5rem;
+  transform: rotate(135deg);
+}
+
+.burger_active .burger-line:nth-child(2) {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.burger_active .burger-line:nth-child(3) {
+  top: 0.5rem;
+  transform: rotate(-135deg);
+}
+
+@media (max-width: 860px) {
+  .burger {
+    display: block;
+    margin-left: 25px;
+
+    position: absolute;
+    right: 4%;
+  }
+}

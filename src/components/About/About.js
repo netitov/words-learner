@@ -77,7 +77,7 @@ function About() {
               className="about__card"
               to={card.to || ''}
               smooth={true}
-              duration={400}
+              /* duration={400} */
             >
               <div className="about__svg-wrapper">{card.icon}</div>
               <h3>{card.title}</h3>
