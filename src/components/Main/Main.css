@@ -7,6 +7,10 @@
   position: relative;
 }
 
+.main_unscrolled {
+  overflow-y: scroll;
+}
+
 .main__block-disciption {
   font-size: 1.3em;
   line-height: 1.7em;

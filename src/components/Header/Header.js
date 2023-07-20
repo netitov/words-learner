@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-scroll';
 import arrows from '../../images/Arrows.svg';
 import Burger from '../Burger/Burger';
@@ -13,8 +13,10 @@ function Header() {
 
     if (!activeMenu) {
       document.body.classList.add('unscrolled');
+      document.querySelector('main').classList.add('main_unscrolled');
     } else {
       document.body.classList.remove('unscrolled');
+      document.querySelector('main').classList.remove('main_unscrolled');
     }
   }
 
@@ -26,9 +28,9 @@ function Header() {
 
 
   return (
-    <header>
-      <nav className='nav header__nav'>
-        <ul className={`nav__ul${activeMenu ? ' nav__ul_active' : ''}`}>
+    <header className={`header${activeMenu ? ' header_unscrolled' : ''}`}>
+      <nav className={`nav${activeMenu ? ' nav_active' : ''}`}>
+        <ul className='nav__ul'>
 
           <li className={`nav__li`}>
             <Link to='translator' smooth={true} onClick={menuClick}>
@@ -45,7 +47,7 @@ function Header() {
           <li className={`nav__li nav__li_logo`}>
             <Link to='/' smooth={true} onClick={menuClick}>
               <span>WORDS</span> Learner
-              <img className="nav__img" src={arrows} alt="arrows"></img>
+              <img className='nav__img' src={arrows} alt='arrows'></img>
             </Link>
           </li>
 
@@ -71,11 +73,11 @@ function Header() {
         </ul>
       </nav>
 
-      <div className='nav__burger-cont'>
-        <div className={`nav__li nav__li_logo`}>
+      <div className='burger-cont'>
+        <div className='nav__li nav__li_logo'>
           <Link to='/' smooth={true} onClick={menuClick}>
             <span>WORDS</span> Learner
-            <img className="nav__img" src={arrows} alt="arrows"></img>
+            <img className='nav__img' src={arrows} alt='arrows'></img>
           </Link>
         </div>
         <Burger
@@ -83,6 +85,8 @@ function Header() {
           active={activeMenu}
         />
       </div>
+
+
     </header>
   )
 }
