@@ -70,6 +70,12 @@
   overflow-y: hidden;
 }
 
+@media (max-width: 580px) {
+  .heading2 {
+    font-size: 1.8em;
+  }
+}
+
 @keyframes fade-in {
   from {
     opacity: 0;

@@ -18,7 +18,7 @@ function About() {
       const elementHeight = pathRef.current.offsetHeight;
       const windowHeight = window.innerHeight;
 
-      if (elementPos < windowHeight - (elementHeight * 0.5)) {
+      if (elementPos < windowHeight - (elementHeight * 0.4)) {
         setAnimation(true);
       } else {
         setAnimation(false);

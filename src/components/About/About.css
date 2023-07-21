@@ -85,3 +85,20 @@
     gap: 3.5em;
   }
 }
+
+@media (max-width: 425px) {
+  .about__card > h3 {
+    font-size: 1.7em;
+  }
+
+  .about__svg-wrapper > svg {
+    width: 30px;
+    height: 30px;
+    color: #fff;
+  }
+
+  .about__card {
+    width: 230px;
+    padding-left: 40px;
+  }
+}

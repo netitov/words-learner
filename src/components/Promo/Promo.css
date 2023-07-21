@@ -9,7 +9,7 @@
   color: #fff;
   background: var(--prime-blue); /* #376068 */ /* #37636c */
 
-  animation: fade-in 0.5s;
+  /* animation: fade-in 0.5s; */
 }
 
 .promo__img {
@@ -19,6 +19,7 @@
 .promo__container {
   position: relative;
   padding: 0 10px;
+  animation: fade-in 0.7s;
 }
 
 .promo__svg {

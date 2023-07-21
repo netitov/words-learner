@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { charsLimit, tooltipOption } from '../../utils/constants';
 import { BsBookmarks } from 'react-icons/bs';
 import { AiOutlineQuestionCircle } from 'react-icons/ai';
@@ -9,24 +9,46 @@ import Dictionary from '../Dictionary/Dictionary';
 import ColumnChart from '../ColumnChart/ColumnChart';
 import HorizontalChart from '../HorizontalChart/HorizontalChart';
 import { MdTranslate } from 'react-icons/md';
+import { RiArrowLeftRightFill } from 'react-icons/ri';
+//PiArrowsClockwiseFill
 
 function Translate(props) {
 
   const [activeBtn, setActiveBtn] = useState({
     lang: '', type: ''
   });
+  const [animation, setAnimation] = useState(false);
+  const pathRef = useRef();
 
   function handleLangClick(e) {
     setActiveBtn({ lang: e.target.textContent, type: e.target.dataset.type });
     props.openLangList(e.target.dataset.type);
   }
 
+  useEffect(() => {
+    function runAnimation() {
+      const elementPos = pathRef.current.getBoundingClientRect().top;
+      const elementHeight = pathRef.current.offsetHeight;
+      const windowHeight = window.innerHeight;
+
+      if (elementPos < windowHeight - (elementHeight * 0.4)) {
+        setAnimation(true);
+      } /* else {
+        setAnimation(false);
+      } */
+    }
+
+    window.addEventListener('scroll', runAnimation);
+    return () => window.removeEventListener('scroll', runAnimation);
+  });
+
   return (
     <div className='translator-wrapper' id='translator'>
       <h2 className='translator-wrapper__heading heading2'>Translate and compare</h2>
 
-      <div className='translator'>
+      <div className={`translator${animation ? ' translator_active' : ''}`} ref={pathRef}>
 
+        {/* input box */}
         <div className='translator__box translator__box_input'>
           <button
             className='translator__lang translator__lang_input'
@@ -82,13 +104,22 @@ function Translate(props) {
                 </svg>
               </button>
             </Tooltip>
+
+            <Tooltip title='swap languages' componentsProps={{ tooltip: { sx: tooltipOption, } }}>
+              <button className='translator__swap-btn-mob' type='button' onClick={props.swapLangs}>
+                <RiArrowLeftRightFill />
+              </button>
+            </Tooltip>
           </div>
 
           <div className={`error${props.chars.length > charsLimit ? ' error_active' : ''}`}>
             <p>Sorry, only up to {charsLimit} characters</p>
           </div>
+
+
         </div>
 
+        {/* swap btn */}
         <Tooltip title='swap languages' componentsProps={{ tooltip: { sx: tooltipOption, } }}>
           <button className='translator__swap-btn' type='button' onClick={props.swapLangs}>
             <svg id='_Слой_1' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 288.33 145.4'>
@@ -101,6 +132,7 @@ function Translate(props) {
           </button>
         </Tooltip>
 
+        {/* output box */}
         <div className='translator__box translator__box_output'>
           <button
             className={`translator__lang`}

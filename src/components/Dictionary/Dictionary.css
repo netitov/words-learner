@@ -117,6 +117,10 @@ td {
   font-weight: 300;
   transition: var(--transition);
   cursor: pointer;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .table__btn_transl {
@@ -139,6 +143,7 @@ td {
 
 .table__btn-word {
   position: relative;
+
 }
 
 .table__expand-btn {
@@ -176,4 +181,29 @@ td {
   opacity: 0;
   visibility: collapse;
 }
+
+@media (max-width: 950px) {
+  .dictionary {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 580px) {
+  .dictionary {
+    padding: 10px 0 0 0;
+  }
+
+  .table__btn {
+    max-width: 135px;
+  }
+
+  .table__block {
+    padding: 5px 5px 5px 0;
+  }
+
+  td:first-of-type, th:first-of-type {
+    display: none;
+  }
+}
+
 

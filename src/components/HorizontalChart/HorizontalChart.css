@@ -34,3 +34,10 @@
   width: 90%;
   margin-top: 20px;
 }
+
+@media (max-width: 950px) {
+  .chart-wrapper {
+    grid-row: auto;
+  }
+}
+
