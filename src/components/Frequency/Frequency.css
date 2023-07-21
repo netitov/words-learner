@@ -16,6 +16,18 @@
   color: #fff;
 }
 
+.frequency__input-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  transition: opacity 0.6s;
+}
+
+.frequency__input-box_active {
+  opacity: 1;
+}
+
 .frequency__input input {
   font-size: 1.15em;
 }
@@ -43,13 +55,17 @@
 }
 
 .frequency__input > .spinner {
-  right: -10%;
+  right: -46px;
   left: auto;
+
+  border-right: 3px solid var(--prime-yellow);
+  border-top: 3px solid var(--prime-yellow);
 }
 
 .frequency__card-box {
   display: flex;
   margin-top: 35px;
+  gap: 35px;
   visibility: hidden;
   transform: scaleX(0);
   -webkit-transform: scaleX(0);
@@ -71,29 +87,36 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-right: 35px;
+  /* margin-right: 35px; */
   background: var(--darker-blue);
   color:#fff;
   max-width: 300px;
+  min-width: 200px;
   min-height: 140px;
   box-sizing: border-box;
   border-radius: 10px;
   padding: 5px;
   position: relative;
   flex: 1;
+
 }
 
 .frequency__card:last-of-type {
   margin-right: 0;
 }
 
-.frequency__card > h3 {
+.frequency__value {
   margin: 0px 0 10px;
   font-weight: 300;
   font-size: 1.8em;
+  transition: var(--transition);
 }
 
-.frequency__card > h3 > span {
+.frequency__value_loading {
+  opacity: 0.1;
+}
+
+.frequency__value > span {
   font-size: 16px;
   font-weight: 300;
 }
@@ -141,16 +164,16 @@
 .frequency__lst-btn {
   display: flex;
   align-items: center;
-  position: absolute;
-  right: -10%;
+  /* position: absolute;
+  right: -10%; */
   padding: 10px;
   border-radius: 50%;
   transition: var(--transition);
   cursor: pointer;
   visibility: hidden;
-  top: 50%;
+  /* top: 50%;
   transform: translateY(-50%);
-  -webkit-transform: translateY(-50%);
+  -webkit-transform: translateY(-50%); */
   opacity: 0;
   transition: visibility 0.2s ease, opacity 0.3s, background 0.3s;
 }
@@ -168,9 +191,33 @@
   z-index: 0;
   /* fill: var(--darker-blue); */
   /* fill: var(--light-blue); */
+  opacity: 0;
+  transition: opacity 0.6s;
+}
+
+.frequency__bck-svg_active {
+  opacity: 1;
 }
 
 .frequency__svg {
   color: var(--super-light-green)
 }
+
+@media (max-width: 768px) {
+  .frequency__card-box {
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+
+  .frequency__card {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 580px) {
+  .frequency__bck-svg {
+    opacity: 0.2;
+  }
+}
+
 
