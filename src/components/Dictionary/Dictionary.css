@@ -201,9 +201,11 @@ td {
     padding: 5px 5px 5px 0;
   }
 
-  td:first-of-type, th:first-of-type {
+  .dictionary__translations td:first-of-type, .dictionary__translations th:first-of-type {
     display: none;
   }
+
+
 }
 
 

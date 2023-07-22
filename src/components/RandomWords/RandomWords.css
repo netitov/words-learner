@@ -22,14 +22,23 @@ span.wtable__checkbox  {
 
 .words__table-wrapper {
   /* width: 100%; */
-  position: relative;
+  /* position: relative; */
 
   flex: 1 0 auto;
+
+  transition: opacity 0.8s 0.6s;
+  opacity: 0;
 }
+
+.words__table-wrapper_active {
+  opacity: 1;
+}
+
 
 .wtable {
-
+  min-width: 400px;
 }
+
 
 .wtable th {
   text-align: left;
@@ -101,18 +110,66 @@ table tr:first-child th:last-child {
   top: 34px;
   right: 0;
   text-align: right;
+
+  transition: opacity 0.6s 0.2s, transform 0.6s;
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.words__dis-cont_active {
+  transform: translateY(0);
+  opacity: 1;
 }
 
 .words__filter-box{
-  width: 250px;
+  width: 270px;
+
+  transition: opacity 0.8s 0.6s;
+  opacity: 0;
+}
+
+.words__filter-box_active {
+  opacity: 1;
 }
 
 .words__filter-cont {
-  padding: 20px 25px;
+  padding: 20px;
   background: var(--white);
   box-shadow: 0px 0px 8px 1px #dfdfdf94;
   border-radius: 10px;
   /* max-width: 240px; */
+}
+
+.words__filters {
+  margin-top: 2em;
+}
+
+.words__btn-cont {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+ /*  margin-bottom: 2em; */
+}
+
+.words__btn-cont svg {
+  width: 24px;
+  height: 24px;
+  color: var(--prime-blue);
+  padding: 7px 7px;
+  border-radius: 50%;
+  box-shadow: 0px 0px 20px 1px #1273863b;
+  display: block;
+  transition: var(--transition);
+}
+
+.words__filter-icon {
+  padding: 0;
+  cursor: pointer;
+  display: none;
+}
+
+.words__filter-icon:hover > svg {
+  background-color: #fff;
 }
 
 .words__slider-wrapper {
@@ -199,7 +256,7 @@ div.words__select {
   border-radius: 10px;
   width: 100%;
   height: 36px;
-  margin-bottom: 2em;
+  /* margin-bottom: 2em; */
   cursor: pointer;
   transition: var(--transition);
 }
@@ -253,6 +310,15 @@ div.words__select {
   display: flex;
   flex: 1 0 100%;
   flex-wrap: wrap;
+
+  transition:  transform 0.6s, opacity 0.6s;
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+.words__btn-box_active {
+  transform: translateY(0);
+  opacity: 1;
 }
 
 .words__filter-btn {
@@ -272,7 +338,77 @@ div.words__select {
   /* background: #fee6b5; */
   color: #936400;
   border: 2px solid var(--prime-yellow);
+}
 
+@media (max-width: 850px) {
+  .words__filter-icon {
+    display: block;
+  }
+
+  .words__table-wrapper {
+    width: 100%;
+  }
+
+  .words__filters {
+    visibility: hidden;
+    height: 0;
+    min-height: 0;
+    margin: 0;
+    opacity: 0;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: visibility 0.3s, min-height 0.4s, opacity 0.8s, transform 0.4s, margin 0.4s;
+  }
+
+  .words__filters_active {
+    visibility: visible;
+    opacity: 1;
+    margin-top: 2em;
+    min-height: 300px;
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+}
+
+@media (max-width: 768px) {
+  .words__heading {
+    margin-bottom: 5em;
+  }
+
+  .words__dis-cont {
+    font-size: 1.3em;
+    line-height: 1.4em;
+    padding: 5px;
+
+    top: 138px;
+    right: -5px;
+  }
+}
+
+@media (max-width: 580px) {
+  .words__dis-cont {
+    font-size: 1.1em;
+    line-height: 1.4em;
+  }
+
+  .wtable td {
+    font-size: 1em;
+    height: 2.5em;
+    padding: 0 8px;
+  }
+
+  .words__table-wrapper {
+    overflow-x: scroll;
+  }
+
+}
+
+@media (max-width: 360px) {
+  .words__dis-cont {
+    font-size: 1em;
+    line-height: 1.2em;
+    text-align: start;
+  }
 }
 
 

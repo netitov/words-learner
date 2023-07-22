@@ -21,7 +21,7 @@
   align-items: center;
   gap: 10px;
   opacity: 0;
-  transition: opacity 0.6s;
+  transition: opacity 0.8s;
 }
 
 .frequency__input-box_active {
@@ -189,10 +189,8 @@
 
 .frequency__bck-svg {
   z-index: 0;
-  /* fill: var(--darker-blue); */
-  /* fill: var(--light-blue); */
   opacity: 0;
-  transition: opacity 0.6s;
+  transition: opacity 0.8s;
 }
 
 .frequency__bck-svg_active {

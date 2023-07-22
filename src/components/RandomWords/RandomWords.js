@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import Slider from '@mui/material/Slider';
 import RefTooltip from '../RefTooltip/RefTooltip';
 import Spinner from '../Spinner/Spinner';
@@ -16,7 +16,9 @@ import Select from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
 import Tooltip from '@mui/material/Tooltip';
 import { tooltipOption, defaultLang, filterBtns } from '../../utils/constants';
+import { GiSettingsKnobs } from 'react-icons/gi';
 
+//
 
 function RandomWords(props) {
 
@@ -47,6 +49,10 @@ function RandomWords(props) {
   const [frValue, setFrValue] = useState([3, 5.5]);
   const [perValue, setPerValue] = useState([0, 100]);
   const [activeBtn, setActiveBtn] = useState('');
+  const [filtersActive, setFiltersActive] = useState(false);
+  const [animationFilter, setAnimationFilter] = useState(false);
+  const filterRef = useRef();
+  const tableRef = useRef();
 
   useEffect(() => {
     setWords(props.randomWords);
@@ -173,6 +179,10 @@ function RandomWords(props) {
     props.searchWords(filters);
   }
 
+  function handleFilters() {
+    setFiltersActive(!filtersActive);
+  }
+
 
   const getActiveLanguage = useMemo(() => {
     const value = props.activeLangOutput.code !== 'en' ? props.activeLangOutput : props.activeLangInput;
@@ -181,19 +191,41 @@ function RandomWords(props) {
     return { lang: obj.lang, code: obj.code, type: 'random' };
   }, [props.activeLangOutput, props.activeLangInput]);
 
+  function runAnimationFilter() {
+    const elementPos = filterRef.current.getBoundingClientRect().top;
+    const elementHeight = filterRef.current.offsetHeight;
+    const windowHeight = window.innerHeight;
+
+    if (elementPos < windowHeight - (elementHeight * 0.4)) {
+      setAnimationFilter(true);
+    } else {
+      setAnimationFilter(false);
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('scroll', runAnimationFilter);
+
+    return () => {
+      window.removeEventListener('scroll', runAnimationFilter);
+    };
+  });
+
 
   return (
     <div className='words' id='random'>
+
       <h2 className='words__heading heading2'>Find words</h2>
 
-      <div className='words__dis-cont'>
+      <div className={`words__dis-cont${animationFilter ? ' words__dis-cont_active' : ''}`}>
         <p>Some random words you can start learning.</p>
         <p>Use filters to create a customized list of words</p>
       </div>
 
       <div className='words__container'>
 
-        <div className='words__btn-box'>
+        {/* btn filters */}
+        <div className={`words__btn-box${animationFilter ? ' words__btn-box_active' : ''}`} ref={filterRef}>
 
           {filterBtns.map((i) => (
             <button
@@ -207,100 +239,109 @@ function RandomWords(props) {
           ))}
         </div>
 
-        <div className='words__filter-box'>
-
+        {/* additional filters */}
+        <div className={`words__filter-box${animationFilter ? ' words__filter-box_active' : ''}`}>
           {/* container with table filters */}
           <div className='words__filter-cont'>
 
-            <button
-              className={`words__search-btn${props.wordsAreLoading ? ' words__search-btn_inactive' : ''}`}
-              type='button'
-              onClick={handleSearch}>
-                Search / update
-            </button>
+            <div className='words__btn-cont'>
+              <button
+                className={`words__search-btn${props.wordsAreLoading ? ' words__search-btn_inactive' : ''}`}
+                type='button'
+                onClick={handleSearch}>
+                  Search / update
+              </button>
+              <button className='words__filter-icon' type='button' onClick={handleFilters}>
+                <GiSettingsKnobs />
+              </button>
+            </div>
 
-            <FormControl className='words__select'>
-              <InputLabel id='demo-multiple-chip-label'>Part of speech</InputLabel>
-              <Select
-                labelId='demo-multiple-chip-label'
-                id='demo-multiple-chip'
-                multiple
-                value={pos}
-                onChange={handleChangePos}
-                input={<OutlinedInput id='select-multiple-chip' label='Part of speech' />}
-                renderValue={(selected) => (
-                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                    {selected.map((value) => (
-                      <Chip key={value} label={value} />
-                    ))}
-                  </Box>
-                )}
-              >
-                {initPos.map((i) => (
-                  <MenuItem
-                    key={i}
-                    value={i}
-                  >
-                    {i}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <div className={`words__filters${filtersActive ? ' words__filters_active' : ''}`}>
 
-            <div className='words__slider-wrapper'>
-              <div className='words__heading-box'>
-                <h3 className='words__slider-heading'>Frequency</h3>
-                <RefTooltip class='words__fr-tlt' color='#757575'>
-                  <p>Word frequency measure on the basis of American subtitle in Zipf format (scale 1-7).&nbsp;
-                    <a
-                      href='https://www.ugent.be/pp/experimentele-psychologie/en/research/documents/subtlexus/overview.htm'
-                      target='_blank'
-                      rel='noreferrer'
-                      className='frequency__tlt-link'
+              <FormControl className='words__select'>
+                <InputLabel id='demo-multiple-chip-label'>Part of speech</InputLabel>
+                <Select
+                  labelId='demo-multiple-chip-label'
+                  id='demo-multiple-chip'
+                  multiple
+                  value={pos}
+                  onChange={handleChangePos}
+                  input={<OutlinedInput id='select-multiple-chip' label='Part of speech' />}
+                  renderValue={(selected) => (
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                      {selected.map((value) => (
+                        <Chip key={value} label={value} />
+                      ))}
+                    </Box>
+                  )}
+                >
+                  {initPos.map((i) => (
+                    <MenuItem
+                      key={i}
+                      value={i}
                     >
-                      Learn more
-                    </a>
-                  </p>
-                </RefTooltip>
+                      {i}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <div className='words__slider-wrapper'>
+                <div className='words__heading-box'>
+                  <h3 className='words__slider-heading'>Frequency</h3>
+                  <RefTooltip class='words__fr-tlt' color='#757575'>
+                    <p>Word frequency measure on the basis of American subtitle in Zipf format (scale 1-7).&nbsp;
+                      <a
+                        href='https://www.ugent.be/pp/experimentele-psychologie/en/research/documents/subtlexus/overview.htm'
+                        target='_blank'
+                        rel='noreferrer'
+                        className='frequency__tlt-link'
+                      >
+                        Learn more
+                      </a>
+                    </p>
+                  </RefTooltip>
+                </div>
+
+                <Slider
+                  value={frValue}
+                  name='frequency'
+                  onChange={handleChangeSLider}
+                  valueLabelDisplay='on'
+                  className='words__slider'
+                  step={0.5}
+                  min={1.5}
+                  max={7}
+                  marks={marks}
+                />
               </div>
 
-              <Slider
-                value={frValue}
-                name='frequency'
-                onChange={handleChangeSLider}
-                valueLabelDisplay='on'
-                className='words__slider'
-                step={0.5}
-                min={1.5}
-                max={7}
-                marks={marks}
-              />
-            </div>
+              <div className='words__slider-wrapper'>
+                <div className='words__heading-box'>
+                  <h3 className='words__slider-heading'>Film percent</h3>
+                  <RefTooltip  class='words__fr-tlt' color='#757575'>
+                    <p>Indicates in how many percent of films the word appears</p>
+                  </RefTooltip>
+                </div>
 
-            <div className='words__slider-wrapper'>
-              <div className='words__heading-box'>
-                <h3 className='words__slider-heading'>Film percent</h3>
-                <RefTooltip  class='words__fr-tlt' color='#757575'>
-                  <p>Indicates in how many percent of films the word appears</p>
-                </RefTooltip>
+                <Slider
+                  value={perValue}
+                  onChange={handleChangeSLider}
+                  valueLabelDisplay='on'
+                  className='words__slider'
+                  step={10}
+                  min={0}
+                  max={100}
+                />
               </div>
 
-              <Slider
-                value={perValue}
-                onChange={handleChangeSLider}
-                valueLabelDisplay='on'
-                className='words__slider'
-                step={10}
-                min={0}
-                max={100}
-              />
             </div>
 
         </div>
 
         </div>
 
-        <div className='words__table-wrapper'>
+        <div className={`words__table-wrapper${animationFilter ? ' words__table-wrapper_active' : ''}`}>
           <table className='wtable'>
 
             <thead>
