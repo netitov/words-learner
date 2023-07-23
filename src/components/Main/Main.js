@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import promoImg from '../../images/Picture.svg';
 import Translate from '../Translator/Translator';
 import Frequency from '../Frequency/Frequency';
@@ -11,10 +11,29 @@ import About from '../About/About';
 function Main(props) {
 
   const [btnActive, setBtnActive] = useState(false);
+  const [animation, setAnimation] = useState(false);
+  const pathRef = useRef();
 
   function handleBtn() {
     setBtnActive(!btnActive);
   }
+
+  useEffect(() => {
+    function runAnimation() {
+      const elementPos = pathRef.current.getBoundingClientRect().top;
+      const elementHeight = pathRef.current.offsetHeight;
+      const windowHeight = window.innerHeight;
+
+      if (elementPos < windowHeight - (elementHeight * 0.4)) {
+        setAnimation(true);
+      } /* else {
+        setAnimation(false);
+      } */
+    }
+
+    window.addEventListener('scroll', runAnimation);
+    return () => window.removeEventListener('scroll', runAnimation);
+  }, []);
 
   return (
     <main className='main'>
@@ -49,6 +68,7 @@ function Main(props) {
 
       <Frequency
         setCharsFreq={props.setCharsFreq}
+        charsFreq={props.charsFreq}
         wordFrequency={props.wordFrequency}
         frIsLoading={props.frIsLoading}
         frNoData={props.frNoData}
@@ -73,7 +93,7 @@ function Main(props) {
 
       <div className='main__quiz' id='quiz'>
         <h2 className='main__heading heading2'>Learn and test yourself</h2>
-        <div className='main__quiz-container'>
+        <div className={`main__quiz-container${animation ? ' main__quiz-container_active' : ''}`} ref={pathRef}>
           <div className='main__block-disciption'>
             <p>Take the tests and check your progress.</p>
             <p>Use filters above to update the word list</p>

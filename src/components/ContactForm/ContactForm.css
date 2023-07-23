@@ -95,8 +95,8 @@
 }
 
 .form {
-  max-width: 550px;
-  width: 90%;
+  max-width: 600px;
+  width: 100%;
   background: var(--white);
   display: flex;
   justify-content: center;
@@ -267,10 +267,6 @@ textarea.form__input {
 }
 
 @media (max-width: 768px) {
-  .form {
-    width: 95%;
-  }
-
   .form__title {
     margin: 15px 0 35px;
     font-size: 25px;
@@ -278,6 +274,21 @@ textarea.form__input {
 
   .contact__img {
     right: -23%;
+  }
+
+  .form__close-btn {
+    right: 0;
+    top: -69px;
+  }
+}
+
+@media (max-width: 580px) {
+  .form__input {
+    font-size: 1em;
+  }
+
+  .contact__text_form {
+    font-size: 1.3em;
   }
 }
 

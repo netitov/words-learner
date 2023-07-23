@@ -198,9 +198,9 @@ function RandomWords(props) {
 
     if (elementPos < windowHeight - (elementHeight * 0.4)) {
       setAnimationFilter(true);
-    } else {
+    } /* else {
       setAnimationFilter(false);
-    }
+    } */
   }
 
   useEffect(() => {
@@ -209,7 +209,7 @@ function RandomWords(props) {
     return () => {
       window.removeEventListener('scroll', runAnimationFilter);
     };
-  });
+  }, []);
 
 
   return (

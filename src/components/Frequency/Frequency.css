@@ -21,7 +21,7 @@
   align-items: center;
   gap: 10px;
   opacity: 0;
-  transition: opacity 0.8s;
+  transition: opacity 0.8s ease-out;
 }
 
 .frequency__input-box_active {
@@ -72,7 +72,7 @@
   transform-origin: left;
   -webkit-transform-origin: left;
   opacity: 0;
-  transition: visibility 0.2s ease, transform 0.3s ease, opacity 0.3s;
+  transition: all 0.4s ease-out;
 }
 
 .frequency__card-box_active {
@@ -190,11 +190,11 @@
 .frequency__bck-svg {
   z-index: 0;
   opacity: 0;
-  transition: opacity 0.8s;
+  transition: opacity 0.8s ease-out;
 }
 
 .frequency__bck-svg_active {
-  opacity: 1;
+  opacity: 0.2;
 }
 
 .frequency__svg {

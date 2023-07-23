@@ -33,14 +33,14 @@ function Translate(props) {
 
       if (elementPos < windowHeight - (elementHeight * 0.4)) {
         setAnimation(true);
-      } else {
+      } /* else {
         setAnimation(false);
-      }
+      } */
     }
 
     window.addEventListener('scroll', runAnimation);
     return () => window.removeEventListener('scroll', runAnimation);
-  });
+  }, []);
 
   return (
     <div className='translator-wrapper' id='translator'>

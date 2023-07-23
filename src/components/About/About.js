@@ -20,14 +20,14 @@ function About() {
 
       if (elementPos < windowHeight - (elementHeight * 0.4)) {
         setAnimation(true);
-      } else {
+      } /* else {
         setAnimation(false);
-      }
+      } */
     }
 
     window.addEventListener('scroll', runAnimation);
     return () => window.removeEventListener('scroll', runAnimation);
-  });
+  }, []);
 
   const cards = [
     {

@@ -21,7 +21,7 @@ function App() {
   const [otherTransl, setOtherTransl] = useState([]);
   const [frequency, setFrequency] = useState({ word: '', fr: 0, text: '', filmPer: 0 });
   const [translFreqs, setTranslFreqs] = useState([]);
-  const [charsFreq, setCharsFreq] = useState('');
+  const [charsFreq, setCharsFreq] = useState('example');
   const [wordFreq, setWordFreq] = useState({ word: '', fr: 0, text: '', filmPer: 0 });
   const [frIsLoading, setFrIsLoading] = useState(false);
   const [frNoData, setFrNoData] = useState(false);
@@ -568,6 +568,7 @@ function App() {
           compareFreq={compareFreq}
           translFreqs={translFreqs}
           setCharsFreq={setCharsFreq}
+          charsFreq={charsFreq}
           wordFrequency={wordFreq}
           frIsLoading={frIsLoading}
           frNoData={frNoData}

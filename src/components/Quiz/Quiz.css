@@ -30,11 +30,12 @@
   min-height: 80vh;
   justify-content: center;
   background: #ffe9b8;
-  border-radius: 5%;
+  border-radius: 20px;
   position: relative;
   opacity: 0;
   transition: opacity 0.2s 0.3s;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .quiz_active > .quiz__container {
@@ -71,11 +72,12 @@
 }
 
 .quiz__options-box {
-  grid-template-columns: auto auto;
+  grid-template-columns: 200px 200px;
   justify-content: center;
   grid-gap: 15px;
   margin-top: 30px;
   display: grid;
+  padding: 0 10px;
 }
 
 .quiz__quest-box_active .quiz__options-box {
@@ -86,10 +88,10 @@
 .quiz__option {
   font-weight: 300;
   font-size: 1.3em;
-  padding: 10px;
+  padding: 10px 5px;
   border: 1px solid #dcb869;
   border-radius: 20px;
-  min-width: 180px;
+  /* width: 200px; */
   cursor: pointer;
   transition: var(--transition);
   position: relative;
@@ -97,6 +99,13 @@
 
 .quiz__option:hover {
   background-color: var(--yellow);
+}
+
+.quiz__option > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
 }
 
 .quiz__option_passed:hover {
@@ -241,12 +250,16 @@
 }
 
 .quiz__btn-box {
- /*  margin-top: 40px; */
+ display: flex;
+ gap: 15px;
+ flex-wrap: wrap;
+ align-items: center;
+ justify-content: center;
 }
 
 .quiz__btn-result {
   cursor: pointer;
-  margin-right: 15px;
+  /* margin-right: 15px; */
 }
 
 .quiz__btn-result:last-of-type {
@@ -269,11 +282,11 @@
   transition: var(--transition);
   position: absolute;
   top: 2%;
-  right: 5%;
+  right: 3%;
 }
 
 .quiz__close-btn:hover {
-  background: #18181878;
+  background: #f9e1ab;
   cursor: pointer;
 }
 
@@ -284,8 +297,8 @@
 }
 
 .quiz__close-btn svg line {
-  stroke: #fff;
-  stroke-width: 5;
+  stroke: #dcb869;
+  stroke-width: 6;
 }
 
 .quiz__overlay {
@@ -333,6 +346,44 @@
 .quiz__login a:hover {
   opacity: 0.8;
   border-bottom: none;
+}
+
+@media (max-width: 580px) {
+  .quiz__container {
+    width: 100%;
+    border-radius: 0;
+    min-height: 100vh;
+  }
+
+  .quiz__progress {
+    width: 80%;
+    max-width: 190px;
+    height: 10px;
+    border-radius: 10px;
+    position: absolute;
+    z-index: 0;
+    top: 9%;
+    left: 5%;
+    border: 1px solid #dcb869;
+  }
+
+  .quiz__quest > h3 {
+    font-size: 2.3em;
+  }
+
+  .quiz__option {
+    font-size: 1.2em;
+  }
+
+  .quiz__options-box {
+    grid-gap: 10px;
+  }
+}
+
+@media (max-width: 425px) {
+  .quiz__options-box {
+    grid-template-columns: 100%;
+  }
 }
 
 @keyframes slide-in-left {

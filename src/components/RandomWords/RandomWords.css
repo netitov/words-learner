@@ -21,10 +21,8 @@ span.wtable__checkbox  {
 }
 
 .words__table-wrapper {
-  /* width: 100%; */
-  /* position: relative; */
-
   flex: 1 0 auto;
+  position: relative;
 
   transition: opacity 0.8s 0.6s;
   opacity: 0;
@@ -357,7 +355,7 @@ div.words__select {
     opacity: 0;
     transform: scaleY(0);
     transform-origin: top;
-    transition: visibility 0.3s, min-height 0.4s, opacity 0.8s, transform 0.4s, margin 0.4s;
+    transition: all 0.3s ease-out;
   }
 
   .words__filters_active {
@@ -365,8 +363,8 @@ div.words__select {
     opacity: 1;
     margin-top: 2em;
     min-height: 300px;
+    /* height: 100%; */
     transform: scaleY(1);
-    transform-origin: top;
   }
 }
 
@@ -398,7 +396,7 @@ div.words__select {
   }
 
   .words__table-wrapper {
-    overflow-x: scroll;
+    overflow-x: auto;
   }
 
 }

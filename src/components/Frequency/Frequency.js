@@ -22,26 +22,27 @@ function Frequency(props) {
       const elementHeight = pathRef.current.offsetHeight;
       const windowHeight = window.innerHeight;
 
-      if (elementPos < windowHeight - (elementHeight * 0.4)) {
+      if (elementPos < windowHeight - (elementHeight * 0.3)) {
         setAnimation(true);
-      } else {
+      } /* else {
         setAnimation(false);
-      }
+      } */
     }
 
     window.addEventListener('scroll', runAnimation);
     return () => window.removeEventListener('scroll', runAnimation);
-  });
+  }, []);
 
   return (
     <div className='frequency-wrapper' id='frequency' >
     <div className='frequency'>
       <h2 className='frequency__heading heading2'>Check the word frequency</h2>
-      <div className={`frequency__input-box${animation ? ' frequency__input-box_active' : ''}`} ref={pathRef}>
+      <div className={`frequency__input-box${animation ? ' frequency__input-box_active' : ''}`} >
         <FormControl
           sx={{ m: 1, maxWidth: '577px', width: '100%', margin: 0 }}
           variant='filled'
           className='frequency__input'
+
           onChange={e => props.setCharsFreq(e.target.value.toLowerCase())}
         >
           <InputLabel htmlFor='filled-basic'>Enter a word in English</InputLabel>
@@ -52,6 +53,7 @@ function Frequency(props) {
                 <SearchIcon />
               </InputAdornment>
             }
+            value={props.charsFreq}
           />
           <Spinner isLoading={props.frIsLoading} />
           <span
@@ -71,7 +73,7 @@ function Frequency(props) {
           </button>
         </Tooltip>
       </div>
-      <div className={`frequency__card-box ${props.wordFrequency.text !== '' ? ' frequency__card-box_active' : ''}`}>
+      <div className={`frequency__card-box ${props.wordFrequency.text !== '' && animation ? ' frequency__card-box_active' : ''}`} ref={pathRef}>
 
         <div className='frequency__card'>
           <h3 className={`frequency__value${props.frIsLoading ? ' frequency__value_loading' : ''}`}>
