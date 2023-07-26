@@ -10,6 +10,7 @@ import { BsBookmarks } from 'react-icons/bs';
 import Tooltip from '@mui/material/Tooltip';
 import { tooltipOption } from '../../utils/constants';
 import { BsCheck2All } from 'react-icons/bs';
+import { useSelector } from 'react-redux';
 
 function Frequency(props) {
 
@@ -33,8 +34,14 @@ function Frequency(props) {
     return () => window.removeEventListener('scroll', runAnimation);
   }, []);
 
+  const language = useSelector((state) => state.language);
+
+  function test() {
+    console.log(language)
+  }
+
   return (
-    <div className='frequency-wrapper' id='frequency' >
+    <div className='frequency-wrapper' id='frequency' onClick={test}>
     <div className='frequency'>
       <h2 className='frequency__heading heading2'>Check the word frequency</h2>
       <div className={`frequency__input-box${animation ? ' frequency__input-box_active' : ''}`} >

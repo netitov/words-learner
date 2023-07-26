@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-scroll';
+import { Link as ScrollLink } from 'react-scroll';
+import { Link } from 'react-router-dom';
 import arrows from '../../images/Arrows.svg';
 import Burger from '../Burger/Burger';
 
@@ -33,41 +34,43 @@ function Header() {
         <ul className='nav__ul'>
 
           <li className={`nav__li`}>
-            <Link to='translator' smooth={true} onClick={menuClick}>
+            <ScrollLink to='translator' smooth={true} onClick={menuClick}>
               Translate
-            </Link>
+            </ScrollLink>
           </li>
 
           <li className={`nav__li`}>
-            <Link to='frequency' smooth={true} onClick={menuClick}>
+            <ScrollLink to='frequency' smooth={true} onClick={menuClick}>
               Usage
-            </Link>
+            </ScrollLink>
           </li>
 
           <li className={`nav__li nav__li_logo`}>
-            <Link to='/' smooth={true} onClick={menuClick}>
+            <Link to='/' onClick={menuClick}>
               <span>WORDS</span> Learner
               <img className='nav__img' src={arrows} alt='arrows'></img>
             </Link>
           </li>
 
           <li className={`nav__li`}>
-            <Link to='random' smooth={true} onClick={menuClick}>
+            <ScrollLink to='random' smooth={true} onClick={menuClick}>
               Find
-            </Link>
+            </ScrollLink>
           </li>
 
           <li className={`nav__li`} >
-            <Link to='quiz' smooth={true} onClick={menuClick}>
+            <ScrollLink to='quiz' smooth={true} onClick={menuClick}>
               Learn
-            </Link>
+            </ScrollLink>
           </li>
 
           <li>
-            <button className='nav__acc-btn' type='button' onClick={menuClick}>
-            <VscAccount />
-            <span>Sign in</span>
-          </button>
+            <Link to='login'>
+              <button className='nav__acc-btn' type='button' onClick={menuClick}>
+              <VscAccount />
+              <span>Log in</span>
+              </button>
+            </Link>
           </li>
 
         </ul>
@@ -75,7 +78,7 @@ function Header() {
 
       <div className='burger-cont'>
         <div className='nav__li nav__li_logo'>
-          <Link to='/' smooth={true} onClick={menuClick}>
+          <Link to='/' onClick={menuClick}>
             <span>WORDS</span> Learner
             <img className='nav__img' src={arrows} alt='arrows'></img>
           </Link>

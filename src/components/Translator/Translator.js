@@ -10,6 +10,8 @@ import ColumnChart from '../ColumnChart/ColumnChart';
 import HorizontalChart from '../HorizontalChart/HorizontalChart';
 import { MdTranslate } from 'react-icons/md';
 import { RiArrowLeftRightFill } from 'react-icons/ri';
+
+import { useDispatch, useSelector } from 'react-redux';
 //PiArrowsClockwiseFill
 
 function Translate(props) {
@@ -18,12 +20,35 @@ function Translate(props) {
     lang: '', type: ''
   });
   const [animation, setAnimation] = useState(false);
+  const [langListActive, setLangListActive] = useState({ type: '', value: false });
   const pathRef = useRef();
 
-  function handleLangClick(e) {
+  const currentInputLang = useSelector((state) => state.inputLang);
+  const currentOutputLang = useSelector((state) => state.outputLang);
+  const languages = useSelector((state) => state.langList);
+
+  /* function handleLangClick(e) {
     setActiveBtn({ lang: e.target.textContent, type: e.target.dataset.type });
     props.openLangList(e.target.dataset.type);
+    openLangList(e.target.dataset.type);
+  } */
+
+  function toggleLangList(e) {
+    const type = e.target.dataset.type;
+    setActiveBtn({ lang: e.target.textContent, type });
+    if (type === langListActive.type) {
+      setLangListActive({ type: '', value: false });
+    }
+    else {
+      setLangListActive({ type: type, value: true });
+      //setRandomlangListActive({ value: false })
+    }
   }
+
+  function closeLangList() {
+    setLangListActive({ value: false });
+  }
+
 
   useEffect(() => {
     function runAnimation() {
@@ -52,10 +77,11 @@ function Translate(props) {
         <div className='translator__box translator__box_input'>
           <button
             className='translator__lang translator__lang_input'
-            onClick={handleLangClick}
+            onClick={toggleLangList}
             data-type='input'
           >
-            {props.activeLangInput.lang}
+            {/* {props.activeLangInput.lang} */}
+            {currentInputLang.lang}
           </button>
           <div className='translator__container translator__container_input'>
             <textarea
@@ -136,10 +162,11 @@ function Translate(props) {
         <div className='translator__box translator__box_output'>
           <button
             className={`translator__lang`}
-            onClick={handleLangClick}
+            onClick={toggleLangList}
             data-type='output'
           >
-            {props.activeLangOutput.lang}
+            {/* {props.activeLangOutput.lang} */}
+            {currentOutputLang.lang}
           </button>
           <div className='translator__container translator__container_output'>
             <p className={`translator__text${props.chars.length > 0 ? '' : ' translator__text_inactive'}`}>
@@ -186,12 +213,13 @@ function Translate(props) {
         </div>
 
         <Languages
-          languages={props.languages}
-          isActive={props.isActive}
+          languages={languages}
+          isActive={langListActive}
           selectLang={props.selectLang}
           activeBtn={activeBtn}
           searchLang={props.searchLang}
           inputText={props.inputText}
+          closeLangList={closeLangList}
         />
 
         <Dictionary

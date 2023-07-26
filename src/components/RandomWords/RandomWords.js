@@ -17,6 +17,7 @@ import Chip from '@mui/material/Chip';
 import Tooltip from '@mui/material/Tooltip';
 import { tooltipOption, defaultLang, filterBtns } from '../../utils/constants';
 import { GiSettingsKnobs } from 'react-icons/gi';
+import { useDispatch, useSelector } from 'react-redux';
 
 //
 
@@ -51,12 +52,16 @@ function RandomWords(props) {
   const [activeBtn, setActiveBtn] = useState('');
   const [filtersActive, setFiltersActive] = useState(false);
   const [animationFilter, setAnimationFilter] = useState(false);
+  const [langListActive, setLangListActive] = useState({ type: '', value: false });
+  const [activeLangBtn, setActiveLangBtn] = useState({ lang: '', type: '' });
+
   const filterRef = useRef();
   const tableRef = useRef();
 
-  useEffect(() => {
-    setWords(props.randomWords);
-  }, [props.randomWords])
+  const currentInputLang = useSelector((state) => state.inputLang);
+  const currentOutputLang = useSelector((state) => state.outputLang);
+  const languages = useSelector((state) => state.dictionLangs);
+
 
   //handle event changing part of speech select
   function handleChangePos(event) {
@@ -183,13 +188,12 @@ function RandomWords(props) {
     setFiltersActive(!filtersActive);
   }
 
-
-  const getActiveLanguage = useMemo(() => {
+  /* const getActiveLanguage = useMemo(() => {
     const value = props.activeLangOutput.code !== 'en' ? props.activeLangOutput : props.activeLangInput;
     //if selected lang is not in dictionary, use the default one
     const obj = props.enDicLangs.some((i) => i.language === value.lang) ? value : defaultLang;
     return { lang: obj.lang, code: obj.code, type: 'random' };
-  }, [props.activeLangOutput, props.activeLangInput]);
+  }, [props.activeLangOutput, props.activeLangInput]); */
 
   function runAnimationFilter() {
     const elementPos = filterRef.current.getBoundingClientRect().top;
@@ -203,6 +207,21 @@ function RandomWords(props) {
     } */
   }
 
+  function toggleLangList(e) {
+    const lang = currentInputLang.code === 'en' ? currentOutputLang.lang : currentInputLang.lang;
+    setActiveLangBtn({ lang, type: 'random' });
+    if (langListActive.type === 'random') {
+      setLangListActive({ type: '', value: false });
+    }
+    else {
+      setLangListActive({ type: 'random', value: true });
+    }
+  }
+
+  function closeLangList() {
+    setLangListActive({ value: false });
+  }
+
   useEffect(() => {
     window.addEventListener('scroll', runAnimationFilter);
 
@@ -210,6 +229,10 @@ function RandomWords(props) {
       window.removeEventListener('scroll', runAnimationFilter);
     };
   }, []);
+
+  useEffect(() => {
+    setWords(props.randomWords);
+  }, [props.randomWords])
 
 
   return (
@@ -357,18 +380,21 @@ function RandomWords(props) {
                   </Tooltip>
                   {/* list of available languages */}
                   <Languages
-                    languages={props.enDicLangs}
-                    isActive={props.isActive}
+                    languages={languages}
+                    isActive={langListActive}
                     selectLang={props.selectLang}
-                    activeBtn={getActiveLanguage}
+                    activeBtn={activeLangBtn}
                     searchLang={props.searchLang}
                     inputText={props.inputText}
                     commentActive={true}
+                    closeLangList={closeLangList}
                   />
                 </th>
                 <th>word</th>
-                <th className='wtable__th wtable__th_btn' onClick={() => props.openLangList('random')}>
-                  translation ({getActiveLanguage.code})
+                <th className='wtable__th wtable__th_btn' /* onClick={() => props.openLangListWords('random')} */
+                  onClick={toggleLangList}
+                >
+                  translation ({currentInputLang.code === 'en' ? currentOutputLang.code : currentInputLang.code})
 
                 </th>
                 <th>frequency</th>

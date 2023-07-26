@@ -86,7 +86,7 @@ function Main(props) {
         enDicLangs={props.enDicLangs}
         isActive={props.randomlangListActive}
         inputText={props.inputText}
-        openLangList={props.openLangListWords}
+        openLangListWords={props.openLangListWords}
         selectLang={props.selectLang}
         searchLang={props.searchLang}
       />

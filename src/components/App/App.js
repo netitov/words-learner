@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
 
 import { translate, getLanguages, getDictionary, checkFrequency, getRandomWords } from '../../utils/api';
 import { defaultLang } from '../../utils/constants';
+import { useDispatch, useSelector } from 'react-redux';
+import { setLangList } from '../../store/langList';
+import { setFilteredLangs } from '../../store/filteredLangs';
+import { setDictionLangs } from '../../store/dictionLangs';
+
+import useLangsFetch from '../../hooks/useLangsFetch';
 
 function App() {
 
@@ -29,13 +36,17 @@ function App() {
   const [wordsAreLoading, setWordsAreLoading] = useState(false);
   const [enDicLangs, setEnDicLangs] = useState([]);//list of languages supporning dictionary translation from english
   const [enDicLangsInit, setEnDicLangsInit] = useState([]);
-  const [randomlangListActive, setRandomlangListActive] = useState({ type: 'random', value: false });
+  const [randomlangListActive, setRandomlangListActive] = useState({ type: '', value: false });
   const [filters, setFilters] = useState({
     frSt: 3,
     frEn: 5.5
   });
   const [quizActive, setQuizActive] = useState(false);
   const [quizQuestions, setQuizQuestions] = useState([]);
+
+  const { dataIsLoading } = useLangsFetch();
+
+  const dispatch = useDispatch();
 
   //check key in local storage
   function getStorageItem(storage, key) {
@@ -79,6 +90,7 @@ function App() {
     } else return 'very high';
   }
 
+
   //get data from server
   useEffect(() => {
     Promise.all([
@@ -86,12 +98,15 @@ function App() {
       getDictionary()
     ])
       .then(([lang, dict]) => {
-        //localStorage.setItem('standings', JSON.stringify(st));
-
         //list of languages for translation
         const sortedLangs = lang.sort((a, b) => a.language.localeCompare(b.language));
         setAvailLang(sortedLangs);
-        setFilteredLang(sortedLangs);
+        setFilteredLangs(sortedLangs);
+
+        //redux test
+        dispatch(setLangList(sortedLangs));
+        dispatch(setFilteredLangs(sortedLangs));
+
 
         //set initial user language
         const userLang = getStorageItem(localStorage, 'userLang');
@@ -112,6 +127,8 @@ function App() {
         })
         setEnDicLangs(filteredLangs);
         setEnDicLangsInit(filteredLangs);
+
+        dispatch(setDictionLangs(filteredLangs));
       })
       .catch((err) => {
         console.log(err);
@@ -585,9 +602,7 @@ function App() {
           quizQuestions={quizQuestions}
           filters={filters}
         />
-
         <Footer />
-
       </div>
     </div>
   )
