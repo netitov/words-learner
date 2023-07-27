@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { setLangList } from '../store/langList';
 import { setDictionLangs } from '../store/dictionLangs';
+import { setEnDictionLangs } from '../store/enDictionLangs';
 
 import { getLanguages, getDictionary } from '../utils/api';
 
@@ -15,7 +16,7 @@ function useLangsFetch() {
 
 
   useEffect(() => {
-    if (!data) {
+    if (data.length === 0) {
       Promise.all([
         getLanguages(),
         getDictionary()
@@ -24,30 +25,17 @@ function useLangsFetch() {
           //list of languages for translation
           const sortedLangs = lang.sort((a, b) => a.language.localeCompare(b.language));
 
-          //redux test
           dispatch(setLangList(sortedLangs));
-
-          //set initial user language
-          //const userLang = getStorageItem(localStorage, 'userLang');
-
-          /* if (userLang) {
-            setActiveLangOutput(userLang);
-          } else {
-            setInitLang(sortedLangs);
-          } */
-
-          //list of languages for dictionary check
-          //setDictionary(dict);
 
           //list of languages for translation in feat RandomWords (available for dictionary from english)
           const engDictionary = dict.filter((i) => i.languages.includes('en-'));
           const filteredLangs = sortedLangs.filter((i) => {
             return engDictionary.some((el) => i.code === el.languages.split('-')[1])
           })
-          //setEnDicLangs(filteredLangs);
-          //setEnDicLangsInit(filteredLangs);
 
-          dispatch(setDictionLangs(filteredLangs));
+          dispatch(setDictionLangs(dict));
+          dispatch(setEnDictionLangs(filteredLangs));
+
           setDataIsLoading(false);
 
         })

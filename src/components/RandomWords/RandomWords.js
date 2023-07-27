@@ -60,7 +60,7 @@ function RandomWords(props) {
 
   const currentInputLang = useSelector((state) => state.inputLang);
   const currentOutputLang = useSelector((state) => state.outputLang);
-  const languages = useSelector((state) => state.dictionLangs);
+  const languages = useSelector((state) => state.enDictionLangs);
 
 
   //handle event changing part of speech select

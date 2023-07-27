@@ -11,28 +11,38 @@ import HorizontalChart from '../HorizontalChart/HorizontalChart';
 import { MdTranslate } from 'react-icons/md';
 import { RiArrowLeftRightFill } from 'react-icons/ri';
 
+import { translate, checkFrequency } from '../../utils/api';
+import { getFreqCat } from '../../utils/getFreqCat';
 import { useDispatch, useSelector } from 'react-redux';
+
+import { selectInputLang } from '../../store/inputLang';
+import { selectOutputLang } from '../../store/outputLang';
 //PiArrowsClockwiseFill
 
 function Translate(props) {
 
-  const [activeBtn, setActiveBtn] = useState({
-    lang: '', type: ''
-  });
+  const [activeBtn, setActiveBtn] = useState({ lang: '', type: '' });
   const [animation, setAnimation] = useState(false);
   const [langListActive, setLangListActive] = useState({ type: '', value: false });
+
+  const [chars, setChars] = useState('');
+  const [translation, setTranslation] = useState('');
+  const [otherTransl, setOtherTransl] = useState([]);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [frequency, setFrequency] = useState({ word: '', fr: 0, text: '', filmPer: 0 });
+  const [translFreqs, setTranslFreqs] = useState([]);
+
   const pathRef = useRef();
+  const dispatch = useDispatch();
 
   const currentInputLang = useSelector((state) => state.inputLang);
   const currentOutputLang = useSelector((state) => state.outputLang);
   const languages = useSelector((state) => state.langList);
+  const dictionLangs = useSelector((state) => state.dictionLangs);
 
-  /* function handleLangClick(e) {
-    setActiveBtn({ lang: e.target.textContent, type: e.target.dataset.type });
-    props.openLangList(e.target.dataset.type);
-    openLangList(e.target.dataset.type);
-  } */
-
+  //open/close language list on btn click
   function toggleLangList(e) {
     const type = e.target.dataset.type;
     setActiveBtn({ lang: e.target.textContent, type });
@@ -49,7 +59,98 @@ function Translate(props) {
     setLangListActive({ value: false });
   }
 
+  async function getTranslation(text) {
+    //get translation
+    const langs = currentInputLang.code + '-' + currentOutputLang.code;
+    const inDictionary = dictionLangs.some((i) => i.languages === langs);
+    const response = await translate({ langs, text, inDictionary });
+    setIsLoading(false);
 
+    //use translation
+    const translation = response.text === undefined ? response[0].tr[0].text : response.text[0];
+    const otherTranslations = (response.text === undefined && response.length > 0) ? response : [];
+    setTranslation(translation);
+    setOtherTransl(otherTranslations);
+    setTranslFreqs([]);
+
+    //get frequency if english is selected
+    if (chars.split(' ').length === 1) {
+      if (currentInputLang.lang === 'English') {
+        getFrequency(chars);
+      } else if (currentOutputLang.lang === 'English') {
+        getFrequency(translation);
+      } else setFrequency({ word: '', fr: 0, text: '' });
+    }
+  }
+
+  function swapLangs() {
+    //setActiveLangInput(activeLangOutput);
+    //setActiveLangOutput(activeLangInput);
+
+
+    dispatch(selectInputLang(currentOutputLang));
+    dispatch(selectOutputLang(currentInputLang));
+    setChars(translation);
+    setTranslation(chars);
+  }
+
+  //translate on word click
+  function addTranslate(text, swap) {
+    setChars(text);
+    setTranslation('');
+    if (swap) {
+      dispatch(selectInputLang(currentOutputLang));
+      dispatch(selectOutputLang(currentInputLang));
+    }
+  }
+
+  //get translated word frequency
+  async function getFrequency(word) {
+    const response = await checkFrequency(word);
+
+    if (response.length > 0) {
+      const obj = response[0];
+      const frequencyNumber = obj.fr;
+      //for feat translate
+      setFrequency({ word, fr: frequencyNumber, text: getFreqCat(frequencyNumber), filmPer: obj.filmPer });
+    } else {
+      setFrequency({ word: '', fr: 0, text: '', filmPer: 0 });
+    }
+  }
+
+  async function compareFreq(data, translation) {
+    const wordsArr = [];
+
+    if (translation) {
+      wordsArr.push(data.text);
+      data.syn?.forEach((i) => wordsArr.push(i.text));
+    } else {
+      Array.isArray(data) ? data.forEach((obj) => wordsArr.push(obj.text)) : wordsArr.push(data);
+    }
+
+    const workdsStr = wordsArr.filter(i => !i.includes(' ')).join(',');
+    const response = await checkFrequency(workdsStr);
+
+    const foundFreqs = !response.some(i => i.word === frequency.word) ? [frequency, ...response] : response;
+    setTranslFreqs(foundFreqs);
+  }
+
+  //call translate function
+  useEffect(() => {
+    if(chars.length > 0) {
+      setIsLoading(true);
+      const timeOutId = setTimeout(() => getTranslation(chars),1500);//delay before start translating
+      return () => clearTimeout(timeOutId);
+    } else {
+      setTranslation('');
+      setOtherTransl([]);
+      setIsLoading(false);
+      setFrequency({ word: '', fr: 0, text: '', filmPer: 0 });
+      setTranslFreqs([]);
+    }
+  }, [chars, currentInputLang, currentOutputLang]);
+
+  //animation
   useEffect(() => {
     function runAnimation() {
       const elementPos = pathRef.current.getBoundingClientRect().top;
@@ -85,21 +186,21 @@ function Translate(props) {
           </button>
           <div className='translator__container translator__container_input'>
             <textarea
-              className={`translator__text${props.chars.length > 0 ? '' : ' translator__text_inactive'}`}
+              className={`translator__text${chars.length > 0 ? '' : ' translator__text_inactive'}`}
               placeholder='Start typing'
-              onChange={e => props.setChars(e.target.value)}
-              value={props.chars}
+              onChange={e => setChars(e.target.value)}
+              value={chars}
             >
             </textarea>
 
             <div className='translator__secondary-container'>
               <div
-                className={`translator__freq-box${props.frequency.text.length > 0
-                  && props.activeLangInput.lang === 'English' ? ' translator__freq-box_active' : ''}`
+                className={`translator__freq-box${frequency.text.length > 0
+                  && currentInputLang.lang === 'English' ? ' translator__freq-box_active' : ''}`
                 }
               >
-                <ColumnChart value={props.frequency.fr}/>
-                <span>{props.frequency.text} frequency</span>
+                <ColumnChart value={frequency.fr}/>
+                <span>{frequency.text} frequency</span>
                 <Tooltip
                   componentsProps={{ tooltip: { sx: tooltipOption, } }}
                   title={
@@ -119,11 +220,11 @@ function Translate(props) {
 
                 </Tooltip>
               </div>
-              <span>{props.chars.length} / {charsLimit}</span>
+              <span>{chars.length} / {charsLimit}</span>
             </div>
 
             <Tooltip title='delete text' componentsProps={{ tooltip: { sx: tooltipOption, } }}>
-              <button className='btn-cross translator__btn' type='button' onClick={props.handleClear}>
+              <button className='btn-cross translator__btn' type='button' onClick={() => setChars('')}>
                 <svg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'>
                   <line x1='0' x2='100' y1='0' y2='100' />
                   <line x1='0' x2='100' y1='100' y2='0' />
@@ -132,13 +233,13 @@ function Translate(props) {
             </Tooltip>
 
             <Tooltip title='swap languages' componentsProps={{ tooltip: { sx: tooltipOption, } }}>
-              <button className='translator__swap-btn-mob' type='button' onClick={props.swapLangs}>
+              <button className='translator__swap-btn-mob' type='button' onClick={swapLangs}>
                 <RiArrowLeftRightFill />
               </button>
             </Tooltip>
           </div>
 
-          <div className={`error${props.chars.length > charsLimit ? ' error_active' : ''}`}>
+          <div className={`error${chars.length > charsLimit ? ' error_active' : ''}`}>
             <p>Sorry, only up to {charsLimit} characters</p>
           </div>
 
@@ -147,7 +248,7 @@ function Translate(props) {
 
         {/* swap btn */}
         <Tooltip title='swap languages' componentsProps={{ tooltip: { sx: tooltipOption, } }}>
-          <button className='translator__swap-btn' type='button' onClick={props.swapLangs}>
+          <button className='translator__swap-btn' type='button' onClick={swapLangs}>
             <svg id='_Слой_1' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 288.33 145.4'>
               <defs></defs>
               <rect className='cls-1' y='33.28' width='263.84' height='4.08'/>
@@ -169,18 +270,18 @@ function Translate(props) {
             {currentOutputLang.lang}
           </button>
           <div className='translator__container translator__container_output'>
-            <p className={`translator__text${props.chars.length > 0 ? '' : ' translator__text_inactive'}`}>
-              {props.chars.length > 0 ? props.translation : 'Translation will be here'}
+            <p className={`translator__text${chars.length > 0 ? '' : ' translator__text_inactive'}`}>
+              {chars.length > 0 ? translation : 'Translation will be here'}
             </p>
 
             <div className='translator__secondary-container'>
               <div
-                className={`translator__freq-box${props.frequency.text.length > 0
-                  && props.activeLangOutput.lang === 'English' ? ' translator__freq-box_active' : ''}`
+                className={`translator__freq-box${frequency.text.length > 0
+                  && currentOutputLang.lang === 'English' ? ' translator__freq-box_active' : ''}`
                 }
               >
-                <ColumnChart value={props.frequency.fr}/>
-                <span>{props.frequency.text} frequency</span>
+                <ColumnChart value={frequency.fr}/>
+                <span>{frequency.text} frequency</span>
                 <Tooltip
                   componentsProps={{ tooltip: { sx: tooltipOption, } }}
                   title={
@@ -207,7 +308,7 @@ function Translate(props) {
               </button>
             </Tooltip>
             <Spinner
-              isLoading={props.isLoading}
+              isLoading={isLoading}
             />
           </div>
         </div>
@@ -215,24 +316,24 @@ function Translate(props) {
         <Languages
           languages={languages}
           isActive={langListActive}
-          selectLang={props.selectLang}
+          //selectLang={props.selectLang}
           activeBtn={activeBtn}
-          searchLang={props.searchLang}
-          inputText={props.inputText}
+          //searchLang={props.searchLang}
+          //inputText={props.inputText}
           closeLangList={closeLangList}
         />
 
         <Dictionary
-          otherTransl={props.otherTransl}
-          addTranslate={props.addTranslate}
+          otherTransl={otherTransl}
+          addTranslate={addTranslate}
           handleLearnList={props.handleLearnList}
-          compareFreq={props.compareFreq}
-          outputLang={props.activeLangOutput.lang}
-          inputLang={props.activeLangInput.lang}
+          compareFreq={compareFreq}
+          outputLang={currentOutputLang.lang}
+          inputLang={currentInputLang.lang}
         />
 
         <HorizontalChart
-          translFreqs={props.translFreqs}
+          translFreqs={translFreqs}
         />
       </div>
 

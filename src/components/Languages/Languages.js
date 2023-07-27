@@ -37,6 +37,7 @@ function Languages(props) {
       } else {
         //setOutputLang({ lang, code });
         dispatch(selectOutputLang({ lang, code }));
+        console.log({ lang, code })
       }
 
     } else if (type === 'input') {

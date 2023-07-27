@@ -10,13 +10,57 @@ import { BsBookmarks } from 'react-icons/bs';
 import Tooltip from '@mui/material/Tooltip';
 import { tooltipOption } from '../../utils/constants';
 import { BsCheck2All } from 'react-icons/bs';
-import { useSelector } from 'react-redux';
+
+import { checkFrequency } from '../../utils/api';
+import { getFreqCat } from '../../utils/getFreqCat';
 
 function Frequency(props) {
 
   const [animation, setAnimation] = useState(false);
+  const [chars, setChars] = useState('example');
+  const [isLoading, setIsLoading] = useState(false);
+  const [notFound, setNotFound] = useState(false);
+  const [frequency, setFrequency] = useState({ word: '', fr: 0, text: '', filmPer: 0 });
+
   const pathRef = useRef();
 
+  //get word frequency
+  async function getFrequency(word) {
+    const response = await checkFrequency(word);
+
+    if (response.length > 0) {
+      const obj = response[0];
+      const frequencyNumber = obj.fr;
+
+        //for feat search frequency (without translate)
+        setFrequency({ word, fr: frequencyNumber, text: getFreqCat(frequencyNumber), filmPer: obj.filmPer });
+    } else {
+      setFrequency({ word: '', fr: 0, text: '', filmPer: 0 });
+    }
+    setIsLoading(false);
+  }
+
+  //call search frequency function
+  useEffect(() => {
+    //drop error 'no data'
+    setNotFound(false);
+
+    if(chars.length > 0) {
+      //delay for spinner
+      const timeOutLoading = setTimeout(() => setIsLoading(true), 500);
+      //delay before api request
+      const timeOutRequest = setTimeout(() => getFrequency(chars, true),1500);
+      return () => {
+        clearTimeout(timeOutRequest);
+        clearTimeout(timeOutLoading);
+      };
+    } else {
+      setIsLoading(false);
+      setFrequency({ word: '', fr: 0, text: '', filmPer: 0 });
+    }
+  }, [chars]);
+
+  //run animation
   useEffect(() => {
     function runAnimation() {
       const elementPos = pathRef.current.getBoundingClientRect().top;
@@ -34,14 +78,8 @@ function Frequency(props) {
     return () => window.removeEventListener('scroll', runAnimation);
   }, []);
 
-  const language = useSelector((state) => state.language);
-
-  function test() {
-    console.log(language)
-  }
-
   return (
-    <div className='frequency-wrapper' id='frequency' onClick={test}>
+    <div className='frequency-wrapper' id='frequency'>
     <div className='frequency'>
       <h2 className='frequency__heading heading2'>Check the word frequency</h2>
       <div className={`frequency__input-box${animation ? ' frequency__input-box_active' : ''}`} >
@@ -50,7 +88,7 @@ function Frequency(props) {
           variant='filled'
           className='frequency__input'
 
-          onChange={e => props.setCharsFreq(e.target.value.toLowerCase())}
+          onChange={e => setChars(e.target.value.toLowerCase())}
         >
           <InputLabel htmlFor='filled-basic'>Enter a word in English</InputLabel>
           <FilledInput
@@ -60,11 +98,11 @@ function Frequency(props) {
                 <SearchIcon />
               </InputAdornment>
             }
-            value={props.charsFreq}
+            value={chars}
           />
-          <Spinner isLoading={props.frIsLoading} />
+          <Spinner isLoading={isLoading} />
           <span
-            className={`frequency__not-found${props.frNoData ? ' frequency__not-found_active' : ''}`}
+            className={`frequency__not-found${notFound ? ' frequency__not-found_active' : ''}`}
           >
             Sorry, we don't have data on this word &#128532; <br />
           </span>
@@ -72,7 +110,7 @@ function Frequency(props) {
 
         <Tooltip title='add to the learning list' componentsProps={{ tooltip: { sx: tooltipOption, } }}>
           <button
-            className={`frequency__lst-btn${props.wordFrequency.text !== '' && !props.frIsLoading ? ' frequency__lst-btn_active' : ''}`}
+            className={`frequency__lst-btn${frequency.text !== '' && !isLoading ? ' frequency__lst-btn_active' : ''}`}
             type='button'
             onClick={props.handleLearnList}
           >
@@ -80,11 +118,11 @@ function Frequency(props) {
           </button>
         </Tooltip>
       </div>
-      <div className={`frequency__card-box ${props.wordFrequency.text !== '' && animation ? ' frequency__card-box_active' : ''}`} ref={pathRef}>
+      <div className={`frequency__card-box ${frequency.text !== '' && animation ? ' frequency__card-box_active' : ''}`} ref={pathRef}>
 
         <div className='frequency__card'>
-          <h3 className={`frequency__value${props.frIsLoading ? ' frequency__value_loading' : ''}`}>
-            {props.wordFrequency.text}
+          <h3 className={`frequency__value${isLoading ? ' frequency__value_loading' : ''}`}>
+            {frequency.text}
           </h3>
           <p>Frequency</p>
           <RefTooltip class='frequency__tlt' color='#dbecec'>
@@ -103,8 +141,8 @@ function Frequency(props) {
         </div>
 
         <div className='frequency__card'>
-          <h3 className={`frequency__value${props.frIsLoading ? ' frequency__value_loading' : ''}`}>
-            {props.wordFrequency.fr.toFixed(1)}<span> / 7</span>
+          <h3 className={`frequency__value${isLoading ? ' frequency__value_loading' : ''}`}>
+            {frequency.fr.toFixed(1)}<span> / 7</span>
           </h3>
           <p>Frequency rate</p>
           <RefTooltip  class='frequency__tlt' color='#dbecec'>
@@ -122,8 +160,8 @@ function Frequency(props) {
         </div>
 
         <div className='frequency__card'>
-          <h3 className={`frequency__value${props.frIsLoading ? ' frequency__value_loading' : ''}`}>
-            {props.wordFrequency.filmPer.toFixed(1)}%
+          <h3 className={`frequency__value${isLoading ? ' frequency__value_loading' : ''}`}>
+            {frequency.filmPer.toFixed(1)}%
           </h3>
           <p>Film percent</p>
           <RefTooltip  class='frequency__tlt' color='#dbecec'>

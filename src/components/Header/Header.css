@@ -2,7 +2,7 @@ header {
   position: absolute;
   right: 0;
   left: 0;
-  /* height: 100%; */
+  height: 100%;
 
 
   animation: slide-down 0.5s;

@@ -32,6 +32,7 @@ export async function getRandomWords(obj) {
 
 //find word (and translate) in dictionary api, if text is shorter 3 words. Otherwise, use translation api
 export async function translate({ langs, text, inDictionary }) {
+  console.log({ langs, text, inDictionary })
   try {
     const response = await fetch(`${SERVER_API}/translate`, {
       method: 'POST',
