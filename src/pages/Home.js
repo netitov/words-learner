@@ -1,16 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Translate from '../Translator/Translator';
-import Frequency from '../Frequency/Frequency';
-import RandomWords from '../RandomWords/RandomWords';
-import Promo from '../Promo/Promo';
-import Quiz from '../Quiz/Quiz';
-import About from '../About/About';
-import { useSelector } from 'react-redux';
-import { getRandomWords } from '../../utils/api';
-import { getFreqCat } from '../../utils/getFreqCat';
+import Translate from '../components/Translator/Translator';
+import Frequency from '../components/Frequency/Frequency';
+import RandomWords from '../components/RandomWords/RandomWords';
+import Promo from '../components/Promo/Promo';
+import Quiz from '../components/Quiz/Quiz';
+import About from '../components/About/About';
+import Header from '../components/Header/Header';
+import Footer from '../components/Footer/Footer';
+import { useSelector, useDispatch } from 'react-redux';
+import { getRandomWords } from '../utils/api';
+import { getFreqCat } from '../utils/getFreqCat';
+import useLangsFetch from '../hooks/useLangsFetch';
+import { useInitLang } from '../hooks/useInitLang';
+import { selectOutputLang } from '../store/outputLang';
 
 
-function Main(props) {
+function Home() {
 
   const [animation, setAnimation] = useState(false);
   const [quizActive, setQuizActive] = useState(false);
@@ -19,11 +24,33 @@ function Main(props) {
   const [randomWords, setRandomWords] = useState([]);
   const [filters, setFilters] = useState({frSt: 3, frEn: 5.5 });
 
-
   const currentInputLang = useSelector((state) => state.inputLang);
   const currentOutputLang = useSelector((state) => state.outputLang);
 
   const pathRef = useRef();
+  const dispatch = useDispatch();
+
+  //fetch languages list
+  const { dataIsLoading } = useLangsFetch();
+  //initial user language
+  const { setInitLang } = useInitLang();
+  const languages = useSelector((state) => state.langList);
+
+
+  //get init user language after language list is fetched
+  useEffect(() => {
+    if (!dataIsLoading) {
+      // Возможно, вы захотите передать сюда data, чтобы useInitLang мог использовать его внутри себя
+      const userLang = JSON.parse(localStorage.getItem('userLang'));
+      if (userLang) {
+        dispatch(selectOutputLang(userLang));
+
+      } else {
+        setInitLang(languages);
+        console.log('lang added')
+      }
+    }
+  }, [dataIsLoading]);
 
   // RANDOM WORDS
 
@@ -222,46 +249,52 @@ function Main(props) {
   }, []);
 
   return (
-    <main className='main'>
+    <>
+      <Header />
 
-      <Promo />
+      <main className='main'>
 
-      <About />
+        <Promo />
 
-      <Translate
-        handleLearnList={handleLearnList}
-      />
+        <About />
 
-      <Frequency
-        handleLearnList={handleLearnList}
-      />
-
-      <RandomWords
-        randomWords={randomWords}
-        searchWords={searchWords}
-        handleLearnList={handleLearnList}
-        isLoading={isLoading}
-      />
-
-      <div className='main__quiz' id='quiz'>
-        <h2 className='main__heading heading2'>Learn and test yourself</h2>
-        <div className={`main__quiz-container${animation ? ' main__quiz-container_active' : ''}`} ref={pathRef}>
-          <div className='main__block-disciption'>
-            <p>Take the tests and check your progress.</p>
-            <p>Use filters above to update the word list</p>
-          </div>
-          <button className='main__quiz-btn' type='button' onClick={startQuiz}>Start test</button>
-        </div>
-        <Quiz
-          quizActive={quizActive}
-          closeQuiz={closeQuiz}
-          quizQuestions={quizQuestions}
-          searchWords={searchWords}
+        <Translate
+          handleLearnList={handleLearnList}
         />
-      </div>
 
-    </main>
+        <Frequency
+          handleLearnList={handleLearnList}
+        />
+
+        <RandomWords
+          randomWords={randomWords}
+          searchWords={searchWords}
+          handleLearnList={handleLearnList}
+          isLoading={isLoading}
+        />
+
+        <div className='main__quiz' id='quiz'>
+          <h2 className='main__heading heading2'>Learn and test yourself</h2>
+          <div className={`main__quiz-container${animation ? ' main__quiz-container_active' : ''}`} ref={pathRef}>
+            <div className='main__block-disciption'>
+              <p>Take the tests and check your progress.</p>
+              <p>Use filters above to update the word list</p>
+            </div>
+            <button className='main__quiz-btn' type='button' onClick={startQuiz}>Start test</button>
+          </div>
+          <Quiz
+            quizActive={quizActive}
+            closeQuiz={closeQuiz}
+            quizQuestions={quizQuestions}
+            searchWords={searchWords}
+          />
+        </div>
+
+      </main>
+
+      <Footer />
+    </>
   )
 }
 
-export default Main;
+export default Home;

@@ -20,3 +20,8 @@ export const defaultLang = {
 export const filterBtns = [
   'common verbs', 'common nouns', 'in every movie', 'average frequency', 'low frequency'
 ];
+
+export const defaultFilters = {
+  lang: 'Spanish',
+  code: 'es'
+};

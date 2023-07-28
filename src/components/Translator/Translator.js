@@ -303,7 +303,7 @@ function Translate(props) {
             </div>
 
             <Tooltip title='add to the learning list' componentsProps={{ tooltip: { sx: tooltipOption, } }}>
-              <button className='translator__btn' type='button' onClick={props.handleClear}>
+              <button className='translator__btn' type='button' onClick={props.handleLearnList}>
                 <BsBookmarks size='20' color='#757575'/>
               </button>
             </Tooltip>

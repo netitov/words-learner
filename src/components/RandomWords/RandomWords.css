@@ -338,7 +338,7 @@ div.words__select {
   border: 2px solid var(--prime-yellow);
 }
 
-@media (max-width: 850px) {
+@media (max-width: 900px) {
   .words__filter-icon {
     display: block;
   }

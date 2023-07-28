@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Slider from '@mui/material/Slider';
 import RefTooltip from '../RefTooltip/RefTooltip';
 import Spinner from '../Spinner/Spinner';
@@ -15,11 +15,9 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
 import Tooltip from '@mui/material/Tooltip';
-import { tooltipOption, defaultLang, filterBtns } from '../../utils/constants';
+import { tooltipOption, filterBtns } from '../../utils/constants';
 import { GiSettingsKnobs } from 'react-icons/gi';
-import { useDispatch, useSelector } from 'react-redux';
-
-//
+import { useSelector } from 'react-redux';
 
 function RandomWords(props) {
 
@@ -45,7 +43,7 @@ function RandomWords(props) {
     },
   ];
 
-  const [pos, setPos] = useState([]); //props.randomWords
+  const [pos, setPos] = useState([]);
   const [words, setWords] = useState([]);
   const [frValue, setFrValue] = useState([3, 5.5]);
   const [perValue, setPerValue] = useState([0, 100]);
@@ -56,7 +54,6 @@ function RandomWords(props) {
   const [activeLangBtn, setActiveLangBtn] = useState({ lang: '', type: '' });
 
   const filterRef = useRef();
-  const tableRef = useRef();
 
   const currentInputLang = useSelector((state) => state.inputLang);
   const currentOutputLang = useSelector((state) => state.outputLang);
@@ -127,7 +124,7 @@ function RandomWords(props) {
       filters = {
         frSt: 4,
         frEn: 8,
-        pos: 'Verb'
+        pos: ['Verb']
       };
     };
 
@@ -135,7 +132,7 @@ function RandomWords(props) {
       filters = {
         frSt: 4,
         frEn: 8,
-        pos: 'Noun'
+        pos: ['Noun']
       };
     };
 
@@ -167,12 +164,10 @@ function RandomWords(props) {
     setPerValue([0, 100]);
     setPos([]);
 
-    //search movie in DB
     props.searchWords(filters);
-
   }
 
-  function handleSearch() {
+  function handleSearchClick() {
     const filters = {
       frSt: frValue[0],
       frEn: frValue[1] === 7 ? 8 : frValue[1],
@@ -187,13 +182,6 @@ function RandomWords(props) {
   function handleFilters() {
     setFiltersActive(!filtersActive);
   }
-
-  /* const getActiveLanguage = useMemo(() => {
-    const value = props.activeLangOutput.code !== 'en' ? props.activeLangOutput : props.activeLangInput;
-    //if selected lang is not in dictionary, use the default one
-    const obj = props.enDicLangs.some((i) => i.language === value.lang) ? value : defaultLang;
-    return { lang: obj.lang, code: obj.code, type: 'random' };
-  }, [props.activeLangOutput, props.activeLangInput]); */
 
   function runAnimationFilter() {
     const elementPos = filterRef.current.getBoundingClientRect().top;
@@ -223,16 +211,16 @@ function RandomWords(props) {
   }
 
   useEffect(() => {
+    setWords(props.randomWords);
+  }, [props.randomWords])
+
+  useEffect(() => {
     window.addEventListener('scroll', runAnimationFilter);
 
     return () => {
       window.removeEventListener('scroll', runAnimationFilter);
     };
   }, []);
-
-  useEffect(() => {
-    setWords(props.randomWords);
-  }, [props.randomWords])
 
 
   return (
@@ -269,9 +257,9 @@ function RandomWords(props) {
 
             <div className='words__btn-cont'>
               <button
-                className={`words__search-btn${props.wordsAreLoading ? ' words__search-btn_inactive' : ''}`}
+                className={`words__search-btn${props.isLoading ? ' words__search-btn_inactive' : ''}`}
                 type='button'
-                onClick={handleSearch}>
+                onClick={handleSearchClick}>
                   Search / update
               </button>
               <button className='words__filter-icon' type='button' onClick={handleFilters}>
@@ -382,10 +370,10 @@ function RandomWords(props) {
                   <Languages
                     languages={languages}
                     isActive={langListActive}
-                    selectLang={props.selectLang}
+                    //selectLang={props.selectLang}
                     activeBtn={activeLangBtn}
-                    searchLang={props.searchLang}
-                    inputText={props.inputText}
+                    //searchLang={props.searchLang}
+                    //inputText={props.inputText}
                     commentActive={true}
                     closeLangList={closeLangList}
                   />
@@ -431,12 +419,12 @@ function RandomWords(props) {
             </tbody>
           </table>
 
-          <div className={`words__table-overlay${props.wordsAreLoading ? ' words__table-overlay_active' : ''}`}>
-            <Spinner isLoading={props.wordsAreLoading}/>
+          <div className={`words__table-overlay${props.isLoading ? ' words__table-overlay_active' : ''}`}>
+            <Spinner isLoading={props.isLoading}/>
           </div>
 
           <span
-            className={`words__not-found${!props.wordsAreLoading && words.length === 0 ? ' words__not-found_active' : ''}`}
+            className={`words__not-found${!props.isLoading && words.length === 0 ? ' words__not-found_active' : ''}`}
           >
             Sorry, data not found. &#128532; Please try different filters <br />
           </span>

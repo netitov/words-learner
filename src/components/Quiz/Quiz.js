@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { IoCheckmarkCircleOutline } from 'react-icons/io5';
 import { IoCloseCircleOutline } from 'react-icons/io5';
 import Spinner from '../Spinner/Spinner';
-
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 
@@ -20,12 +19,6 @@ function Quiz(props) {
   const [comment, setComment] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    if (props.quizQuestions.length > 0) {
-      setQuestions(props.quizQuestions);
-      setActiveQuestion(props.quizQuestions[0]);
-    }
-  }, [props.quizQuestions])
 
   function handleComment(percent) {
     if (percent === 1) {
@@ -111,15 +104,27 @@ function Quiz(props) {
     droppData();
   }
 
+  // use redux fo filters?
   async function updateWords() {
     //search new words for quiz
+    console.log('func start')
     setIsLoading(true);
-    await props.searchWords(props.filters);
+    await props.searchWords();
 
     //dropp data and go to the first quest
     droppData();
     setIsLoading(false);
+
+    console.log('finish QUIZ')
   }
+
+  //update quiz qestions if props changed
+  useEffect(() => {
+    if (props.quizQuestions.length > 0) {
+      setQuestions(props.quizQuestions);
+      setActiveQuestion(props.quizQuestions[0]);
+    }
+  }, [props.quizQuestions])
 
   const data = {
     labels: ['correct answers', 'incorrect answers'],
@@ -236,7 +241,7 @@ function Quiz(props) {
           <Spinner isLoading={isLoading}/>
         </div>
 
-        <button className='quiz__close-btn btn-cross' type='button' onClick={props.closeQuiz}>
+        <button className='quiz__close-btn btn-cross' type='button' onClick={handleClose}>
           <svg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'>
             <line x1='0' x2='100' y1='0' y2='100' />
             <line x1='0' x2='100' y1='100' y2='0' />

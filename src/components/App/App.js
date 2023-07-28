@@ -90,7 +90,7 @@ function App() {
   } */
 
   //add frequency category
-  function getFreqCat(fr) {
+  /* function getFreqCat(fr) {
     if (fr < 2) {
       return 'very low';
     } else if (fr < 4) {
@@ -98,7 +98,7 @@ function App() {
     } else if (fr < 6) {
       return 'high';
     } else return 'very high';
-  }
+  } */
 
   //get init user language after language list is fetched
   useEffect(() => {
@@ -159,7 +159,7 @@ function App() {
       })
   }, []); */
 
-  async function requestRandomWords(filters) {
+  /* async function requestRandomWords(filters) {
     const response = await getRandomWords(filters);
     const lang = filters.lang;
     const newObj = response.map((i) => {
@@ -169,10 +169,10 @@ function App() {
     sessionStorage.setItem('randomWords', JSON.stringify(newObj));
     setRandomWords(newObj);
     setWordsAreLoading(false);
-  }
+  } */
 
-  // get inital list of random words/ update word list of languages was changed
-  useEffect(() => {
+  // get inital list of random words/ update word list if languages was changed
+/*   useEffect(() => {
     const currLang = JSON.parse(localStorage.getItem('userLang'));
     if (currLang) {
 
@@ -210,7 +210,7 @@ function App() {
 
   }
 
-  }, [currentInputLang, currentOutputLang]);
+  }, [currentInputLang, currentOutputLang]); */
 
   //get translation; switch the spinner
   /* async function getTranslation(text) {
@@ -414,9 +414,9 @@ function App() {
     }
   } */
 
-  function handleLearnList(data) {
+  /* function handleLearnList(data) {
     console.log(data)
-  }
+  } */
 
   //compare words frequency
   /* async function compareFreq(data, translation) {
@@ -435,15 +435,15 @@ function App() {
     const foundFreqs = !response.some(i => i.word === frequency.word) ? [frequency, ...response] : response;
     setTranslFreqs(foundFreqs);
   } */
-
+/*
   function updateQuizQuestions() {
     const quizArr = createQuizQuestions();
     setQuizQuestions(quizArr);
     sessionStorage.setItem('quizQuestions', JSON.stringify(quizArr));
-  }
+  } */
 
   //search random words
-  async function searchWords(filters) {
+  /* async function searchWords(filters) {
     //check of words are not already on loading
     if (!wordsAreLoading) {
       const currLang = JSON.parse(localStorage.getItem('userLang'));
@@ -458,75 +458,19 @@ function App() {
 
       updateQuizQuestions();
     }
-  }
+  } */
 
-  function startQuiz() {
+ /*  function startQuiz() {
     setQuizActive(true);
   }
 
   function closeQuiz(e) {
     setQuizActive(false);
-  }
+  } */
 
 
   //create questions and answers for quiz (from random words)
-  function createQuizQuestions() {
-    const wordStorage = getStorageItem(sessionStorage, 'randomWords');
-    const allWords = [];
-    const quizArr = [];
-    const mainWords = [];
 
-    wordStorage.forEach((i) => {
-      const obj = { word: i.translation, translation: i.word, pos: i.pos.toLowerCase() };
-      allWords.push(obj);
-      mainWords.push(obj);
-
-      i.otherTransl.forEach((o) => {
-
-        o.tr.forEach((el) => {
-           if(!allWords.some((word) => word.word === el.text)) {
-            const obj = { word: el.text, pos: el.pos, syn: i.translation };
-            allWords.push(obj);
-           }
-        })
-
-      })
-
-    })
-
-    mainWords.forEach((i) => {
-      const obj = {
-        question: i.translation,
-        correctAnswer: i.word,
-        pos: i.pos,
-        options: []
-      };
-
-      const filteredWords = allWords.filter((el) => {
-        return el.word !== obj.correctAnswer && el.syn !== obj.correctAnswer /* && el.pos === obj.pos */
-        }
-
-      );
-
-      while (obj.options.length < 3) {
-        const randomIndex = Math.floor(Math.random() * filteredWords.length);
-
-        const newOpt = filteredWords[randomIndex].word;
-
-        if (!obj.options.some((opt) => opt === newOpt)) {
-          obj.options.push(newOpt);
-        }
-      }
-
-      quizArr.push(obj);
-
-      const randomIndexinArr = Math.floor(Math.random() * 4);
-      obj.options.splice(randomIndexinArr, 0, obj.correctAnswer);
-
-    })
-
-    return quizArr;
-  }
 
   //update quiz questions of randomWords were changed
   /* useEffect(() => {
@@ -561,7 +505,7 @@ function App() {
   }, [randomWords]) */
 
    //close quiz on esc and overlay
-   useEffect(() => {
+   /* useEffect(() => {
     function handleEscClose(e) {
       if (e.key === 'Escape') {
         setQuizActive(false);
@@ -580,14 +524,11 @@ function App() {
       document.removeEventListener('keyup', handleEscClose);
       document.removeEventListener('click', handleOverlayClose);
     };
-  }, [])
+  }, []) */
 
-  function test() {
-
-  }
 
   return (
-    <div className='page' onClick={test}>
+    <div className='page'>
       <div className='page__wrapper'>
         <Header />
         <Main
@@ -609,7 +550,7 @@ function App() {
           otherTransl={otherTransl}
           frequency={frequency}
           //addTranslate={addTranslate}
-          handleLearnList={handleLearnList}
+          //handleLearnList={handleLearnList}
           //compareFreq={compareFreq}
           translFreqs={translFreqs}
           setCharsFreq={setCharsFreq}
@@ -619,14 +560,14 @@ function App() {
           frNoData={frNoData}
           randomWords={randomWords}
           getFreqCat={getFreqCat}
-          searchWords={searchWords}
+          //searchWords={searchWords}
           wordsAreLoading={wordsAreLoading}
           //enDicLangs={enDicLangs}
           randomlangListActive={randomlangListActive}
           //openLangListWords={openLangListWords}
           quizActive={quizActive}
-          setQuizActive={startQuiz}
-          closeQuiz={closeQuiz}
+          //setQuizActive={startQuiz}
+          //closeQuiz={closeQuiz}
           quizQuestions={quizQuestions}
           filters={filters}
         />
