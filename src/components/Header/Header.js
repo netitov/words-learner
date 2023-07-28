@@ -65,7 +65,7 @@ function Header() {
           </li>
 
           <li>
-            <Link to='login'>
+            <Link to='/login'>
               <button className='nav__acc-btn' type='button' onClick={menuClick}>
               <VscAccount />
               <span>Log in</span>
@@ -77,10 +77,10 @@ function Header() {
       </nav>
 
       <div className='burger-cont'>
-        <div className='nav__li nav__li_logo'>
+        <div className='nav__li nav__li_logo logo'>
           <Link to='/' onClick={menuClick}>
             <span>WORDS</span> Learner
-            <img className='nav__img' src={arrows} alt='arrows'></img>
+            <img className='logo__img' src={arrows} alt='arrows'></img>
           </Link>
         </div>
         <Burger

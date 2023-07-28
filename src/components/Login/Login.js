@@ -15,15 +15,16 @@ function Login() {
 
         <form className='auth__form'>
           <TextField
-            id='standard-basic'
+            id='email'
             label='Email'
             type='email'
             variant='standard'
           />
           <TextField
-            id='standard-basic'
+            id='password'
             label='Password'
             type='password'
+            autoComplete='on'
             variant='standard'
           />
           <button type='submit' className='auth__sbt-btn'></button>

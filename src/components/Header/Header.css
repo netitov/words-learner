@@ -2,7 +2,7 @@ header {
   position: absolute;
   right: 0;
   left: 0;
-  height: 100%;
+  /* height: 100%; */
 
 
   animation: slide-down 0.5s;
@@ -39,7 +39,7 @@ header {
   margin-right: 0;
 }
 
-.nav__li_logo > a {
+.logo > a {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -52,16 +52,16 @@ header {
   transition: var(--transition);
 }
 
-.nav__li_logo:hover > a {
+.logo:hover > a {
   color: var(--prime-yellow);
 }
 
-.nav__img {
+.logo__img {
   width: 36px;
   margin-top: 8px;
 }
 
-.nav__li > a > span {
+.logo > a > span {
   font-weight: 400;
 }
 
@@ -156,7 +156,7 @@ header {
     display: none;
   }
 
-  .nav__li_logo > a {
+  .logo > a {
     font-size: 1.1em;
   }
 }
