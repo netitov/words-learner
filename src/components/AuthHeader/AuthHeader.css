@@ -3,3 +3,11 @@
   align-items: center;
   justify-content: center;
 }
+
+.auth-header__logo > a {
+  font-size: 1.1em;
+}
+
+.auth-header {
+  position: relative;
+}

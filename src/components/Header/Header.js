@@ -45,10 +45,10 @@ function Header() {
             </ScrollLink>
           </li>
 
-          <li className={`nav__li nav__li_logo`}>
+          <li className={`nav__li nav__li_logo logo`}>
             <Link to='/' onClick={menuClick}>
               <span>WORDS</span> Learner
-              <img className='nav__img' src={arrows} alt='arrows'></img>
+              <img className='logo__img' src={arrows} alt='arrows'></img>
             </Link>
           </li>
 
