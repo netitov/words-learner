@@ -41,9 +41,9 @@ function Login() {
             <button type='submit' className='auth__sbt-btn'>Sign in</button>
             <div className='auth__pass-box'>
               <FormControlLabel control={<Checkbox defaultChecked />} label='Remember me' className='auth__checkbox' />
-              <a to='#' className='auth__pass-btn' onClick={() => setResetPassActive(true)}>
+              <button className='auth__pass-btn' onClick={() => setResetPassActive(true)}>
                 <span>Forgot password?</span>
-              </a>
+              </button>
             </div>
           </form>
         ) : (
@@ -58,9 +58,9 @@ function Login() {
             />
             <button type='submit' className='auth__sbt-btn'>Send reset link</button>
             <div className='auth__pass-box'>
-            <a to='#' type='button' className='auth__pass-btn' onClick={() => setResetPassActive(false)}>
+            <button to='#' type='button' className='auth__pass-btn' onClick={() => setResetPassActive(false)}>
               <span>&larr; Back to login</span>
-            </a>
+            </button>
             </div>
           </form>
         )}

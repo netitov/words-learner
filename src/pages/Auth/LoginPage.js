@@ -1,7 +1,7 @@
 import React from 'react';
-import Login from '../components/Login/Login';
-import Footer from '../components/Footer/Footer';
-import AuthHeader from '../components/AuthHeader/AuthHeader';
+import Login from '../../components/Auth/Login';
+import Footer from '../../components/Footer/Footer';
+import AuthHeader from '../../components/AuthHeader/AuthHeader';
 
 
 function LoginPage() {

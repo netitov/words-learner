@@ -1,18 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Translate from '../components/Translator/Translator';
-import Frequency from '../components/Frequency/Frequency';
-import RandomWords from '../components/RandomWords/RandomWords';
-import Promo from '../components/Promo/Promo';
-import Quiz from '../components/Quiz/Quiz';
-import About from '../components/About/About';
-import Header from '../components/Header/Header';
-import Footer from '../components/Footer/Footer';
+import Translate from '../../components/Translator/Translator';
+import Frequency from '../../components/Frequency/Frequency';
+import RandomWords from '../../components/RandomWords/RandomWords';
+import Promo from '../../components/Promo/Promo';
+import Quiz from '../../components/Quiz/Quiz';
+import About from '../../components/About/About';
+import Header from '../../components/Header/Header';
+import Footer from '../../components/Footer/Footer';
 import { useSelector, useDispatch } from 'react-redux';
-import { getRandomWords } from '../utils/api';
-import { getFreqCat } from '../utils/getFreqCat';
-import useLangsFetch from '../hooks/useLangsFetch';
-import { useInitLang } from '../hooks/useInitLang';
-import { selectOutputLang } from '../store/outputLang';
+import { getRandomWords } from '../../utils/api';
+import { getFreqCat } from '../../utils/getFreqCat';
+import useLangsFetch from '../../hooks/useLangsFetch';
+import { useInitLang } from '../../hooks/useInitLang';
+import { selectOutputLang } from '../../store/outputLang';
 
 
 function Home() {
