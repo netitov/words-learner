@@ -26,7 +26,7 @@ function ContactForm(props) {
 
     const checkValidation = () => {
       if (name === 'email' && value !== '' && e.target.validationMessage !== '') {
-        return 'invalid email. Pleasy try again';
+        return 'invalid email. Please try again';
       }
       if (value === '') {
         return 'please fill in this field';
