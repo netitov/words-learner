@@ -2,13 +2,13 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { VscAccount } from 'react-icons/vsc';
 import TextField from '@mui/material/TextField';
+import Spinner from '../Spinner/Spinner';
 
 function AuthForm({ textFieldsData, data, setData, submitForm, children, form, question,
   route, refBtn, btnText, addElement, error, setError }) {
 
   const [isValid, setIsValid] = useState(false);
-
-  //const [data, setData] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   const [errorActive, setErrorActive] = useState(false);
 
   const formRef = useRef();
@@ -20,6 +20,10 @@ function AuthForm({ textFieldsData, data, setData, submitForm, children, form, q
 
     if (value === '') {
       return 'Please fill in all fields';
+    }
+
+    if (name === 'password' && value !== '' && message !== '')  {
+      return 'Password must be at least 7 characters long';
     }
 
     if (name === 'password' && value !== '' && data?.confirmPassword && value !== data.confirmPassword) {
@@ -39,30 +43,45 @@ function AuthForm({ textFieldsData, data, setData, submitForm, children, form, q
       ...data,
       [name]: value
     });
-
+    //show error onBlur
     const validation = checkValidation(name, value, e.target.validationMessage);
-
     if (validation !== '') {
+      //set auto validation message
       setError({ ...error, [name]: validation });
-    } else if (name === 'password' || name === 'confirmPassword') {
+    }
+  }
+
+  //hide error on input change
+  async function hideError(e) {
+    const { name, value } = e.target;
+
+    if ((name === 'password' && value === data.confirmPassword) || (name === 'confirmPassword' && value === data.password)) {
       const { confirmPassword: confirmPass, password: pass, ...rest } = error;
       setError(rest);
-    } else {
-      //remove error of vildation passed or error from server
-      const { [name]: removedProperty, serverError: removed, ...rest } = error;
+      console.log(name, value, data.password)
+    } else if (e.target.validationMessage === '' && error[name]) {
+      const { [name]: removedErr, ...rest } = error;
+      setError(rest);
+    }
+
+    if (error.serverError) {
+      const { serverError, ...rest } = error;
       setError(rest);
     }
   }
 
-  function onSubmit(e) {
+  async function onSubmit(e) {
     e.preventDefault();
     if (!isValid) {
       if (!errorActive) {
         setErrorActive(true);
       }
-    } else {
-      submitForm();
+    } else if (!isLoading) {
+      setIsLoading(true);
+      await submitForm();
+      setIsLoading(false);
     }
+
   }
 
   function test() {
@@ -84,7 +103,6 @@ function AuthForm({ textFieldsData, data, setData, submitForm, children, form, q
   return (
     <div className='auth' onClick={test}>
       <div className='auth__form-wrapper'>
-
         <div className='auth__img-box'>
           <VscAccount />
           <h2>{form}</h2>
@@ -95,6 +113,23 @@ function AuthForm({ textFieldsData, data, setData, submitForm, children, form, q
 
         <form className='auth__form' ref={formRef} onSubmit={onSubmit}>
           {addElement}
+
+          {textFieldsData.map((field) => (
+            <TextField
+              key={field.id}
+              id={field.id}
+              name={field.name}
+              label={field.label}
+              type={field.type}
+              autoComplete={field.autoComplete}
+              variant='standard'
+              className={`auth__input${field.name in error ? ' auth__input_error' : ''}`}
+              onBlur={handleChange}
+              onChange={hideError}
+              required={field.required}
+              inputProps={{ minLength: field.minLength }}
+            />
+          ))}
           <div className={`auth__err-box${errorActive ? ' auth__err-box_active' : ''}`}>
             <div className='auth__err-text-box'>
               {Array.from(new Set(Object.values(error))).map((i) => (
@@ -108,21 +143,10 @@ function AuthForm({ textFieldsData, data, setData, submitForm, children, form, q
               </svg>
             </button>
           </div>
-          {textFieldsData.map((field) => (
-            <TextField
-              key={field.id}
-              id={field.id}
-              name={field.name}
-              label={field.label}
-              type={field.type}
-              autoComplete={field.autoComplete}
-              variant='standard'
-              className={`auth__input${field.name in error ? ' auth__input_error' : ''}`}
-              onBlur={handleChange}
-              required={field.required}
-            />
-          ))}
-          <button type='submit' className={`auth__sbt-btn${isValid ? ' auth__sbt-btn_active' : ''}`}>{btnText}</button>
+          <button type='submit' className={`auth__sbt-btn${isLoading ? ' auth__sbt-btn_loading' : ''}`}>
+            {btnText}
+            <Spinner isLoading={isLoading} />
+          </button>
           {children}
         </form>
 

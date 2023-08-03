@@ -113,3 +113,7 @@ export async function getUserData(token) {
 export async function authorize(obj) {
   return fetchAPI('login', 'POST', undefined, obj);
 }
+
+export async function signup(obj) {
+  return fetchAPI('signup', 'POST', undefined, obj);
+}
