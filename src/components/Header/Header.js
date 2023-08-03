@@ -3,11 +3,15 @@ import { Link as ScrollLink } from 'react-scroll';
 import { Link } from 'react-router-dom';
 import arrows from '../../images/Arrows.svg';
 import Burger from '../Burger/Burger';
-
 import { VscAccount } from 'react-icons/vsc';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../../store/user';
 
 function Header() {
   const [activeMenu, setActiveMenu] = useState(false);
+
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const dispatch = useDispatch();
 
   function toggleMenu() {
     setActiveMenu(!activeMenu);
@@ -25,6 +29,12 @@ function Header() {
     if (activeMenu) {
       toggleMenu();
     }
+  }
+
+  function signOut() {
+    dispatch(logout());
+    localStorage.removeItem('token');
+    menuClick();
   }
 
 
@@ -65,12 +75,19 @@ function Header() {
           </li>
 
           <li>
-            <Link to='/login'>
-              <button className='nav__acc-btn' type='button' onClick={menuClick}>
-              <VscAccount />
-              <span>Log in</span>
+            {!isLoggedIn ? (
+              <Link to='/login'>
+                <button className='nav__acc-btn' type='button' onClick={menuClick}>
+                  <VscAccount />
+                  <span>Log in</span>
+                </button>
+              </Link>) : (
+              <button className='nav__acc-btn' type='button' onClick={signOut}>
+                <VscAccount />
+                <span>Log out</span>
               </button>
-            </Link>
+            )}
+
           </li>
 
         </ul>

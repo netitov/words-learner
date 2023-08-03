@@ -5,7 +5,8 @@
   align-items: center;
   /* margin-bottom: var(--main-gap); */
 
-  min-height: 100vh;
+  /* min-height: 100vh; */
+  min-height: calc(100vh - 108px);
   color: #fff;
   background: var(--prime-blue); /* #376068 */ /* #37636c */
 
@@ -138,6 +139,12 @@
   .promo__container > h1 {
     text-align: center;
     font-size: 3.5em;
+  }
+}
+
+@media (max-width: 860px) {
+  .promo {
+    min-height: calc(100vh - 102px);
   }
 }
 

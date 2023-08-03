@@ -6,6 +6,7 @@ import langListReducer from './langList';
 import filteredLangsReducer from './filteredLangs';
 import dictionLangsReducer from './dictionLangs';
 import enDictionLangsReducer from './enDictionLangs';
+import userReducer from './user';
 
 const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ const store = configureStore({
     filteredLangs: filteredLangsReducer,
     dictionLangs: dictionLangsReducer,
     enDictionLangs: enDictionLangsReducer,
+    user: userReducer,
     devTools: process.env.NODE_ENV !== 'production',
   },
 });

@@ -1,11 +1,13 @@
 header {
-  position: absolute;
+  /* position: absolute;
   right: 0;
-  left: 0;
+  left: 0; */
   /* height: 100%; */
 
+  background-color: var(--prime-blue);
 
-  animation: slide-down 0.5s;
+
+  /* animation: slide-down 0.5s; */
 }
 
 .header_unscrolled {
@@ -93,11 +95,13 @@ header {
 .nav__acc-btn {
   color: #fff;
   font-weight: 300;
+  min-width: 110px;
   padding: 8px 10px;
   background: var(--darker-blue);
   border-radius: 10px;
   display: flex;
   align-items: center;
+  justify-content: center;
   cursor: pointer;
   transition: var(--transition);
 }
@@ -121,6 +125,11 @@ header {
 }
 
 @media (max-width: 860px) {
+
+  .header {
+    height: 100%;
+  }
+
   .nav {
     visibility: hidden;
     background: #000000c9;
@@ -140,6 +149,7 @@ header {
     top: 0;
     opacity: 1;
     visibility: visible;
+    overflow-y: scroll;
   }
 
   .nav__ul {

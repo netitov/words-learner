@@ -1,5 +1,38 @@
 import { SERVER_API } from './config';
 
+async function fetchAPI(path, method, headers, body) {
+  try {
+    const options = {
+      method: method,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        ...headers
+      },
+      body: method === 'GET' ? undefined : JSON.stringify(body)
+    };
+
+    const response = await fetch(`${SERVER_API}/${path}`, options);
+    const result = await response.json();
+    console.log(result)
+
+    if (!response.ok) {
+      return {
+        error: true,
+        status: response.status,
+        serverError: result.serverError || response.message,
+      };
+    }
+    return result;
+  } catch (err) {
+    return {
+      error: true,
+      serverError: 'Unexpected error occurred. Please try again later',
+    };
+  }
+}
+
+
 export async function checkFrequency(word) {
   try {
     const response = await fetch(`${SERVER_API}/word-data/${word}`,
@@ -50,8 +83,7 @@ export async function translate({ langs, text, inDictionary }) {
 export async function getLanguages() {
   try {
     const response = await fetch(`${SERVER_API}/languages`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'GET'
     });
     const result = await response.json();
     return result;
@@ -64,12 +96,20 @@ export async function getLanguages() {
 export async function getDictionary() {
   try {
     const response = await fetch(`${SERVER_API}/dictionary`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
+      method: 'GET'
     });
     const result = await response.json();
     return result;
   } catch (err) {
     console.error(err);
   }
+}
+
+export async function getUserData(token) {
+  const headers = {'Authorization': `Bearer ${token}`};
+  return fetchAPI('users/me', 'GET', headers);
+}
+
+export async function authorize(obj) {
+  return fetchAPI('login', 'POST', undefined, obj);
 }

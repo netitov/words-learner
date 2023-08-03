@@ -1,72 +1,66 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { VscAccount } from 'react-icons/vsc';
-import TextField from '@mui/material/TextField';
+import { Link, useNavigate } from 'react-router-dom';
+import AuthForm from "./AuthForm";
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import { authorize } from '../../utils/api';
+import { useSelector, useDispatch } from 'react-redux';
+import { login } from '../../store/user';
 
 function Login() {
 
+  const [data, setData] = useState({});
+  const [error, setError] = useState({});
   const [resetPassActive, setResetPassActive] = useState(false);
 
+  const navigate = useNavigate();
+
+  const textFieldsData = [
+    { id: 'email', name: 'email', label: 'Email', type: 'email', required: true },
+    { id: 'password', name: 'password', label: 'Password', type: 'password', autoComplete: 'on', required: true },
+  ];
+
+  /* const isLoggedIn = useSelector((state) => state.isLoggedIn);
+  const userData = useSelector((state) => state.userData); */
+  const dispatch = useDispatch();
+
+  async function submitForm() {
+    const response = await authorize(data);
+    const { email, userName, token, serverError } = response;
+    const userData = { email, userName };
+
+    if (response.error) {
+      //error text
+      setError({ serverError });
+    } else {
+      //add token to local storage + save user data in store
+      localStorage.setItem('token', token);
+      dispatch(login({ userData }));
+      navigate('/');
+    }
+  }
+
   return (
-    <div className='auth'>
-      <div className='auth__form-wrapper'>
-
-        <div className='auth__img-box'>
-          <VscAccount />
-          <h2>{!resetPassActive ? 'Log in' : 'Restore password'}</h2>
-        </div>
-        <p className='auth__mode-switch'>Don't have an account?
-          <Link to='/signup' className='auth__mode-btn'>Sign up</Link>
-        </p>
-
-        {!resetPassActive ? (
-          <form className='auth__form'>
-            <TextField
-              id='email'
-              label='Email'
-              type='email'
-              variant='standard'
-              className='auth__input'
-            />
-            <TextField
-              id='password'
-              label='Password'
-              type='password'
-              autoComplete='on'
-              variant='standard'
-              className='auth__input'
-            />
-            <button type='submit' className='auth__sbt-btn'>Sign in</button>
-            <div className='auth__pass-box'>
-              <FormControlLabel control={<Checkbox defaultChecked />} label='Remember me' className='auth__checkbox' />
-              <button className='auth__pass-btn' onClick={() => setResetPassActive(true)}>
-                <span>Forgot password?</span>
-              </button>
-            </div>
-          </form>
-        ) : (
-          <form className='auth__form'>
-            <p className='auth__description'>Enter your account email, and we'll send you a link to reset your password</p>
-            <TextField
-              id='email'
-              label='Email'
-              type='email'
-              variant='standard'
-              className='auth__input'
-            />
-            <button type='submit' className='auth__sbt-btn'>Send reset link</button>
-            <div className='auth__pass-box'>
-            <button to='#' type='button' className='auth__pass-btn' onClick={() => setResetPassActive(false)}>
-              <span>&larr; Back to login</span>
-            </button>
-            </div>
-          </form>
-        )}
-
+    <AuthForm
+      textFieldsData={textFieldsData}
+      data={data}
+      setData={setData}
+      submitForm={submitForm}
+      form='Log in'
+      question="Don't have an account?"
+      route='/signup'
+      refBtn='Sign up'
+      btnText='Sign in'
+      error={error}
+      setError={setError}
+    >
+      <div className='auth__pass-box'>
+        <FormControlLabel control={<Checkbox defaultChecked />} label='Remember me' className='auth__checkbox' />
+        <button className='auth__pass-btn' onClick={() => setResetPassActive(true)}>
+          <Link to='/restore-password'>Forgot password?</Link>
+        </button>
       </div>
-    </div>
+    </AuthForm>
   )
 }
 
