@@ -50,7 +50,7 @@ function Login() {
       <div className='auth__pass-box'>
         {/* <FormControlLabel control={<Checkbox defaultChecked />} label='Remember me' className='auth__checkbox' /> */}
         <button className='auth__pass-btn' onClick={() => setResetPassActive(true)}>
-          <Link to='/restore-password'>Forgot password?</Link>
+          <Link to='/password-reset'>Forgot password?</Link>
         </button>
       </div>
     </AuthForm>

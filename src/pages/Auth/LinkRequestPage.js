@@ -1,17 +1,17 @@
 import React from 'react';
-import RestorePass from '../../components/Auth/RestorePass';
+import LinkRequest from '../../components/Auth/LinkRequest';
 import Footer from '../../components/Footer/Footer';
 import AuthHeader from '../../components/AuthHeader/AuthHeader';
 
 
-function RestorePassPage() {
+function LinkRequestPage() {
   return (
     <div className='login-page'>
       <AuthHeader />
-      <RestorePass />
+      <LinkRequest />
       <Footer />
     </div>
   )
 }
 
-export default RestorePassPage;
+export default LinkRequestPage;

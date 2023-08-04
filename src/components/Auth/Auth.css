@@ -178,6 +178,7 @@
 .auth__err-box {
   /* display: none;
   padding: 10px; */
+  display: flex;
   align-items: center;
   justify-content: space-between;
   background-color: #ff00001c;
@@ -199,7 +200,7 @@
 }
 
 .auth__err-box_active {
-  display: flex;
+
   padding: 10px;
   min-height: 45px;
   height: auto;
@@ -232,7 +233,36 @@
   stroke: #fff;
 }
 
+.auth__result-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 
+  border: 1px solid #179417;
+  background-color: #056e0533;
+  border-radius: 10px;
+  box-sizing: border-box;
+
+  height: 0;
+  min-height: 0;
+  padding: 0 10px;
+  visibility: hidden;
+  opacity: 0;
+  transform: scaleY(0);
+  transform-origin: top;
+
+  transition: all 0.2s ease-out;
+}
+
+.auth__result-box_active {
+  padding: 10px;
+  min-height: 45px;
+  height: auto;
+  visibility: visible;
+  opacity: 1;
+  transform: scaleY(1);
+}
 
 .auth__err-text-box {
   display: flex;

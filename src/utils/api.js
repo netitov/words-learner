@@ -117,3 +117,9 @@ export async function authorize(obj) {
 export async function signup(obj) {
   return fetchAPI('signup', 'POST', undefined, obj);
 }
+
+//request link for password reset
+export async function linkRequest(obj) {
+  return fetchAPI('users/password-reset', 'POST', undefined, obj);
+}
+
