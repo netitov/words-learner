@@ -29,7 +29,7 @@ function LinkRequest() {
       data={data}
       setData={setData}
       submitForm={submitForm}
-      form='Restore password'
+      form='Password reset'
       question="Don't have an account?"
       route='/signup'
       refBtn='Sign up'

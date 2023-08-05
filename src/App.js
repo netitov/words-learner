@@ -4,7 +4,7 @@ import Home from './pages/Home/Home';
 import LoginPage from './pages/Auth/LoginPage';
 import SignupPage from './pages/Auth/SignupPage';
 import LinkRequestPage from './pages/Auth/LinkRequestPage';
-import PasswordReset from './components/Auth/PasswordReset';
+import PasswordResetPage from './pages/Auth/PasswordResetPage';
 import { login, userData } from './store/user';
 import { useSelector, useDispatch } from 'react-redux';
 import { getUserData } from './utils/api';
@@ -54,7 +54,7 @@ function App() {
           <Route path='/login' element={<LoginPage />} />
           <Route path='/signup' element={<SignupPage />} />
           <Route path='/password-reset' element={<LinkRequestPage />} />
-          <Route path='/password-reset/:userId/:token' element={<PasswordReset />} />
+          <Route path='/password-reset/:userId/:token' element={<PasswordResetPage />} />
         </Routes>
         <div className={`page__loading-overlay${isLoading ? ' page__loading-overlay_active' : ''}`}>
           <Spinner isLoading={isLoading}/>

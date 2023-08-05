@@ -123,3 +123,9 @@ export async function linkRequest(obj) {
   return fetchAPI('users/password-reset', 'POST', undefined, obj);
 }
 
+export async function updatePassword(params, body) {
+  return fetchAPI(`users/password-reset/${params.userId}/${params.token}`, 'POST', undefined, body);
+}
+
+
+
