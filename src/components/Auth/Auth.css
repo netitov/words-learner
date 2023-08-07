@@ -293,6 +293,8 @@
 .auth__modal-box p {
   font-size: 1.2em;
   color: #fff;
+  padding: 5px;
+  text-align: center;
 }
 
 .auth__modal-box p:first-of-type {
@@ -424,5 +426,17 @@
     top: 3.70em;
     left: 2.75em;
     visibility: visible;
+  }
+}
+
+@media (max-width: 350px) {
+  .auth__modal-box p {
+    font-size: 1.1em;
+  }
+
+  .auth__modal-box .auth__mode-btn {
+    font-size: 17px;
+    margin-right: 5px;
+    box-shadow: 0px 0px 12px 1px #25444a;
   }
 }

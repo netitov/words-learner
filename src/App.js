@@ -9,6 +9,7 @@ import { login, userData } from './store/user';
 import { useSelector, useDispatch } from 'react-redux';
 import { getUserData } from './utils/api';
 import Spinner from './components/Spinner/Spinner';
+import Account from './pages/Account/Account';
 
 function App() {
 
@@ -24,7 +25,7 @@ function App() {
 
     if (!response.error) {
       dispatch(login({ userData: { email, userName } }));
-      navigate('/');
+      navigate('/account');
     } else {
       localStorage.removeItem('token');
     }
@@ -55,6 +56,7 @@ function App() {
           <Route path='/signup' element={<SignupPage />} />
           <Route path='/password-reset' element={<LinkRequestPage />} />
           <Route path='/password-reset/:userId/:token' element={<PasswordResetPage />} />
+          <Route path='/account/*' element={<Account />} />
         </Routes>
         <div className={`page__loading-overlay${isLoading ? ' page__loading-overlay_active' : ''}`}>
           <Spinner isLoading={isLoading}/>

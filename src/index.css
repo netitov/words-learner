@@ -22,4 +22,7 @@
 @import url(/src/components/Auth/Auth.css);
 @import url(/src/components/AuthHeader/AuthHeader.css);
 @import url(/src/pages/Auth/Auth.css);
+@import url(/src/components/Navigation/SideNav.css);
+@import url(/src/components/Navigation/CardNav.css);
+@import url(/src/pages/Account/Account.css);
 

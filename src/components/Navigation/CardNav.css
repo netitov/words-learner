@@ -1,0 +1,69 @@
+.cardnav-wrapper > h2 {
+  color: #fff;
+  font-weight: 300;
+  margin: 0;
+}
+
+.cardnav-wrapper > svg {
+  top: -190px;
+  right: 0;
+  position: absolute;
+  color: var(--darker-blue);
+  width: 150px;
+  height: 150px;
+}
+
+.cardnav {
+
+}
+
+.cardnav > ul {
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.cardnav li {
+  display: flex;
+  flex-direction: column;
+  background: var(--darker-blue);
+  color:#fff;
+  /* max-width: 300px; */
+  min-width: 200px;
+  min-height: 140px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  position: relative;
+  flex: 1;
+  gap: 0.5em;
+  font-size: 1.2em;
+  transition: transform 0.3s;
+}
+
+.cardnav li:hover {
+  transform: translateY(-10px);
+}
+
+.cardnav__link {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  flex-direction: column;
+  gap: 0.5em;
+  transition: var(--transition);
+}
+
+.cardnav__link:hover > svg {
+  color: var(--prime-yellow)
+}
+
+.cardnav svg {
+  width: 30px;
+  height: 30px;
+  color: var(--main-blue);
+  transition: color 0.3s;
+}

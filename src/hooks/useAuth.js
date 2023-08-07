@@ -10,7 +10,7 @@ function useAuth() {
   function handleLogin(token, email, userName) {
     localStorage.setItem('token', token);
     dispatch(login({ userData: { email, userName } }));
-    navigate('/');
+    navigate('/account');
     window.scrollTo(0, 0);
   };
 

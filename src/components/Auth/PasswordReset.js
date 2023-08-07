@@ -74,7 +74,7 @@ function PasswordReset() {
           <p>
             You will be redirected to the {' '}
             <span className='auth__mode-switch'>
-              <Link to='/login' className='auth__mode-btn'>Log in</Link>
+              <Link to='/login' className='auth__mode-btn'>Login</Link>
             </span> {countdown} sec
           </p>
         </div>
