@@ -96,6 +96,10 @@ td {
   display: block;
 }
 
+.table__head-box > .table__tooltip_active > svg {
+  color: #757575;
+}
+
 .table__block {
   display: flex;
   align-items: center;

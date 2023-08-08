@@ -5,10 +5,9 @@ import { RxDashboard } from 'react-icons/rx';
 
 function CardNav() {
 
-
   return (
     <div className='cardnav-wrapper'>
-      <RxDashboard />
+      {/* <RxDashboard /> */}
       <h2>Welcome, user13!</h2>
       <nav className='cardnav'>
         <ul>

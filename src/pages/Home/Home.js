@@ -31,7 +31,7 @@ function Home() {
   const dispatch = useDispatch();
 
   //fetch languages list
-  const { dataIsLoading } = useLangsFetch();
+  /* const { dataIsLoading } = useLangsFetch();
   //initial user language
   const { setInitLang } = useInitLang();
   const languages = useSelector((state) => state.langList);
@@ -40,7 +40,6 @@ function Home() {
   //get init user language after language list is fetched
   useEffect(() => {
     if (!dataIsLoading) {
-      // Возможно, вы захотите передать сюда data, чтобы useInitLang мог использовать его внутри себя
       const userLang = JSON.parse(localStorage.getItem('userLang'));
       if (userLang) {
         dispatch(selectOutputLang(userLang));
@@ -50,7 +49,7 @@ function Home() {
         console.log('lang added')
       }
     }
-  }, [dataIsLoading]);
+  }, [dataIsLoading]); */
 
   // RANDOM WORDS
 
@@ -260,6 +259,10 @@ function Home() {
 
         <Translate
           handleLearnList={handleLearnList}
+          chartColor='#fcc5546e'
+          chartFontColor='#757575'
+          columnChartColor='#127386'
+          columnChartStroke='#757575'
         />
 
         <Frequency

@@ -4,14 +4,14 @@
   margin: 0;
 }
 
-.cardnav-wrapper > svg {
+/* .cardnav-wrapper > svg {
   top: -190px;
   right: 0;
   position: absolute;
   color: var(--darker-blue);
   width: 150px;
   height: 150px;
-}
+} */
 
 .cardnav {
 

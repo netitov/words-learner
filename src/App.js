@@ -10,14 +10,27 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getUserData } from './utils/api';
 import Spinner from './components/Spinner/Spinner';
 import Account from './pages/Account/Account';
+import useLangsFetch from './hooks/useLangsFetch';
+import { useInitLang } from './hooks/useInitLang';
+import { selectOutputLang } from './store/outputLang';
 
 function App() {
 
   const [isLoading, setIsLoading] = useState(true);
+
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  //const { dataIsLoading } = useLangsFetch();
   //const userData = useSelector((state) => state.user.userData);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  //fetch languages list
+  const { dataIsLoading } = useLangsFetch();
+  //initial user language
+  const { setInitLang } = useInitLang();
+  const languages = useSelector((state) => state.langList);
+
+
 
   async function tokenCheck(token) {
     const response = await getUserData(token);
@@ -25,7 +38,7 @@ function App() {
 
     if (!response.error) {
       dispatch(login({ userData: { email, userName } }));
-      navigate('/account');
+      //navigate('/account');
     } else {
       localStorage.removeItem('token');
     }
@@ -46,6 +59,23 @@ function App() {
     }
 
   }, [])
+
+  //get init user language after language list is fetched
+  useEffect(() => {
+    if (!dataIsLoading) {
+      // Возможно, вы захотите передать сюда data, чтобы useInitLang мог использовать его внутри себя
+      const userLang = JSON.parse(localStorage.getItem('userLang'));
+      if (userLang) {
+        dispatch(selectOutputLang(userLang));
+
+      } else {
+        setInitLang(languages);
+        console.log('lang added')
+      }
+    }
+  }, [dataIsLoading]);
+
+
 
   return (
     <div className='page'>

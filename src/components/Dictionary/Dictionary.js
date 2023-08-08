@@ -86,7 +86,7 @@ function Dictionary(props) {
                   <span>translation</span>
                   <RefTooltip
                     class={`table__tooltip${props.outputLang === 'English' ? ' table__tooltip_active' : ''}`}
-                    color='#757575'
+                    /* color='#757575' */
                   >
                     <p>Сlick on the appropriate translation option to view more features
                     </p>
@@ -98,7 +98,7 @@ function Dictionary(props) {
                   <span>synonyms</span>
                   <RefTooltip
                     class={`table__tooltip${props.inputLang === 'English' ? ' table__tooltip_active' : ''}`}
-                    color='#757575'
+                    /* color='#757575' */
                   >
                     <p>Сlick on the appropriate synonym to view more features
                     </p>

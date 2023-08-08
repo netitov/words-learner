@@ -36,7 +36,7 @@ export const defaultFilters = {
 
 export const accountNav = [
   {
-    route: '/',
+    route: '/account/navigation',
     title: 'My account',
     icon: <RxDashboard />
   },

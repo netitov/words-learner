@@ -101,6 +101,18 @@ function Languages(props) {
     };
   }, [props.isActive])
 
+  //update parent height for fitting child - only in account
+  useEffect(() => {
+    if (langRef.current && props.account) {
+      if (props.isActive.value) {
+        const height = langRef.current.getBoundingClientRect().height;
+        props.onHeightChange(height);
+      } else {
+        props.onHeightChange(0);
+      }
+    }
+  }, [props.isActive]);
+
 
 
   return (

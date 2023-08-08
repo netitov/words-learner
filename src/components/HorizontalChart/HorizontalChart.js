@@ -22,6 +22,7 @@ function HorizontalChart(props) {
   );
 
   ChartJS.defaults.font.family = "'Noto Sans Display', 'Sans-serif', 'Arial', 'Helvetica'";
+  ChartJS.defaults.color = props.chartFontColor;
 
   const options = {
     indexAxis: 'y',
@@ -76,7 +77,7 @@ function HorizontalChart(props) {
     datasets: [
       {
         data: props.translFreqs.map((i) => i.fr),
-        backgroundColor: '#fcc5546e',
+        backgroundColor: props.chartColor, //#fcc5546e
         barThickness: 'flex',
         maxBarThickness: 30,
       },

@@ -17,11 +17,170 @@
   gap: 2em;
 }
 
-.account-page > h2 {
+.account-page__heading-box {
+  position: relative;
+  width: var(--page-width);
+  max-width: var(--max-width);
+
+}
+
+.account-page__heading {
   color: var(--prime-yellow);
   font-size: 4em;
   font-weight: 300;
   letter-spacing: 5px;
   /* margin: 0; */
   position: relative;
+  text-align: center;
+}
+
+.account-page__heading-box > svg {
+  top: 0;
+  right: 0;
+  position: absolute;
+  color: var(--darker-blue);
+  width: 150px;
+  height: 150px;
+}
+
+.account-page__box {
+  & .translator-wrapper {
+    padding: 0;
+    margin: 0;
+  }
+
+  & .translator-wrapper > h2 {
+    display: none;
+  }
+
+  & .translator-wrapper {
+    padding: 0;
+    margin: 0;
+  }
+
+  & .translator-wrapper > h2 {
+    display: none;
+  }
+
+  & .translator__box_input, .translator__box_output {
+    transform: none;
+    opacity: 1;
+  }
+
+  & .translator__lang {
+    color: #fff;
+    border-bottom: 1px solid #44737c;
+  }
+
+  & .translator__lang:hover {
+    background: #476e77;
+  }
+
+  & .translator__box {
+    box-shadow: none;
+    background-color: var(--darker-blue);
+  }
+
+  & .translator__box_input {
+    background-color: var(--super-dark-blue);
+  }
+
+  & .translator__text {
+    color: #fff;
+  }
+
+  & .translator__btn:hover {
+    background: var(--prime-blue);
+  }
+
+  & .translator__text_inactive, .translator__text::placeholder {
+    color: var(--light-grey);
+  }
+
+  & .translator__btn > svg > line {
+    stroke: var(--light-grey);
+  }
+
+  & .translator__btn > svg, .translator__tlt-btn > svg {
+    color: var(--light-grey);
+  }
+
+  & .translator__secondary-container span {
+    color: var(--light-grey);
+  }
+
+  & .translator__swap-btn {
+    opacity: 1;
+  }
+
+  & .translator__swap-btn > svg {
+    fill: var(--light-grey);
+  }
+
+  & .languages {
+    color: #fff;
+    background: #315b64;
+  }
+
+  & .languages_input {
+    background: #2b555e;
+  }
+
+  & .languages__search {
+    background: var(--super-light-green);
+  }
+
+  & .languages__item:hover, .languages__item_active {
+    background: var(--super-light-green);
+    color: var(--prime-blue);
+  }
+
+  & .dictionary {
+    color: #fff;
+  }
+
+  & .table__btn_transl {
+    background: #ffecc3;
+  }
+
+  & .table__btn:hover {
+    background: var(--darker-blue);
+    color: #fff;
+  }
+
+  & .menu {
+    background-color: #1f1f1fed;
+  }
+
+  & .table__head-box > .table__tooltip_active > svg {
+    color: var(--light-grey);
+  }
+
+  & .table__expand-btn {
+    color: #fff;
+  }
+
+  & .table__expand-btn:hover {
+    background: var(--darker-blue);
+  }
+
+  & .spinner {
+    border-top: 3px solid var(--prime-yellow);
+    border-right: 3px solid var(--prime-yellow);
+  }
+
+  & .chart-wrapper {
+    color: #fff;
+  }
+
+}
+
+
+@media (max-width: 950px) {
+  .account-page__box {
+    & .translator__swap-btn-mob > svg {
+        color: var(--light-grey);
+        box-shadow: 0px 0px 20px 1px #25444adb;
+      }
+  }
 }

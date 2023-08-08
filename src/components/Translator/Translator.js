@@ -199,7 +199,11 @@ function Translate(props) {
                   && currentInputLang.lang === 'English' ? ' translator__freq-box_active' : ''}`
                 }
               >
-                <ColumnChart value={frequency.fr}/>
+                <ColumnChart
+                  value={frequency.fr}
+                  columnChartColor={props.columnChartColor}
+                  columnChartStroke={props.columnChartStroke}
+                />
                 <span>{frequency.text} frequency</span>
                 <Tooltip
                   componentsProps={{ tooltip: { sx: tooltipOption, } }}
@@ -215,7 +219,7 @@ function Translate(props) {
                   }
                 >
                   <button className='translator__tlt-btn'>
-                    <AiOutlineQuestionCircle size='15' color='#757575' />
+                    <AiOutlineQuestionCircle size='15' /* color='#757575' */ />
                   </button>
 
                 </Tooltip>
@@ -280,7 +284,11 @@ function Translate(props) {
                   && currentOutputLang.lang === 'English' ? ' translator__freq-box_active' : ''}`
                 }
               >
-                <ColumnChart value={frequency.fr}/>
+                <ColumnChart
+                  value={frequency.fr}
+                  columnChartColor={props.columnChartColor}
+                  columnChartStroke={props.columnChartStroke}
+                />
                 <span>{frequency.text} frequency</span>
                 <Tooltip
                   componentsProps={{ tooltip: { sx: tooltipOption, } }}
@@ -296,7 +304,7 @@ function Translate(props) {
                   }
                 >
                   <button className='translator__tlt-btn'>
-                    <AiOutlineQuestionCircle size='15' color='#757575' />
+                    <AiOutlineQuestionCircle size='15'/*  color='#757575' */ />
                   </button>
                 </Tooltip>
               </div>
@@ -304,7 +312,7 @@ function Translate(props) {
 
             <Tooltip title='add to the learning list' componentsProps={{ tooltip: { sx: tooltipOption, } }}>
               <button className='translator__btn' type='button' onClick={props.handleLearnList}>
-                <BsBookmarks size='20' color='#757575'/>
+                <BsBookmarks size='20' /* color='#757575' *//>
               </button>
             </Tooltip>
             <Spinner
@@ -316,11 +324,10 @@ function Translate(props) {
         <Languages
           languages={languages}
           isActive={langListActive}
-          //selectLang={props.selectLang}
           activeBtn={activeBtn}
-          //searchLang={props.searchLang}
-          //inputText={props.inputText}
           closeLangList={closeLangList}
+          account={props.account}
+          onHeightChange={props.onHeightChange}
         />
 
         <Dictionary
@@ -334,6 +341,8 @@ function Translate(props) {
 
         <HorizontalChart
           translFreqs={translFreqs}
+          chartColor={props.chartColor}
+          chartFontColor={props.chartFontColor}
         />
       </div>
 
