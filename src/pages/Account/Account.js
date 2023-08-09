@@ -5,12 +5,12 @@ import AuthHeader from '../../components/AuthHeader/AuthHeader';
 import SideNav from '../../components/Navigation/SideNav';
 import CardNav from '../../components/Navigation/CardNav';
 import Translate from '../../components/Translator/Translator';
+import Frequency from '../../components/Frequency/Frequency';
 import { accountNav } from '../../utils/constants';
 
 function Account() {
 
   const [translatorHeight, setTranslatorHeight] = useState(400);
-
   const location = useLocation().pathname;
 
   //current route for display in heading and navigation
@@ -53,6 +53,8 @@ function Account() {
               />
             }
           />
+          <Route path='/frequency' element={<Frequency account={true} />} />
+          <Route path='/*' element={<CardNav />} />
         </Routes>
       </div>
 

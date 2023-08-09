@@ -173,6 +173,35 @@
     color: #fff;
   }
 
+  & .frequency-wrapper {
+    width: 100%;
+    background: none;
+  }
+
+  & .frequency {
+    padding: 0;
+    max-width: auto;
+  }
+
+  & .frequency__heading {
+    display: none;
+  }
+
+  & .bck-svg {
+    display: none;
+  }
+
+  & .frequency__card-box {
+    /* visibility: visible;
+    transform: scaleX(1);
+    -webkit-transform: scaleX(1);
+    opacity: 1; */
+  }
+
+  & .frequency__input-box {
+    opacity: 1;
+  }
+
 }
 
 

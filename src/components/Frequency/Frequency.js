@@ -36,6 +36,7 @@ function Frequency(props) {
         setFrequency({ word, fr: frequencyNumber, text: getFreqCat(frequencyNumber), filmPer: obj.filmPer });
     } else {
       setFrequency({ word: '', fr: 0, text: '', filmPer: 0 });
+      setNotFound(true);
     }
     setIsLoading(false);
   }
@@ -67,11 +68,9 @@ function Frequency(props) {
       const elementHeight = pathRef.current.offsetHeight;
       const windowHeight = window.innerHeight;
 
-      if (elementPos < windowHeight - (elementHeight * 0.3)) {
+      if (elementPos < windowHeight - (elementHeight * 0.3) && !props.account) {
         setAnimation(true);
-      } /* else {
-        setAnimation(false);
-      } */
+      }
     }
 
     window.addEventListener('scroll', runAnimation);
@@ -118,7 +117,7 @@ function Frequency(props) {
           </button>
         </Tooltip>
       </div>
-      <div className={`frequency__card-box ${frequency.text !== '' && animation ? ' frequency__card-box_active' : ''}`} ref={pathRef}>
+      <div className={`frequency__card-box ${frequency.text !== '' && (animation || props.account) ? ' frequency__card-box_active' : ''}`} ref={pathRef}>
 
         <div className='frequency__card'>
           <h3 className={`frequency__value${isLoading ? ' frequency__value_loading' : ''}`}>
