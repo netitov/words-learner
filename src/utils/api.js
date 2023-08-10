@@ -127,5 +127,19 @@ export async function updatePassword(params, body) {
   return fetchAPI(`users/password-reset/${params.userId}/${params.token}`, 'POST', undefined, body);
 }
 
+//add words to user learning list
+export async function addToList(arr, token) {
+  console.log(arr)
+  const headers = {'Authorization': `Bearer ${token}`};
+  return fetchAPI('userwords', 'POST', headers, arr);
+}
+
+//get user learning list
+export async function getWordList(token) {
+  console.log('req')
+  const headers = {'Authorization': `Bearer ${token}`};
+  return fetchAPI('userwords', 'GET', headers);
+}
+
 
 

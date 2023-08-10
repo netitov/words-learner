@@ -1,42 +1,30 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Slider from '@mui/material/Slider';
-import RefTooltip from '../RefTooltip/RefTooltip';
 import Spinner from '../Spinner/Spinner';
 import Languages from '../Languages/Languages';
 
 import Checkbox from '@mui/material/Checkbox';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
-import Box from '@mui/material/Box';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import Chip from '@mui/material/Chip';
-import Tooltip from '@mui/material/Tooltip';
-import { tooltipOption, filterBtns } from '../../utils/constants';
-import { GiSettingsKnobs } from 'react-icons/gi';
 import { useSelector } from 'react-redux';
 
-
-import { GiFilmStrip } from 'react-icons/gi';
 import { MdOutlineQuiz } from 'react-icons/md';
 import { BsBookmarks } from 'react-icons/bs';
-import { RxDashboard } from 'react-icons/rx';
 import { CiFilter } from 'react-icons/ci';
+
+import { getWordList, addToList } from '../../utils/api';
 
 function WordList() {
 
   const [langListActive, setLangListActive] = useState({ type: '', value: false });
   const [activeLangBtn, setActiveLangBtn] = useState({ lang: '', type: '' });
+  const [words, setWords] = useState([]);
 
   const currentInputLang = useSelector((state) => state.inputLang);
   const currentOutputLang = useSelector((state) => state.outputLang);
   const languages = useSelector((state) => state.enDictionLangs);
 
-  const words = JSON.parse(sessionStorage.getItem('randomWords'));
+  ///const words = JSON.parse(sessionStorage.getItem('randomWords'));
 
   function toggleLangList(e) {
     const lang = currentInputLang.code === 'en' ? currentOutputLang.lang : currentInputLang.lang;
@@ -53,7 +41,6 @@ function WordList() {
     setLangListActive({ value: false });
   }
 
-
   function handleCheck(i) {
     const updatedData = words.map((obj) => {
       if (obj._id === i._id) {
@@ -67,18 +54,73 @@ function WordList() {
 
   }
 
+  async function addRandomWordsToList(words) {
+    const token = localStorage.getItem('token');
+    const newWords = words.map((i) => {
+      const newObj = {
+        word: i.word,
+        translation: i.translation,
+        translationLang: i.lang,
+        source: ['random']
+      };
+      return newObj;
+    })
+    const response = await addToList(newWords, token);
+    return response;
+  }
+
+  //get user word list
+  async function fetchWords() {
+    const token = localStorage.getItem('token');
+    const wordList = await getWordList(token);
+    if (wordList.err) {
+      console.log(wordList.err);
+      return [];
+    } else {
+      return wordList;
+    }
+  }
+
+  //set user word list
+  async function initializeWords() {
+    const storage = JSON.parse(sessionStorage.getItem('userWords'));
+    if (!storage) {
+      //if words not in session storage - fetch them and add to session storage
+      const wordList = await fetchWords();
+      if (wordList.length > 0) {
+        setWords(wordList);
+        sessionStorage.setItem('userWords', JSON.stringify(wordList));
+      } else {
+        //if user doesn't have saved words yet - use random words for exapmle
+        const words = JSON.parse(sessionStorage.getItem('randomWords')).slice(0, 5);
+        setWords(words);
+        sessionStorage.setItem('userWords', JSON.stringify(words));
+        //add random words to user list
+        await addRandomWordsToList(words);
+      }
+    } else {
+      setWords(storage);
+    }
+  }
+
+
+  //set user word list
+  useEffect(() => {
+    initializeWords();
+  }, [])
+
 
   return (
     <div className='wordlist'>
 
       <div className='wordlist__btn-container'>
-        <button type='button' className='wordlist__btn'>
+        <Link to='/account/translator' className='wordlist__btn'>
           <svg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'>
             <line x1='0' x2='100' y1='0' y2='100' />
             <line x1='0' x2='100' y1='100' y2='0' />
           </svg>
           Add a word
-        </button>
+        </Link>
         <Link className='wordlist__btn' to='#'>
           <BsBookmarks className='wordlist__btn-icon'/>
           Go to Collections
