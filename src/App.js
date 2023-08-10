@@ -63,14 +63,12 @@ function App() {
   //get init user language after language list is fetched
   useEffect(() => {
     if (!dataIsLoading) {
-      // Возможно, вы захотите передать сюда data, чтобы useInitLang мог использовать его внутри себя
       const userLang = JSON.parse(localStorage.getItem('userLang'));
+      console.log(userLang)
       if (userLang) {
         dispatch(selectOutputLang(userLang));
-
       } else {
         setInitLang(languages);
-        console.log('lang added')
       }
     }
   }, [dataIsLoading]);

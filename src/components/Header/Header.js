@@ -37,6 +37,11 @@ function Header() {
     menuClick();
   }
 
+  {/* <button className='nav__acc-btn' type='button' onClick={signOut}>
+    <VscAccount />
+    <span>Log out</span>
+  </button> */}
+
 
   return (
     <header className={`header${activeMenu ? ' header_unscrolled' : ''}`}>
@@ -82,10 +87,12 @@ function Header() {
                   <span>Log in</span>
                 </button>
               </Link>) : (
-              <button className='nav__acc-btn' type='button' onClick={signOut}>
-                <VscAccount />
-                <span>Log out</span>
-              </button>
+              <Link to='/account/navigation'>
+                <button className='nav__acc-btn' type='button' onClick={menuClick}>
+                  <VscAccount />
+                  <span>Account</span>
+                </button>
+            </Link>
             )}
 
           </li>

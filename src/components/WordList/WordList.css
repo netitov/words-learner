@@ -1,0 +1,164 @@
+.wordlist {
+  flex: 1 0 auto;
+  position: relative;
+}
+
+.wordlist-table {
+  width: 100%;
+  min-width: 400px;
+  color: #fff;
+
+  background-color: var(--darker-blue);
+  border-radius: 15px;
+  padding: 10px;
+}
+
+.wordlist__btn-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  position: absolute;
+  top: -42px;
+  gap: 10px;
+}
+
+.wordlist__btn {
+  padding: 5px 15px;
+  color: #fff;
+  font-weight: 300;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: 1px solid var(--light-blue);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.wordlist__btn > svg {
+  z-index: 100;
+  display: block;
+  transform: rotate(45deg);
+  width: 9px;
+}
+
+.wordlist__btn > .wordlist__btn-icon {
+  display: block;
+  transform: none;
+  width: 15px;
+  height: 15px;
+}
+
+.wordlist__btn > svg > line {
+  stroke: #fff;
+  stroke-width: 10px;
+  transition: all 0.3s;
+}
+
+.wordlist__pgn-btn-box {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.wordlist__pgn-btn {
+  max-width: 600px;
+  width: 100%;
+  padding: 10px;
+}
+
+.wordlist__btn:hover {
+  color: var(--prime-yellow);
+  border: 1px solid var(--prime-yellow);
+}
+
+.wordlist__btn:hover > svg > line {
+  stroke: var(--prime-yellow)
+}
+
+.wordlist-table th {
+  padding: 10px;
+  font-weight: 300;
+  text-align: left;
+  color: var(--super-light-green);
+}
+
+.wordlist-table tbody tr {
+  background-color: var(--prime-blue);
+}
+
+.wordlist-table tbody tr:nth-of-type(even) {
+  background-color: transparent;
+}
+
+.wordlist-table td {
+  height: 2.5em;
+  font-size: 1.1em;
+  color: var(--super-light-green);
+  border: none;
+}
+
+.wordlist-table tr td:first-of-type {
+  border-radius: 15px 0 0 15px;
+  padding-left: 5px;
+}
+
+.wordlist-table tr td:last-of-type {
+  border-radius: 0 15px 15px 0;
+}
+
+.wordlist-table .wordlist__td_emph {
+  color: #fff;
+  font-weight: 400;
+  font-size: 1.2em;
+}
+
+.wordlist-table__tag {
+  border-radius: 10px;
+  padding: 2px 6px;
+  background-color: var(--bck-svg-color);
+  color: var(--super-light-green);
+  font-size: 0.9em;
+}
+
+.wordlist-table__progress {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.wordlist-table__progress-chart {
+  width: 55px;
+  height: 5px;
+  border-radius: 10px;
+  background-color: #ffd98726;
+  position: relative;
+}
+
+.wordlist-table__progress-done {
+  background: var(--prime-yellow);
+  height: 100%;
+  border-radius: 10px;
+  transition: var(--transition);
+}
+
+
+.wordlist-table__progress > span {
+  /* position: absolute;
+  right: -10px; */
+  font-size: 0.8em;
+}
+
+span.wordlist-table__checkbox {
+  &.Mui-checked {
+    color: var(--prime-yellow);
+  }
+
+  &.MuiCheckbox-root:hover {
+    background-color: #dbecec0f;
+  }
+
+}

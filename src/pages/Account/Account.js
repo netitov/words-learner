@@ -6,6 +6,7 @@ import SideNav from '../../components/Navigation/SideNav';
 import CardNav from '../../components/Navigation/CardNav';
 import Translate from '../../components/Translator/Translator';
 import Frequency from '../../components/Frequency/Frequency';
+import WordList from '../../components/WordList/WordList';
 import { accountNav } from '../../utils/constants';
 
 function Account() {
@@ -54,6 +55,7 @@ function Account() {
             }
           />
           <Route path='/frequency' element={<Frequency account={true} />} />
+          <Route path='/words' element={<WordList />} />
           <Route path='/*' element={<CardNav />} />
         </Routes>
       </div>
