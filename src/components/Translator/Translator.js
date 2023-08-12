@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { charsLimit, tooltipOption } from '../../utils/constants';
-import { BsBookmarks } from 'react-icons/bs';
 import { AiOutlineQuestionCircle } from 'react-icons/ai';
 import Tooltip from '@mui/material/Tooltip';
 import Spinner from '../Spinner/Spinner';
@@ -17,22 +17,24 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { selectInputLang } from '../../store/inputLang';
 import { selectOutputLang } from '../../store/outputLang';
-//PiArrowsClockwiseFill
+import { saveWord } from '../../utils/saveWord';
+import Bookmark from '../Bookmark/Bookmark';
+import Snackbar from '../Snackbar/Snackbar';
 
 function Translate(props) {
 
   const [activeBtn, setActiveBtn] = useState({ lang: '', type: '' });
   const [animation, setAnimation] = useState(false);
   const [langListActive, setLangListActive] = useState({ type: '', value: false });
-
   const [chars, setChars] = useState('');
   const [translation, setTranslation] = useState('');
   const [otherTransl, setOtherTransl] = useState([]);
-
   const [isLoading, setIsLoading] = useState(false);
-
   const [frequency, setFrequency] = useState({ word: '', fr: 0, text: '', filmPer: 0 });
   const [translFreqs, setTranslFreqs] = useState([]);
+  const [isChecked, setIsChecked] = useState(false);
+  const [snackbarActive, setSnackbarActive] = useState(false);
+  const [snackbarErrorActive, setSnackbarErrorActive] = useState(false);
 
   const pathRef = useRef();
   const dispatch = useDispatch();
@@ -41,6 +43,7 @@ function Translate(props) {
   const currentOutputLang = useSelector((state) => state.outputLang);
   const languages = useSelector((state) => state.langList);
   const dictionLangs = useSelector((state) => state.dictionLangs);
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
   //open/close language list on btn click
   function toggleLangList(e) {
@@ -104,6 +107,11 @@ function Translate(props) {
     }
   }
 
+  function droppSearch() {
+    setChars('');
+    setSnackbarActive(false);
+  }
+
   //get translated word frequency
   async function getFrequency(word) {
     const response = await checkFrequency(word);
@@ -135,6 +143,33 @@ function Translate(props) {
     setTranslFreqs(foundFreqs);
   }
 
+  async function handleWordSave() {
+    if (translation !== '') {
+      if (!isLoggedIn) {
+        setSnackbarActive(true);
+      }
+      else if (isChecked) {
+        setIsChecked(false);
+      } else {
+        setIsChecked(true);
+        const userLang = JSON.parse(localStorage.getItem('userLang'));
+        //const word = userLang === currentInputLang.lang ? translation : chars;
+        const obj = {
+          word: userLang.lang === currentInputLang.lang ? translation : chars,
+          translation: userLang.lang === currentInputLang.lang ? chars : translation,
+          translationLang: userLang.code,
+          source: ['-']
+        }
+        const response = await saveWord(obj);
+
+        if (response.err) {
+          //show error
+          setSnackbarErrorActive(true);
+        }
+      }
+    }
+  }
+
   //call translate function
   useEffect(() => {
     if(chars.length > 0) {
@@ -147,6 +182,7 @@ function Translate(props) {
       setIsLoading(false);
       setFrequency({ word: '', fr: 0, text: '', filmPer: 0 });
       setTranslFreqs([]);
+      setSnackbarActive();
     }
   }, [chars, currentInputLang, currentOutputLang]);
 
@@ -228,7 +264,7 @@ function Translate(props) {
             </div>
 
             <Tooltip title='delete text' componentsProps={{ tooltip: { sx: tooltipOption, } }}>
-              <button className='btn-cross translator__btn' type='button' onClick={() => setChars('')}>
+              <button className='btn-cross translator__btn' type='button' onClick={droppSearch}>
                 <svg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'>
                   <line x1='0' x2='100' y1='0' y2='100' />
                   <line x1='0' x2='100' y1='100' y2='0' />
@@ -310,15 +346,38 @@ function Translate(props) {
               </div>
             </div>
 
-            <Tooltip title='add to the learning list' componentsProps={{ tooltip: { sx: tooltipOption, } }}>
-              <button className='translator__btn' type='button' onClick={props.handleLearnList}>
-                <BsBookmarks size='20' /* color='#757575' *//>
-              </button>
-            </Tooltip>
+            <Bookmark
+              toggleBookmark={handleWordSave}
+              isChecked={isChecked}
+              title='add to the learning list'
+              propClass='translator__btn'
+              width='18px'
+              height='18px'
+            />
             <Spinner
               isLoading={isLoading}
             />
+            <Snackbar
+              snackbarActive={snackbarActive}
+              elClass='translator__snack'
+              closeSnack={() => setSnackbarActive(false)}
+              transformPos='_left'
+            >
+              <p className='translator__snack-text'>
+                <Link to='/signup'>Sign up</Link> / <Link to='/login'>Log in</Link>
+                &nbsp;to create your own word list and much more
+              </p>
+            </Snackbar>
+
+            <Snackbar
+              snackbarActive={snackbarErrorActive}
+              elClass='translator__snack translator__snack_err'
+              text='Something went wrong, please try again later'
+              closeSnack={() => setSnackbarErrorActive(false)}
+              transformPos='_left'
+            />
           </div>
+
         </div>
 
         <Languages

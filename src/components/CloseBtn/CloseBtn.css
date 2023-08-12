@@ -1,0 +1,19 @@
+.close-btn {
+  border: none;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.close-btn > svg {
+  display: block;
+}
+
+.close-btn:hover, .close-btn:active {
+  background-color: #0006;
+}
+
+

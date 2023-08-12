@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { login } from '../store/user'; // Подставьте свой путь к действию для логина
+import { login } from '../store/user';
 import { useNavigate } from 'react-router-dom';
 
 function useAuth() {

@@ -16,11 +16,11 @@
 .wordlist__btn-container {
   display: flex;
   align-items: center;
-  justify-content: center;
   margin-bottom: 10px;
-  position: absolute;
-  top: -42px;
   gap: 10px;
+  /* position: absolute;
+  top: -42px;
+  gap: 10px; */
 }
 
 .wordlist__btn {
@@ -36,6 +36,7 @@
   align-items: center;
   justify-content: center;
   gap: 5px;
+  white-space: nowrap;
 }
 
 .wordlist__btn > svg {
@@ -99,6 +100,10 @@
   font-size: 1.1em;
   color: var(--super-light-green);
   border: none;
+}
+
+.wordlist-table__td_emph {
+  font-weight: 400;
 }
 
 .wordlist-table tr td:first-of-type {

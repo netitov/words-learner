@@ -47,7 +47,6 @@ function ContactForm(props) {
 
     emailjs.sendForm(process.env.REACT_APP_SERVICE_ID, process.env.REACT_APP_TEMPLATE_ID, form, process.env.REACT_APP_PUBLIC_KEY)
       .then((result) => {
-        console.log(result.text);
         setInSend(false);
         setIsSent(true);
         setSnackbarActive(true);
@@ -55,6 +54,7 @@ function ContactForm(props) {
         setTimeout(() => {
           setSnackbarActive(false);
           setIsSent(false);
+
         }, 3000)
 
       }, (error) => {
@@ -169,8 +169,9 @@ function ContactForm(props) {
       {/* snackbar if message sent */}
       <Snackbar
         snackbarActive={snackbarActive}
-        class='contact__snack'
+        elClass='contact__snack'
         text='Message sent!'
+        closeSnack={() => setSnackbarActive(false)}
       >
         <IoCheckmarkCircleOutline size={22} />
       </Snackbar>
@@ -178,10 +179,11 @@ function ContactForm(props) {
       {/* snackbar if message is not sent */}
       <Snackbar
         snackbarActive={snackbarErrorActive}
-        class='contact__snack-error'
+        elClass='contact__snack contact__snack-error'
         text='Something went wrong, please try again later'
+        closeSnack={() => setSnackbarErrorActive(false)}
       >
-        <IoCheckmarkCircleOutline size={22} />
+        {/* <IoCheckmarkCircleOutline size={22} /> */}
       </Snackbar>
 
     </div>

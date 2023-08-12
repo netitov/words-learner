@@ -248,6 +248,8 @@ textarea.form__input {
 .contact__snack {
   background: #36913f;
   color: #fff;
+  bottom: 4%;
+  left: 3%;
 }
 
 .contact__snack-error {
