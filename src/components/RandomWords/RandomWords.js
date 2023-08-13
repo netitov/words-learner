@@ -17,7 +17,9 @@ import Chip from '@mui/material/Chip';
 import Tooltip from '@mui/material/Tooltip';
 import { tooltipOption, filterBtns } from '../../utils/constants';
 import { GiSettingsKnobs } from 'react-icons/gi';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { setFilters } from '../../store/filters';
+import useRandomWordsFetch from '../../hooks/useRandomWordsFetch';
 
 function RandomWords(props) {
 
@@ -53,11 +55,18 @@ function RandomWords(props) {
   const [langListActive, setLangListActive] = useState({ type: '', value: false });
   const [activeLangBtn, setActiveLangBtn] = useState({ lang: '', type: '' });
 
+  const { requestRandomWords } = useRandomWordsFetch();
+
   const filterRef = useRef();
 
   const currentInputLang = useSelector((state) => state.inputLang);
   const currentOutputLang = useSelector((state) => state.outputLang);
   const languages = useSelector((state) => state.enDictionLangs);
+  const randomWords = useSelector((state) => state.randomWords.data);
+  const randomWordsInLoading = useSelector((state) => state.randomWords.isLoading);
+  const filters = useSelector((state) => state.filters);
+
+  const dispatch = useDispatch();
 
 
   //handle event changing part of speech select
@@ -109,6 +118,7 @@ function RandomWords(props) {
     props.handleLearnList(updatedData.find((el) => el._id === i._id ));
   }
 
+  //handle filter words on tag btn click
   function handleBtnFilter(e) {
 
     let filters = {};
@@ -164,9 +174,10 @@ function RandomWords(props) {
     setPerValue([0, 100]);
     setPos([]);
 
-    props.searchWords(filters);
+    searchWords(filters);
   }
 
+  //handle filter words on search btn click
   function handleSearchClick() {
     const filters = {
       frSt: frValue[0],
@@ -176,7 +187,16 @@ function RandomWords(props) {
       filmPerEn: perValue[1]
     };
     setActiveBtn('');
-    props.searchWords(filters);
+    searchWords(filters);
+  }
+
+  //execute search
+  async function searchWords(filts) {
+    //check of words are not already loaded
+    if (!randomWordsInLoading) {
+      const newFilters = { ...filts === undefined ? filters : filts };
+      await requestRandomWords(newFilters);
+    }
   }
 
   function handleFilters() {
@@ -211,9 +231,10 @@ function RandomWords(props) {
   }
 
   useEffect(() => {
-    setWords(props.randomWords);
-  }, [props.randomWords])
+    setWords(randomWords);
+  }, [randomWords])
 
+  //run animation
   useEffect(() => {
     window.addEventListener('scroll', runAnimationFilter);
 
@@ -257,7 +278,7 @@ function RandomWords(props) {
 
             <div className='words__btn-cont'>
               <button
-                className={`words__search-btn${props.isLoading ? ' words__search-btn_inactive' : ''}`}
+                className={`words__search-btn${randomWordsInLoading ? ' words__search-btn_inactive' : ''}`}
                 type='button'
                 onClick={handleSearchClick}>
                   Search / update
@@ -419,12 +440,12 @@ function RandomWords(props) {
             </tbody>
           </table>
 
-          <div className={`words__table-overlay${props.isLoading ? ' words__table-overlay_active' : ''}`}>
-            <Spinner isLoading={props.isLoading}/>
+          <div className={`words__table-overlay${randomWordsInLoading ? ' words__table-overlay_active' : ''}`}>
+            <Spinner isLoading={randomWordsInLoading}/>
           </div>
 
           <span
-            className={`words__not-found${!props.isLoading && words.length === 0 ? ' words__not-found_active' : ''}`}
+            className={`words__not-found${!randomWordsInLoading && words.length === 0 ? ' words__not-found_active' : ''}`}
           >
             Sorry, data not found. &#128532; Please try different filters <br />
           </span>

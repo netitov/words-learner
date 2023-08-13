@@ -7,6 +7,10 @@ import filteredLangsReducer from './filteredLangs';
 import dictionLangsReducer from './dictionLangs';
 import enDictionLangsReducer from './enDictionLangs';
 import userReducer from './user';
+import userWordsReducer from './userWords';
+import randomWordsReducer from './randomWords';
+import quizReducer from './quiz';
+import filtersReducer from './filters';
 
 const store = configureStore({
   reducer: {
@@ -17,6 +21,10 @@ const store = configureStore({
     dictionLangs: dictionLangsReducer,
     enDictionLangs: enDictionLangsReducer,
     user: userReducer,
+    userWords: userWordsReducer,
+    randomWords: randomWordsReducer,
+    quiz: quizReducer,
+    filters: filtersReducer,
     devTools: process.env.NODE_ENV !== 'production',
   },
 });

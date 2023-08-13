@@ -1,4 +1,3 @@
-// src/hooks/useDataFetch.js
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -11,7 +10,7 @@ import { getLanguages, getDictionary } from '../utils/api';
 function useLangsFetch() {
 
   const dispatch = useDispatch();
-  const [dataIsLoading, setDataIsLoading] = useState(true);
+  const [langsLoaded, setLangsLoaded] = useState(true);
   const data = useSelector((state) => state.langList);
 
   const langList = JSON.parse(localStorage.getItem('langList'));
@@ -45,7 +44,7 @@ function useLangsFetch() {
             dispatch(setEnDictionLangs(filteredLangs));
             localStorage.setItem('enDictionLangs', JSON.stringify(filteredLangs));
 
-            setDataIsLoading(false);
+            setLangsLoaded(false);
 
           })
           .catch((err) => {
@@ -56,14 +55,14 @@ function useLangsFetch() {
         dispatch(setDictionLangs(dictionLangs));
         dispatch(setEnDictionLangs(enDictionLangs));
 
-        setDataIsLoading(false);
+        setLangsLoaded(false);
       }
     } else {
-      setDataIsLoading(false);
+      setLangsLoaded(false);
     }
   }, []);
 
-  return { dataIsLoading };
+  return { langsLoaded };
 };
 
 export default useLangsFetch;

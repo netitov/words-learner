@@ -17,7 +17,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { selectInputLang } from '../../store/inputLang';
 import { selectOutputLang } from '../../store/outputLang';
-import { saveWord } from '../../utils/saveWord';
+import { addNewWords } from '../../store/userWords';
+//import { saveWord } from '../../utils/saveWord';
+import useSaveWord from '../../hooks/useSaveWord';
 import Bookmark from '../Bookmark/Bookmark';
 import Snackbar from '../Snackbar/Snackbar';
 
@@ -38,6 +40,8 @@ function Translate(props) {
 
   const pathRef = useRef();
   const dispatch = useDispatch();
+
+  const saveWord = useSaveWord();
 
   const currentInputLang = useSelector((state) => state.inputLang);
   const currentOutputLang = useSelector((state) => state.outputLang);
@@ -150,22 +154,24 @@ function Translate(props) {
       }
       else if (isChecked) {
         setIsChecked(false);
+        //delete word
       } else {
         setIsChecked(true);
         const userLang = JSON.parse(localStorage.getItem('userLang'));
-        //const word = userLang === currentInputLang.lang ? translation : chars;
         const obj = {
           word: userLang.lang === currentInputLang.lang ? translation : chars,
           translation: userLang.lang === currentInputLang.lang ? chars : translation,
           translationLang: userLang.code,
           source: ['-']
         }
-        const response = await saveWord(obj);
+        const result = await saveWord(obj);
+        //dispatch(addNewWords(obj));
+        /* const response = await saveWord(obj);
 
         if (response.err) {
           //show error
           setSnackbarErrorActive(true);
-        }
+        } */
       }
     }
   }

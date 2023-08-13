@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { IoCheckmarkCircleOutline } from 'react-icons/io5';
 import { IoCloseCircleOutline } from 'react-icons/io5';
 import Spinner from '../Spinner/Spinner';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
+import useRandomWordsFetch from '../../hooks/useRandomWordsFetch';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -18,6 +20,10 @@ function Quiz(props) {
   const [result, setResult] = useState({ quests: 0, correctAnsw: 0 });
   const [comment, setComment] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  const randomWords = useSelector((state) => state.randomWords.data);
+
+  const { requestRandomWords } = useRandomWordsFetch();
 
 
   function handleComment(percent) {
@@ -40,12 +46,12 @@ function Quiz(props) {
     if (passedQuests.some(el => el.question === i.question)) {
       const completedPart = Math.round(passedQuests.length/questions.length * 100);
 
-      const currPosition = props.quizQuestions.findIndex((i) => i.question === activeQuestion.question);
-      const quest = ((currPosition + 1) > (questions.length - 1)) ? { question: '' } : props.quizQuestions[currPosition + 1];
+      const currPosition = questions.findIndex((i) => i.question === activeQuestion.question);
+      const quest = ((currPosition + 1) > (questions.length - 1)) ? { question: '' } : questions[currPosition + 1];
       setActiveQuestion(quest);
 
       //progress line
-      const nextQuestPos = props.quizQuestions.findIndex((i) => i.question === quest.question);
+      const nextQuestPos = questions.findIndex((i) => i.question === quest.question);
       setProgress({ percent: completedPart + '%', quest: nextQuestPos + 1 });
 
       //quiz result
@@ -96,7 +102,7 @@ function Quiz(props) {
     setProgress({ percent: '0%', quest: 1 });
     setResult({ quests: 0, correctAnsw: 0 });
     setComment('');
-    setActiveQuestion(props.quizQuestions[0]);
+    setActiveQuestion(questions[0]);
   }
 
   function handleClose() {
@@ -104,27 +110,87 @@ function Quiz(props) {
     droppData();
   }
 
-  // use redux fo filters?
+  //search new words
   async function updateWords() {
-    //search new words for quiz
-    console.log('func start')
     setIsLoading(true);
-    await props.searchWords();
-
-    //dropp data and go to the first quest
-    droppData();
+    await requestRandomWords();
     setIsLoading(false);
-
-    console.log('finish QUIZ')
   }
 
-  //update quiz qestions if props changed
+  //create questions and answers for quiz (from random words)
+  function createQuizQuestions() {
+    const wordStorage = randomWords;
+    const allWords = [];
+    const quizArr = [];
+    const mainWords = [];
+
+    wordStorage.forEach((i) => {
+      const obj = { word: i.translation, translation: i.word, pos: i.pos.toLowerCase() };
+      allWords.push(obj);
+      mainWords.push(obj);
+
+      i.otherTransl.forEach((o) => {
+
+        o.tr.forEach((el) => {
+           if(!allWords.some((word) => word.word === el.text)) {
+            const obj = { word: el.text, pos: el.pos, syn: i.translation };
+            allWords.push(obj);
+           }
+        })
+
+      })
+
+    })
+
+    mainWords.forEach((i) => {
+      const obj = {
+        question: i.translation,
+        correctAnswer: i.word,
+        pos: i.pos,
+        options: []
+      };
+
+      const filteredWords = allWords.filter((el) => {
+        return el.word !== obj.correctAnswer && el.syn !== obj.correctAnswer /* && el.pos === obj.pos */
+        }
+
+      );
+
+      while (obj.options.length < 3) {
+        const randomIndex = Math.floor(Math.random() * filteredWords.length);
+
+        const newOpt = filteredWords[randomIndex].word;
+
+        if (!obj.options.some((opt) => opt === newOpt)) {
+          obj.options.push(newOpt);
+        }
+      }
+
+      quizArr.push(obj);
+
+      const randomIndexinArr = Math.floor(Math.random() * 4);
+      obj.options.splice(randomIndexinArr, 0, obj.correctAnswer);
+
+    })
+
+    return quizArr;
+  }
+
+  function setQuizQuestions() {
+    const quizArr = createQuizQuestions();
+    setQuestions(quizArr);
+    setActiveQuestion(quizArr[0]);
+    sessionStorage.setItem('quizQuestions', JSON.stringify(quizArr));
+  }
+
+  //get initial quiz questions and update when randomWords changed
   useEffect(() => {
-    if (props.quizQuestions.length > 0) {
-      setQuestions(props.quizQuestions);
-      setActiveQuestion(props.quizQuestions[0]);
+    if (randomWords.length > 0) {
+      //dropp data and go to the first quest
+      droppData();
+      setQuizQuestions();
     }
-  }, [props.quizQuestions])
+  }, [randomWords])
 
   const data = {
     labels: ['correct answers', 'incorrect answers'],

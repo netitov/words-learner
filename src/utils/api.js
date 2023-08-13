@@ -45,7 +45,7 @@ export async function checkFrequency(word) {
   }
 }
 
-export async function getRandomWords(obj) {
+/* export async function getRandomWords(obj) {
   try {
     console.log(obj)
 
@@ -61,7 +61,7 @@ export async function getRandomWords(obj) {
   } catch (err) {
     console.error(err);
   }
-}
+} */
 
 //find word (and translate) in dictionary api, if text is shorter 3 words. Otherwise, use translation api
 export async function translate({ langs, text, inDictionary }) {
@@ -141,5 +141,29 @@ export async function getWordList(token) {
   return fetchAPI('userwords', 'GET', headers);
 }
 
+export async function getRandomWords(obj) {
+  console.log(obj);
+  const queryParams = new URLSearchParams(obj);
+
+  return fetchAPI(`random-words?${queryParams}`, 'GET');
+}
+
+/* export async function getRandomWords(obj) {
+  try {
+    console.log(obj)
+
+    const queryParams = new URLSearchParams(obj);
+
+    const response = await fetch(`${SERVER_API}/random-words?${queryParams}`,
+      { method: 'GET' }
+    );
+
+    const result = await response.json();
+    console.log(result)
+    return result;
+  } catch (err) {
+    console.error(err);
+  }
+} */
 
 
