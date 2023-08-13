@@ -12,17 +12,16 @@ import { MdOutlineQuiz } from 'react-icons/md';
 import { BsBookmarks } from 'react-icons/bs';
 import { CiFilter } from 'react-icons/ci';
 
-import { getWordList, addToList } from '../../utils/api';
-
 function WordList() {
 
   const [langListActive, setLangListActive] = useState({ type: '', value: false });
   const [activeLangBtn, setActiveLangBtn] = useState({ lang: '', type: '' });
-  const [words, setWords] = useState([]);
+  //const [words, setWords] = useState([]);
 
   const currentInputLang = useSelector((state) => state.inputLang);
   const currentOutputLang = useSelector((state) => state.outputLang);
   const languages = useSelector((state) => state.enDictionLangs);
+  const userWords = useSelector((state) => state.userWords);
 
   ///const words = JSON.parse(sessionStorage.getItem('randomWords'));
 
@@ -42,7 +41,7 @@ function WordList() {
   }
 
   function handleCheck(i) {
-    const updatedData = words.map((obj) => {
+    const updatedData = userWords.map((obj) => {
       if (obj._id === i._id) {
         return {
           ...obj,
@@ -53,62 +52,6 @@ function WordList() {
     });
 
   }
-
-  async function addRandomWordsToList(words) {
-    const token = localStorage.getItem('token');
-    const newWords = words.map((i) => {
-      const newObj = {
-        word: i.word,
-        translation: i.translation,
-        translationLang: i.lang,
-        source: ['random']
-      };
-      return newObj;
-    })
-    const response = await addToList(newWords, token);
-    return response;
-  }
-
-  //get user word list
-  async function fetchWords() {
-    const token = localStorage.getItem('token');
-    const wordList = await getWordList(token);
-    if (wordList.err) {
-      console.log(wordList.err);
-      return [];
-    } else {
-      return wordList;
-    }
-  }
-
-  //set user word list
-  async function initializeWords() {
-    const storage = JSON.parse(sessionStorage.getItem('userWords'));
-    if (!storage) {
-      //if words not in session storage - fetch them and add to session storage
-      const wordList = await fetchWords();
-      if (wordList.length > 0) {
-        setWords(wordList);
-        sessionStorage.setItem('userWords', JSON.stringify(wordList));
-      } else {
-        //if user doesn't have saved words yet - use random words for exapmle
-        const words = JSON.parse(sessionStorage.getItem('randomWords')).slice(0, 5);
-        setWords(words);
-        sessionStorage.setItem('userWords', JSON.stringify(words));
-        //add random words to user list
-        await addRandomWordsToList(words);
-      }
-    } else {
-      setWords(storage);
-    }
-  }
-
-
-  //set user word list
-  useEffect(() => {
-    initializeWords();
-  }, [])
-
 
   return (
     <div className='wordlist'>
@@ -171,7 +114,7 @@ function WordList() {
         </thead>
 
         <tbody>
-          {words.map((i) => (
+          {userWords.map((i) => (
             <tr key={i.word}>
               <td>
                 <Checkbox

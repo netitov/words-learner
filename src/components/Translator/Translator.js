@@ -48,6 +48,7 @@ function Translate(props) {
   const languages = useSelector((state) => state.langList);
   const dictionLangs = useSelector((state) => state.dictionLangs);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const userWords = useSelector((state) => state.userWords);
 
   //open/close language list on btn click
   function toggleLangList(e) {
@@ -66,6 +67,15 @@ function Translate(props) {
     setLangListActive({ value: false });
   }
 
+  //check if word in user word list
+  function checkList(translation, text) {
+    if (userWords.some((i) => i.word === translation || i.word === text)) {
+      setIsChecked(true);
+    } else {
+      setIsChecked(false);
+    }
+  }
+
   async function getTranslation(text) {
     //get translation
     const langs = currentInputLang.code + '-' + currentOutputLang.code;
@@ -79,6 +89,9 @@ function Translate(props) {
     setTranslation(translation);
     setOtherTransl(otherTranslations);
     setTranslFreqs([]);
+
+    //check if word in user word list
+    checkList(translation, text);
 
     //get frequency if english is selected
     if (chars.split(' ').length === 1) {
@@ -147,12 +160,12 @@ function Translate(props) {
     setTranslFreqs(foundFreqs);
   }
 
+  //add word to learning list
   async function handleWordSave() {
     if (translation !== '') {
       if (!isLoggedIn) {
         setSnackbarActive(true);
-      }
-      else if (isChecked) {
+      } else if (isChecked) {
         setIsChecked(false);
         //delete word
       } else {
