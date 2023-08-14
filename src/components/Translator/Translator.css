@@ -173,7 +173,7 @@
   font-weight: 300;
 }
 
-div > .translator__btn {
+.translator__btn {
   display: flex;
   align-items: center;
   position: absolute;

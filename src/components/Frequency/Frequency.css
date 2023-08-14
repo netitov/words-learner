@@ -22,6 +22,7 @@
   gap: 10px;
   opacity: 0;
   transition: opacity 0.8s ease-out;
+  position: relative;
 }
 
 .frequency__input-box_active {
@@ -164,16 +165,12 @@
 .frequency__lst-btn {
   display: flex;
   align-items: center;
-  /* position: absolute;
-  right: -10%; */
   padding: 10px;
   border-radius: 50%;
   transition: var(--transition);
   cursor: pointer;
   visibility: hidden;
-  /* top: 50%;
-  transform: translateY(-50%);
-  -webkit-transform: translateY(-50%); */
+  color: var(--light-grey);
   opacity: 0;
   transition: visibility 0.2s ease, opacity 0.3s, background 0.3s;
 }
@@ -199,6 +196,25 @@
 
 .frequency__svg {
   color: var(--super-light-green)
+}
+
+.frequency__snack {
+  bottom: -96px;
+  right: 1%;
+  background-color: var(--prime-yellow);
+  max-width: 380px;
+  color: #000;
+}
+
+.frequency__snack-text a {
+  color: var(--prime-blue);
+  border-bottom: 1px solid var(--prime-blue);
+  font-weight: 400;
+  transition: var(--transition);
+}
+
+.frequency__snack-text a:hover {
+  border-bottom: none;
 }
 
 @media (max-width: 768px) {

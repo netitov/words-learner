@@ -17,9 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { selectInputLang } from '../../store/inputLang';
 import { selectOutputLang } from '../../store/outputLang';
-import { addNewWords } from '../../store/userWords';
-//import { saveWord } from '../../utils/saveWord';
-import useSaveWord from '../../hooks/useSaveWord';
+import useWordSave from '../../hooks/useWordSave';
 import Bookmark from '../Bookmark/Bookmark';
 import Snackbar from '../Snackbar/Snackbar';
 
@@ -34,14 +32,12 @@ function Translate(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [frequency, setFrequency] = useState({ word: '', fr: 0, text: '', filmPer: 0 });
   const [translFreqs, setTranslFreqs] = useState([]);
-  const [isChecked, setIsChecked] = useState(false);
-  const [snackbarActive, setSnackbarActive] = useState(false);
   const [snackbarErrorActive, setSnackbarErrorActive] = useState(false);
 
   const pathRef = useRef();
   const dispatch = useDispatch();
 
-  const saveWord = useSaveWord();
+  const { handleWordSave, closeSnackbar, checkList, isChecked, snackbarActive } = useWordSave();
 
   const currentInputLang = useSelector((state) => state.inputLang);
   const currentOutputLang = useSelector((state) => state.outputLang);
@@ -65,15 +61,6 @@ function Translate(props) {
 
   function closeLangList() {
     setLangListActive({ value: false });
-  }
-
-  //check if word in user word list
-  function checkList(translation, text) {
-    if (userWords.some((i) => i.word === translation || i.word === text)) {
-      setIsChecked(true);
-    } else {
-      setIsChecked(false);
-    }
   }
 
   async function getTranslation(text) {
@@ -126,7 +113,8 @@ function Translate(props) {
 
   function droppSearch() {
     setChars('');
-    setSnackbarActive(false);
+    //setSnackbarActive(false);
+    closeSnackbar();
   }
 
   //get translated word frequency
@@ -160,35 +148,6 @@ function Translate(props) {
     setTranslFreqs(foundFreqs);
   }
 
-  //add word to learning list
-  async function handleWordSave() {
-    if (translation !== '') {
-      if (!isLoggedIn) {
-        setSnackbarActive(true);
-      } else if (isChecked) {
-        setIsChecked(false);
-        //delete word
-      } else {
-        setIsChecked(true);
-        const userLang = JSON.parse(localStorage.getItem('userLang'));
-        const obj = {
-          word: userLang.lang === currentInputLang.lang ? translation : chars,
-          translation: userLang.lang === currentInputLang.lang ? chars : translation,
-          translationLang: userLang.code,
-          source: ['-']
-        }
-        const result = await saveWord(obj);
-        //dispatch(addNewWords(obj));
-        /* const response = await saveWord(obj);
-
-        if (response.err) {
-          //show error
-          setSnackbarErrorActive(true);
-        } */
-      }
-    }
-  }
-
   //call translate function
   useEffect(() => {
     if(chars.length > 0) {
@@ -201,7 +160,8 @@ function Translate(props) {
       setIsLoading(false);
       setFrequency({ word: '', fr: 0, text: '', filmPer: 0 });
       setTranslFreqs([]);
-      setSnackbarActive();
+      //setSnackbarActive();
+      closeSnackbar();
     }
   }, [chars, currentInputLang, currentOutputLang]);
 
@@ -366,7 +326,7 @@ function Translate(props) {
             </div>
 
             <Bookmark
-              toggleBookmark={handleWordSave}
+              toggleBookmark={() => handleWordSave(chars, translation)}
               isChecked={isChecked}
               title='add to the learning list'
               propClass='translator__btn'
@@ -379,7 +339,7 @@ function Translate(props) {
             <Snackbar
               snackbarActive={snackbarActive}
               elClass='translator__snack'
-              closeSnack={() => setSnackbarActive(false)}
+              closeSnack={closeSnackbar}
               transformPos='_left'
             >
               <p className='translator__snack-text'>
