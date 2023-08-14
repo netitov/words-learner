@@ -2,15 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Spinner from '../Spinner/Spinner';
 import Languages from '../Languages/Languages';
-
-import Checkbox from '@mui/material/Checkbox';
-import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
-import BookmarkIcon from '@mui/icons-material/Bookmark';
 import { useSelector } from 'react-redux';
-
 import { MdOutlineQuiz } from 'react-icons/md';
 import { BsBookmarks } from 'react-icons/bs';
 import { CiFilter } from 'react-icons/ci';
+import useWordSave from '../../hooks/useWordSave';
+import Bookmark from '../Bookmark/Bookmark';
 
 function WordList() {
 
@@ -22,6 +19,8 @@ function WordList() {
   const currentOutputLang = useSelector((state) => state.outputLang);
   const languages = useSelector((state) => state.enDictionLangs);
   const userWords = useSelector((state) => state.userWords);
+
+  const { removeWord } = useWordSave();
 
   ///const words = JSON.parse(sessionStorage.getItem('randomWords'));
 
@@ -117,13 +116,21 @@ function WordList() {
           {userWords.map((i) => (
             <tr key={i.word}>
               <td>
-                <Checkbox
+                {/* <Checkbox
                   className='wordlist-table__checkbox'
                   icon={<BookmarkBorderIcon sx={{ fontSize: '1.4rem', color: '#bebebe' }}/>}
                   checkedIcon={<BookmarkIcon sx={{ fontSize: '1.4rem' }}/>}
                   onChange={() => handleCheck(i)}
                   checked={true}
                   title='remove from the learning list'
+                /> */}
+                <Bookmark
+                  toggleBookmark={() => removeWord(i.word)}
+                  isChecked={true}
+                  title='remove from the learning list'
+                  propClass='wordlist-table__checkbox'
+                  width='18px'
+                  height='18px'
                 />
               </td>
               <td className='wordlist-table__td wordlist-table__td_emph'>{i.word}</td>

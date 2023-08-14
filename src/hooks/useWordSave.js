@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addNewWords } from '../store/userWords';
-import { addToList } from '../utils/api';
+import { addNewWords, deleteWord } from '../store/userWords';
+import { addToList, deleteFromList } from '../utils/api';
 import { useSelector } from 'react-redux';
 
 function useWordSave() {
@@ -14,37 +14,36 @@ function useWordSave() {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const userWords = useSelector((state) => state.userWords);
 
-  //prepare word for saving in learning list + check if user logged in
-  async function handleWordSave(word, translation) {
-    if (!isLoggedIn) {
-      setSnackbarActive(true);
-    } else if (isChecked) {
-      setIsChecked(false);
-      //delete word
-    } else {
-      setIsChecked(true);
-      const userLang = JSON.parse(localStorage.getItem('userLang'));
-      const obj = {
-        word: userLang.lang === currentInputLang.lang ? translation : word,
-        translation: userLang.lang === currentInputLang.lang ? word : translation,
-        translationLang: userLang.code,
-        source: ['-']
-      }
-      await saveWord(obj);
-    }
-  }
+  const token = localStorage.getItem('token');
+
 
   //save word in user learning list
   async function saveWord(obj) {
-    const token = localStorage.getItem('token');
     const arr = [obj];
     const response = await addToList(arr, token);
     if (response.err) {
-      console.log(response.err);
       return response.err;
     } else {
-      console.log(arr)
       dispatch(addNewWords(arr));
+      sessionStorage.setItem('userWords', JSON.stringify([...userWords, ...arr]));
+      return response.data;
+    }
+  };
+
+  //save word in user learning list
+  async function removeWord(word) {
+    //const wordId = userWords.find((i) => i.word === word)?._id;
+    const response = await deleteFromList(word, token);
+    if (response.err) {
+      return response.err;
+    } else {
+      //update state
+      dispatch(deleteWord(word));
+      //update storage
+      const wordsStorage = JSON.parse(sessionStorage.getItem('userWords'));
+      const updatedUserWordsArray = wordsStorage.filter(i => i.word !== word);
+      sessionStorage.setItem('userWords', JSON.stringify(updatedUserWordsArray));
+
       return response.data;
     }
   };
@@ -62,7 +61,28 @@ function useWordSave() {
     }
   }
 
-  return { handleWordSave, closeSnackbar, checkList, isChecked, snackbarActive } ;
+   //prepare word for saving/ deleting in learning list + check if user logged in
+   async function handleWordList(text, translation) {
+    const userLang = JSON.parse(localStorage.getItem('userLang'));
+    const word = userLang.lang === currentInputLang.lang ? translation : text;
+    if (!isLoggedIn) {
+      setSnackbarActive(true);
+    } else if (isChecked) {
+      setIsChecked(false);
+      await removeWord(word);
+    } else {
+      setIsChecked(true);
+      const obj = {
+        word,
+        translation: userLang.lang === currentInputLang.lang ? word : translation,
+        translationLang: userLang.code,
+        source: ['-']
+      }
+      await saveWord(obj);
+    }
+  }
+
+  return { handleWordList, closeSnackbar, checkList, isChecked, snackbarActive, removeWord } ;
 }
 
 export default useWordSave;

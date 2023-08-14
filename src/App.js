@@ -123,7 +123,7 @@ function App() {
       } else {
         //if user doesn't have saved words yet - use random words for exapmle
         const words = randomWords.slice(0, 5);
-        dispatch(setUserWords(wordList))
+        dispatch(setUserWords(words))
         sessionStorage.setItem('userWords', JSON.stringify(words));
         //add random words to user list
         await addRandomWordsToList(words);

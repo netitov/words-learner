@@ -37,7 +37,7 @@ function Translate(props) {
   const pathRef = useRef();
   const dispatch = useDispatch();
 
-  const { handleWordSave, closeSnackbar, checkList, isChecked, snackbarActive } = useWordSave();
+  const { handleWordList, closeSnackbar, checkList, isChecked, snackbarActive } = useWordSave();
 
   const currentInputLang = useSelector((state) => state.inputLang);
   const currentOutputLang = useSelector((state) => state.outputLang);
@@ -326,7 +326,7 @@ function Translate(props) {
             </div>
 
             <Bookmark
-              toggleBookmark={() => handleWordSave(chars, translation)}
+              toggleBookmark={() => handleWordList(chars, translation)}
               isChecked={isChecked}
               title='add to the learning list'
               propClass='translator__btn'

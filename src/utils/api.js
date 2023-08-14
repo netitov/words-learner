@@ -14,7 +14,6 @@ async function fetchAPI(path, method, headers, body) {
 
     const response = await fetch(`${SERVER_API}/${path}`, options);
     const result = await response.json();
-    console.log(result)
 
     if (!response.ok) {
       return {
@@ -22,8 +21,9 @@ async function fetchAPI(path, method, headers, body) {
         status: response.status,
         serverError: result.serverError || response.message,
       };
+    } else {
+      return result;
     }
-    return result;
   } catch (err) {
     return {
       error: true,
@@ -129,41 +129,27 @@ export async function updatePassword(params, body) {
 
 //add words to user learning list
 export async function addToList(arr, token) {
-  console.log(arr)
   const headers = {'Authorization': `Bearer ${token}`};
   return fetchAPI('userwords', 'POST', headers, arr);
 }
 
+//add words to user learning list
+export async function deleteFromList(word, token) {
+  const headers = {'Authorization': `Bearer ${token}`};
+  return fetchAPI(`userwords/${word}`, 'POST', headers);
+}
+
 //get user learning list
 export async function getWordList(token) {
-  console.log('req')
   const headers = {'Authorization': `Bearer ${token}`};
   return fetchAPI('userwords', 'GET', headers);
 }
 
 export async function getRandomWords(obj) {
-  console.log(obj);
   const queryParams = new URLSearchParams(obj);
-
   return fetchAPI(`random-words?${queryParams}`, 'GET');
 }
 
-/* export async function getRandomWords(obj) {
-  try {
-    console.log(obj)
 
-    const queryParams = new URLSearchParams(obj);
-
-    const response = await fetch(`${SERVER_API}/random-words?${queryParams}`,
-      { method: 'GET' }
-    );
-
-    const result = await response.json();
-    console.log(result)
-    return result;
-  } catch (err) {
-    console.error(err);
-  }
-} */
 
 

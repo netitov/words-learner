@@ -157,13 +157,10 @@
   font-size: 0.8em;
 }
 
-span.wordlist-table__checkbox {
-  &.Mui-checked {
-    color: var(--prime-yellow);
-  }
+.wordlist-table__checkbox:hover {
+  background-color: #ffd9871a;
+}
 
-  &.MuiCheckbox-root:hover {
-    background-color: #dbecec0f;
-  }
-
+.wordlist-table__checkbox > svg {
+  color: var(--prime-yellow);
 }

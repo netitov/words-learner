@@ -12,8 +12,12 @@ const userWordsSlice = createSlice({
     addNewWords(state, action) {
       return [...state, ...action.payload];
     },
+    deleteWord(state, action) {
+      const wordIdToDelete = action.payload;
+      return state.filter(word => word.word !== wordIdToDelete);
+    },
   },
 });
 
-export const { setUserWords, addNewWords } = userWordsSlice.actions;
+export const { setUserWords, addNewWords, deleteWord } = userWordsSlice.actions;
 export default userWordsSlice.reducer;

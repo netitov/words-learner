@@ -35,7 +35,7 @@ function Frequency(props) {
   const currentOutputLang = useSelector((state) => state.outputLang);
   const dictionLangs = useSelector((state) => state.dictionLangs);
 
-  const { handleWordSave, closeSnackbar, checkList, isChecked, snackbarActive } = useWordSave();
+  const { handleWordList, closeSnackbar, checkList, isChecked, snackbarActive } = useWordSave();
 
   //get translation if user addes a word to learning list
   async function getTranslation(text) {
@@ -43,7 +43,6 @@ function Frequency(props) {
       const langs = currentInputLang.code + '-' + currentOutputLang.code;
       const inDictionary = dictionLangs.some((i) => i.languages === langs);
       const response = await translate({ langs, text, inDictionary });
-      console.log(response)
       if (response.length > 0) {
         const translation = response.text === undefined ? response[0].tr[0].text : response.text[0];
         return translation;
@@ -58,7 +57,7 @@ function Frequency(props) {
   //save word to learning list
   async function saveWord() {
     const translation = await getTranslation(chars);
-    handleWordSave(chars, translation);
+    handleWordList(chars, translation);
   }
 
   //get word frequency
