@@ -41,7 +41,7 @@ body {
   font-family: 'Noto Sans Display', Sans-serif, Arial, Helvetica;
   font-weight: 300;
   font-size: var(--main-font);
-  overflow: hidden;
+  /* overflow-x: hidden; */
 }
 
 .page__wrapper {

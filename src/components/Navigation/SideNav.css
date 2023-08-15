@@ -1,9 +1,14 @@
 .sidenav {
+  min-width: 220px;
+  position: sticky;
+  position: -webkit-sticky;
+  top: 5px;
+  height: 500px;
 }
 
 .sidenav > ul {
   padding: 0;
-  min-width: 220px;
+  /* min-width: 220px; */
   margin: 0;
   color: #fff;
   display: flex;
@@ -15,6 +20,7 @@
   border-radius: 10px;
   padding: 10px;
   box-sizing: border-box;
+
 }
 
 .sidenav__link {

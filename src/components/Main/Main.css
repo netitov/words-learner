@@ -1,3 +1,7 @@
+main {
+  overflow-x: hidden;
+}
+
 .main__quiz {
   max-width: var(--max-width);
   width: var(--page-width);

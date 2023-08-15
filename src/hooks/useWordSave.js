@@ -32,7 +32,6 @@ function useWordSave() {
 
   //save word in user learning list
   async function removeWord(word) {
-    //const wordId = userWords.find((i) => i.word === word)?._id;
     const response = await deleteFromList(word, token);
     if (response.err) {
       return response.err;

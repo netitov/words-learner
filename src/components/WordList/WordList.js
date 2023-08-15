@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Spinner from '../Spinner/Spinner';
 import Languages from '../Languages/Languages';
@@ -13,16 +13,21 @@ function WordList() {
 
   const [langListActive, setLangListActive] = useState({ type: '', value: false });
   const [activeLangBtn, setActiveLangBtn] = useState({ lang: '', type: '' });
-  //const [words, setWords] = useState([]);
+  const [words, setWords] = useState([]);
+
+  const pathRef = useRef();
 
   const currentInputLang = useSelector((state) => state.inputLang);
   const currentOutputLang = useSelector((state) => state.outputLang);
   const languages = useSelector((state) => state.enDictionLangs);
   const userWords = useSelector((state) => state.userWords);
 
+  const initRows = 10;
+  const rowsStep = 10;
+  const rowHeight = 46;
+
   const { removeWord } = useWordSave();
 
-  ///const words = JSON.parse(sessionStorage.getItem('randomWords'));
 
   function toggleLangList(e) {
     const lang = currentInputLang.code === 'en' ? currentOutputLang.lang : currentInputLang.lang;
@@ -39,18 +44,30 @@ function WordList() {
     setLangListActive({ value: false });
   }
 
-  function handleCheck(i) {
-    const updatedData = userWords.map((obj) => {
-      if (obj._id === i._id) {
-        return {
-          ...obj,
-          checked: !obj.checked,
-        };
-      }
-      return obj;
-    });
+  //set initial rows
+  useEffect(() => {
+    setWords(userWords.slice(0, initRows));
+  }, [userWords])
 
-  }
+  //lazy loading of table rows
+  useEffect(() => {
+    function displayMoreRows() {
+      const elementPos = pathRef.current.getBoundingClientRect().top;
+      const elementHeight = pathRef.current.offsetHeight;
+      const windowHeight = window.innerHeight;
+      //run function before last element scrolled and if not all rows displayed
+      if ((elementPos < windowHeight - elementHeight + rowHeight) && (words.length < userWords.length)) {
+        setWords(prevWords => {
+          const newVisibleRowCount = Math.min((prevWords.length + rowsStep), userWords.length);
+          return userWords.slice(0, newVisibleRowCount);
+        });
+      }
+    }
+
+    window.addEventListener('scroll', displayMoreRows);
+    return () => window.removeEventListener('scroll', displayMoreRows);
+  }, [userWords, words]);
+
 
   return (
     <div className='wordlist'>
@@ -77,18 +94,10 @@ function WordList() {
         </button>
       </div>
 
-      <table className='wordlist__table wordlist-table'>
+      <table className='wordlist__table wordlist-table' ref={pathRef}>
         <thead>
           <tr>
             <th className='wordlist-table__th wordlist-table__th_checkbox'>
-              {/* <Tooltip title='add all words to the learning list' componentsProps={{ tooltip: { sx: tooltipOption, } }}>
-                <Checkbox
-                  className='wordlist__checkbox'
-                  icon={<BookmarkBorderIcon sx={{ fontSize: '1.4rem', color: '#7575759c' }} />}
-                  checkedIcon={<BookmarkIcon sx={{ fontSize: '1.4rem'}} />}
-                />
-              </Tooltip> */}
-
               {/* list of available languages */}
               <Languages
                 languages={languages}
@@ -103,7 +112,6 @@ function WordList() {
               onClick={toggleLangList}
             >
               translation ({currentInputLang.code === 'en' ? currentOutputLang.code : currentInputLang.code})
-
             </th>
             <th>source</th>
             <th>progress</th>
@@ -113,17 +121,12 @@ function WordList() {
         </thead>
 
         <tbody>
-          {userWords.map((i) => (
-            <tr key={i.word}>
+          {words.map((i, index) => (
+            <tr
+              key={i.word}
+              className='wordlist-table__row'
+            >
               <td>
-                {/* <Checkbox
-                  className='wordlist-table__checkbox'
-                  icon={<BookmarkBorderIcon sx={{ fontSize: '1.4rem', color: '#bebebe' }}/>}
-                  checkedIcon={<BookmarkIcon sx={{ fontSize: '1.4rem' }}/>}
-                  onChange={() => handleCheck(i)}
-                  checked={true}
-                  title='remove from the learning list'
-                /> */}
                 <Bookmark
                   toggleBookmark={() => removeWord(i.word)}
                   isChecked={true}
@@ -151,11 +154,6 @@ function WordList() {
           ))}
         </tbody>
       </table>
-      <div className='wordlist__pgn-btn-box'>
-        <button className='wordlist__pgn-btn wordlist__btn' type='button'>
-          Show all words
-        </button>
-      </div>
     </div>
 
   )

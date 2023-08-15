@@ -1,6 +1,7 @@
 .wordlist {
   flex: 1 0 auto;
   position: relative;
+  animation: fade-in 0.5s ease-out;
 }
 
 .wordlist-table {
@@ -11,6 +12,24 @@
   background-color: var(--darker-blue);
   border-radius: 15px;
   padding: 10px;
+}
+
+.wordlist-table__row {
+  /* visibility: visible;
+  transition: all 0.3s ease-out;
+  height: auto;
+  transform-origin: top;
+  -webkit-transform-origin: top;
+  opacity: 1; */
+  opacity: 1;
+  animation: fade-in 0.5s ease-out;
+}
+
+.wordlist-table__row_hidden {
+  transform: scaleY(0);
+  -webkit-transform: scaleY(0);
+  opacity: 0;
+  visibility: collapse;
 }
 
 .wordlist__btn-container {
@@ -60,9 +79,13 @@
 }
 
 .wordlist__pgn-btn-box {
-  display: flex;
+  display: none;
   justify-content: center;
   margin-top: 10px;
+}
+
+.wordlist__pgn-btn-box_active {
+  display: flex;
 }
 
 .wordlist__pgn-btn {
@@ -81,10 +104,15 @@
 }
 
 .wordlist-table th {
-  padding: 10px;
+  padding: 10px 0;
   font-weight: 300;
   text-align: left;
   color: var(--super-light-green);
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
+  background-color: #315b64f0;
+  z-index: 2;
 }
 
 .wordlist-table tbody tr {
