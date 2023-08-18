@@ -160,17 +160,18 @@ export function getStyle(obj) {
       pattern:'line3',
       style: {
         backgroundColor: backColor,
-        backgroundImage:  `repeating-linear-gradient(0deg, ${frontColor}, ${frontColor} 2.6px, ${backColor} 2.6px, ${backColor})`,
-        backgroundSize: '52px 52px'
+        backgroundImage:  `repeating-linear-gradient(0deg, ${frontColor}, ${frontColor} 1px, ${backColor} 1px, ${backColor})`,
+        backgroundSize: '20px 20px'
       }
     },
     {
       pattern:'line4',
       style: {
         backgroundColor: backColor,
-        backgroundImage:  `repeating-linear-gradient(to right, ${frontColor}, ${frontColor} 2.6px, ${backColor} 2.6px, ${backColor})`,
-        backgroundSize: '52px 252px'
+        backgroundImage:  `repeating-linear-gradient(to right, ${frontColor}, ${frontColor} 1px, ${backColor} 1px, ${backColor})`,
+        backgroundSize: '20px 20px'
       }
+
     }
   ];
   return patterns;

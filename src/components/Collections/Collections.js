@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { getStyle, tooltipOption } from '../../utils/constants';
 import { BsBookmarksFill } from 'react-icons/bs';
+import { GoKebabHorizontal } from 'react-icons/go';
 import CloseBtn from '../CloseBtn/CloseBtn';
 import { useSelector, useDispatch } from 'react-redux';
 import { addCollection, updateCollection } from '../../store/collections';
 import { createCollection, deleteCollection } from '../../utils/api';
 import Tooltip from '@mui/material/Tooltip';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 function Collections() {
 
@@ -13,9 +16,20 @@ function Collections() {
   const [collectName, setCollectName] = useState('');
   const [styles, setStyles] = useState({});
   const [formStyle, setFormStyle] = useState({});
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const collections = useSelector((state) => state.collections);
   const dispatch = useDispatch();
+
+  const menuActive = Boolean(anchorEl);
+
+  function openMenu(event) {
+    setAnchorEl(event.currentTarget);
+  }
+
+  function closeMenu() {
+    setAnchorEl(null);
+  }
 
   const patternColors = [
     {
@@ -32,6 +46,7 @@ function Collections() {
     }
   ];
 
+  //open form for creating new collection
   function openForm() {
     setFormAсtive(true);
     const randomColors = patternColors[generateRandomNumber(patternColors.length)];
@@ -41,6 +56,7 @@ function Collections() {
     setStyles({ colors: randomColors, pattern: collectionStyle.pattern });
   }
 
+  //close form and clear input
   function closeForm() {
     setFormAсtive(false);
     setCollectName('');
@@ -56,6 +72,7 @@ function Collections() {
     });
   }
 
+  //submit form - create new collection
   async function handleSubmit(e) {
     e.preventDefault();
 
@@ -142,6 +159,23 @@ function Collections() {
               <span className='collection__def'>default</span>
             </Tooltip>
           }
+          <button type='button' className='collection__menu-btn' id="basic-button" onClick={openMenu}>
+            <GoKebabHorizontal size='22px' color='#fff' />
+          </button>
+          <Menu
+            id='ctx-menu'
+            anchorEl={anchorEl}
+            open={menuActive}
+            onClose={closeMenu}
+            className='collection__cxt-menu'
+            MenuListProps={{
+              'aria-labelledby': 'ctx-menu',
+            }}
+          >
+            <MenuItem onClick={closeMenu}>Open collection</MenuItem>
+            <MenuItem onClick={closeMenu}>Delete</MenuItem>
+            <MenuItem onClick={closeMenu}>Make defualt</MenuItem>
+          </Menu>
           <div className='collection__overlay' style={getStyle(i.style.colors).find((s) => s.pattern === i.style.pattern).style}></div>
           <h3 className='collection__title'>{i.collectionName}</h3>
         </div>

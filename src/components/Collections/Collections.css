@@ -93,7 +93,7 @@
 .collection__title {
   margin: 0;
   font-weight: 400;
-  background-color: #494949;
+  background-color: #494949b0;
   padding: 5px;
   border-radius: 10px;
   color: #fff;
@@ -101,7 +101,7 @@
   text-align: center;
   box-sizing: border-box;
   font-size: 1.1em;
-  width: 90%;
+  width: 95%;
 }
 
 .collection__title_all {
@@ -178,9 +178,40 @@
   left: 7px;
   padding: 3px 5px;
   border-radius: 10px;
-  background: #494949;
+  background: #494949b0;
   color: #fff;
-  font-size: 0.9em;
+  font-size: 0.8em;
+}
+
+.collection__menu-btn {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  z-index: 2;
+  padding: 3px;
+  box-sizing: border-box;
+  background-color: #49494959;
+  border-radius: 50%;
+  transition: background-color 0.3s;
+  cursor: pointer;
+}
+
+.collection__menu-btn:hover {
+  background-color: #494949;
+}
+
+.collection__menu-btn > svg {
+  display: block;
+}
+
+.collection__cxt-menu .MuiMenu-paper {
+  background-color: #444444;
+  color: #fff;
+  box-shadow: 0px 2px 6px 0px #2f2f2f6b;
+}
+
+.collection__cxt-menu .MuiMenu-list > li:hover {
+  background-color: rgb(95 95 95);
 }
 
 @keyframes slideAndFadeIn {
