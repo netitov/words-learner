@@ -8,6 +8,7 @@ import Translate from '../../components/Translator/Translator';
 import Frequency from '../../components/Frequency/Frequency';
 import WordList from '../../components/WordList/WordList';
 import { accountNav } from '../../utils/constants';
+import Collections from '../../components/Collections/Collections';
 
 function Account() {
 
@@ -16,7 +17,7 @@ function Account() {
 
   //current route for display in heading and navigation
   const getCurrentElement = useMemo(() => {
-      return accountNav.find((i) => i.route === location);
+      return accountNav.find((i) => location.startsWith(i.route));
   }, [location]);
 
   //expand translation container for fitting languages box
@@ -56,6 +57,7 @@ function Account() {
           />
           <Route path='/frequency' element={<Frequency account={true} />} />
           <Route path='/words' element={<WordList />} />
+          <Route path='/words/collections' element={<Collections />} />
           <Route path='/*' element={<CardNav />} />
         </Routes>
       </div>

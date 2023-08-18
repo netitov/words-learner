@@ -133,7 +133,7 @@ export async function addToList(arr, token) {
   return fetchAPI('userwords', 'POST', headers, arr);
 }
 
-//add words to user learning list
+//delete word from user learning list
 export async function deleteFromList(word, token) {
   const headers = {'Authorization': `Bearer ${token}`};
   return fetchAPI(`userwords/${word}`, 'POST', headers);
@@ -148,6 +148,24 @@ export async function getWordList(token) {
 export async function getRandomWords(obj) {
   const queryParams = new URLSearchParams(obj);
   return fetchAPI(`random-words?${queryParams}`, 'GET');
+}
+
+//get user collections of words
+export async function getCollections(token) {
+  const headers = {'Authorization': `Bearer ${token}`};
+  return fetchAPI('collections', 'GET', headers);
+}
+
+//creare user colletions of words
+export async function createCollection(collectionObj, token) {
+  const headers = {'Authorization': `Bearer ${token}`};
+  return fetchAPI('collections', 'POST', headers, collectionObj);
+}
+
+//delete user collection
+export async function deleteCollection(collectionId, token) {
+  const headers = {'Authorization': `Bearer ${token}`};
+  return fetchAPI(`collections/${collectionId}`, 'POST', headers);
 }
 
 

@@ -7,7 +7,7 @@ import LinkRequestPage from './pages/Auth/LinkRequestPage';
 import PasswordResetPage from './pages/Auth/PasswordResetPage';
 import { login, userData } from './store/user';
 import { useSelector, useDispatch } from 'react-redux';
-import { getUserData, requestRandomWords,  getWordList, addToList } from './utils/api';
+import { getUserData, requestRandomWords,  getWordList, addToList, getCollections } from './utils/api';
 import Spinner from './components/Spinner/Spinner';
 import Account from './pages/Account/Account';
 import useLangsFetch from './hooks/useLangsFetch';
@@ -15,6 +15,7 @@ import { useInitLang } from './hooks/useInitLang';
 import { selectOutputLang } from './store/outputLang';
 import { setRandomWords } from './store/randomWords';
 import { setUserWords } from './store/userWords';
+import { setCollections } from './store/collections';
 import useRandomWordsFetch from './hooks/useRandomWordsFetch';
 
 function App() {
@@ -110,13 +111,25 @@ function App() {
     }
   }
 
+  //get user word list
+  async function fetchWordsCollections() {
+    const token = localStorage.getItem('token');
+    //fetch words
+    const collections = await getCollections(token);
+    if (collections.err) {
+      console.log(collections.err);
+      return [];
+    } else {
+      return collections;
+    }
+  }
+
   //set user word list
   async function initializeUserWords() {
     const storage = JSON.parse(sessionStorage.getItem('userWords'));
     if (!storage) {
       //if words not in session storage - fetch them and add to session storage
       const wordList = await fetchUserWords();
-      console.log(wordList)
       if (wordList.length > 0) {
         dispatch(setUserWords(wordList));
         sessionStorage.setItem('userWords', JSON.stringify(wordList));
@@ -134,10 +147,27 @@ function App() {
     }
   }
 
-  //set initial list of user word list
+  //set user words collections
+  async function initializeWordsCollections() {
+    const storage = JSON.parse(sessionStorage.getItem('collections'));
+    if (!storage) {
+      //if collections not in session storage - fetch them and add to session storage
+      const collections = await fetchWordsCollections();
+      if (collections.length > 0) {
+        dispatch(setCollections(collections));
+        sessionStorage.setItem('collections', JSON.stringify(collections));
+      }
+    } else {
+      //if collections are in storage - use them
+      dispatch(setCollections(storage));
+    }
+  }
+
+  //set initial list of user words and collections
   useEffect(() => {
     if (randomWords.length > 0 && isLoggedIn) {
       initializeUserWords();
+      initializeWordsCollections();
     }
   }, [randomWords, isLoggedIn])
 
@@ -160,7 +190,7 @@ function App() {
     }
   }
 
-  // get init random words + quiz words/ update list of words if languages are changed
+  // get init random words
   useEffect(() => {
     getInitRandomWords();
   }, [currentInputLang, currentOutputLang]);

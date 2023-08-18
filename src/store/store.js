@@ -11,6 +11,7 @@ import userWordsReducer from './userWords';
 import randomWordsReducer from './randomWords';
 import quizReducer from './quiz';
 import filtersReducer from './filters';
+import collectionsReducer from './collections';
 
 const store = configureStore({
   reducer: {
@@ -25,6 +26,7 @@ const store = configureStore({
     randomWords: randomWordsReducer,
     quiz: quizReducer,
     filters: filtersReducer,
+    collections: collectionsReducer,
     devTools: process.env.NODE_ENV !== 'production',
   },
 });

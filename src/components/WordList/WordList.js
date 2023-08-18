@@ -80,7 +80,7 @@ function WordList() {
           </svg>
           Add a word
         </Link>
-        <Link className='wordlist__btn' to='#'>
+        <Link className='wordlist__btn' to='/account/words/collections'>
           <BsBookmarks className='wordlist__btn-icon'/>
           Go to Collections
         </Link>
@@ -113,7 +113,7 @@ function WordList() {
             >
               translation ({currentInputLang.code === 'en' ? currentOutputLang.code : currentInputLang.code})
             </th>
-            <th>source</th>
+            <th>collection</th>
             <th>progress</th>
 
           </tr>

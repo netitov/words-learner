@@ -205,6 +205,7 @@ function Translate(props) {
               placeholder='Start typing'
               onChange={e => setChars(e.target.value)}
               value={chars}
+              maxLength='100'
             >
             </textarea>
 
