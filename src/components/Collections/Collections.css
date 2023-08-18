@@ -171,6 +171,18 @@
   right: 6px;
 }
 
+.collection__def {
+  position: absolute;
+  z-index: 1;
+  top: 7px;
+  left: 7px;
+  padding: 3px 5px;
+  border-radius: 10px;
+  background: #494949;
+  color: #fff;
+  font-size: 0.9em;
+}
+
 @keyframes slideAndFadeIn {
   0% {
     opacity: 0;

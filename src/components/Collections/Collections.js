@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { getStyle } from '../../utils/constants';
+import { getStyle, tooltipOption } from '../../utils/constants';
 import { BsBookmarksFill } from 'react-icons/bs';
 import CloseBtn from '../CloseBtn/CloseBtn';
 import { useSelector, useDispatch } from 'react-redux';
-import { addCollection } from '../../store/collections';
+import { addCollection, updateCollection } from '../../store/collections';
 import { createCollection, deleteCollection } from '../../utils/api';
+import Tooltip from '@mui/material/Tooltip';
 
 function Collections() {
 
@@ -42,6 +43,17 @@ function Collections() {
 
   function closeForm() {
     setFormAсtive(false);
+    setCollectName('');
+  }
+
+  //remove default value in array
+  function updateDefault(initCollects) {
+    return initCollects.map(col => {
+      if (col.default) {
+        return { ...col, default: false };
+      }
+      return col;
+    });
   }
 
   async function handleSubmit(e) {
@@ -61,12 +73,14 @@ function Collections() {
       if (createdCollection.err) {
         return createdCollection.err;
       } else {
-        //update list of collections
-        dispatch(addCollection(createdCollection));
-        sessionStorage.setItem('collections', JSON.stringify([createdCollection, ...collections]));
-        //dropp form data
-        setCollectName('');
         closeForm();
+
+        //update session storage (add new collection and remove current default value)
+        const updatedCollections = updateDefault(collections);
+        sessionStorage.setItem('collections', JSON.stringify([createdCollection, ...updatedCollections]));
+
+        //add new collection and remove current default
+        dispatch(addCollection(createdCollection));
       }
     }
   }
@@ -123,6 +137,11 @@ function Collections() {
       {/* created collections by user */}
       {collections.map((i) => (
         <div className='collection' key={i.collectionName} >
+          {i.default &&
+            <Tooltip title='Words will be saved in this collection by default' componentsProps={{ tooltip: { sx: tooltipOption, } }}>
+              <span className='collection__def'>default</span>
+            </Tooltip>
+          }
           <div className='collection__overlay' style={getStyle(i.style.colors).find((s) => s.pattern === i.style.pattern).style}></div>
           <h3 className='collection__title'>{i.collectionName}</h3>
         </div>
