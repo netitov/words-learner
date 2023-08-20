@@ -45,24 +45,6 @@ export async function checkFrequency(word) {
   }
 }
 
-/* export async function getRandomWords(obj) {
-  try {
-    console.log(obj)
-
-    const queryParams = new URLSearchParams(obj);
-
-    const response = await fetch(`${SERVER_API}/random-words?${queryParams}`,
-      { method: 'GET' }
-    );
-
-    const result = await response.json();
-    console.log(result)
-    return result;
-  } catch (err) {
-    console.error(err);
-  }
-} */
-
 //find word (and translate) in dictionary api, if text is shorter 3 words. Otherwise, use translation api
 export async function translate({ langs, text, inDictionary }) {
   console.log({ langs, text, inDictionary })
@@ -165,7 +147,13 @@ export async function createCollection(collectionObj, token) {
 //delete user collection
 export async function deleteCollection(collectionId, token) {
   const headers = {'Authorization': `Bearer ${token}`};
-  return fetchAPI(`collections/${collectionId}`, 'POST', headers);
+  return fetchAPI(`collections/${collectionId}`, 'DELETE', headers);
+}
+
+//update user collection
+export async function updateCollectionDB(collectionId, token, collectionObj) {
+  const headers = {'Authorization': `Bearer ${token}`};
+  return fetchAPI(`collections/${collectionId}`, 'PATCH', headers, collectionObj);
 }
 
 

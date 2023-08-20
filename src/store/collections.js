@@ -2,12 +2,20 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = [];
 
-const updateDefaultState = (collections, newDefaultId) => {
+//remove default value from all collections exept selected
+const handleUpdateDefaultState = (collections, newDefaultId) => {
   return collections.map(i => ({
     ...i,
     default: i._id === newDefaultId ? true : false
   }));
 };
+
+const handleUpdateCollection = (collections, updatedCollection) => {
+  return collections.map(i => (
+    i._id === updatedCollection._id ? updatedCollection : i
+  ));
+};
+
 
 const collectionsSlice = createSlice({
   name: 'collections',
@@ -18,13 +26,18 @@ const collectionsSlice = createSlice({
     },
     addCollection(state, action) {
       const newCollection = action.payload;
-      const updatedCollections = updateDefaultState(state, newCollection._id);
+      const updatedCollections = handleUpdateDefaultState(state, newCollection._id);
       return [newCollection, ...updatedCollections];
     },
-    updateCollection(state, action) {
+    updateDefaultState(state, action) {
       const updatedCollection = action.payload;
-      const updatedCollections = updateDefaultState(state, updatedCollection._id);
+      const updatedCollections = handleUpdateDefaultState(state, updatedCollection._id);
       return updatedCollections;
+    },
+    updateCollectionState(state, action) {
+      const updatedCollection = action.payload;
+      const allCollections = handleUpdateCollection(state, updatedCollection._id);
+      return allCollections;
     },
     deleteCollection(state, action) {
       const collectionIdToDelete = action.payload;
@@ -33,5 +46,5 @@ const collectionsSlice = createSlice({
   },
 });
 
-export const { setCollections, addCollection, deleteCollection, updateCollection } = collectionsSlice.actions;
+export const { setCollections, addCollection, deleteCollection, updateDefaultState, updateCollectionState } = collectionsSlice.actions;
 export default collectionsSlice.reducer;

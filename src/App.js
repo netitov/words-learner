@@ -184,7 +184,6 @@ function App() {
       if (wordStorage?.some((i) => i.lang === currLang.code)) {
         dispatch(setRandomWords(wordStorage));
       } else if (!randomWordsInLoading && randomWordsInLoading !== undefined) {
-        console.log('else')
         await requestRandomWords();
       }
     }
