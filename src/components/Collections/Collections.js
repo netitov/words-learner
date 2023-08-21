@@ -4,11 +4,12 @@ import { BsBookmarksFill } from 'react-icons/bs';
 import { GoKebabHorizontal } from 'react-icons/go';
 import CloseBtn from '../CloseBtn/CloseBtn';
 import { useSelector, useDispatch } from 'react-redux';
-import { addCollection, updateCollectionState, updateDefaultState } from '../../store/collections';
-import { createCollection, deleteCollection, updateCollectionDB } from '../../utils/api';
+import { addCollection, updateCollectionState, updateDefaultState, deleteCollection } from '../../store/collections';
+import { createCollectionDB, deleteCollectionDB, updateCollectionDB } from '../../utils/api';
 import Tooltip from '@mui/material/Tooltip';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import useWordSave from '../../hooks/useWordSave';
 
 function Collections() {
 
@@ -22,6 +23,9 @@ function Collections() {
 
   const collections = useSelector((state) => state.collections);
   const dispatch = useDispatch();
+
+
+  const { removeWordList, updateCollectionData } = useWordSave();
 
   const menuActive = Boolean(anchorEl);
 
@@ -103,10 +107,10 @@ function Collections() {
       };
 
       //create collection in DB
-      const createdCollection = await createCollection(collectObj, token);
+      const createdCollection = await createCollectionDB(collectObj, token);
 
-      if (createdCollection.err) {
-        return createdCollection.err;
+      if (createdCollection.error) {
+        return createdCollection.error;
       } else {
         closeForm();
 
@@ -128,6 +132,54 @@ function Collections() {
   function closeDeleteForm() {
     setDeleteFormActive(false);
     setTargetCollection({});
+  }
+
+  async function handleDeleteCollection(deleteWords) {
+    const token = localStorage.getItem('token');
+    const deletedCollection = await deleteCollectionDB(targetCollection._id, token);
+
+    if (deletedCollection.error) {
+      console.log(deletedCollection.error);
+      //error handler - display error snack
+    } else {
+      //update state and storage
+      dispatch(deleteCollection(deletedCollection._id));
+      const collectionStorage = JSON.parse(sessionStorage.getItem('collections'));
+      const updatedCollectionList = collectionStorage.filter(i => i._id !== deletedCollection._id);
+      sessionStorage.setItem('collections', JSON.stringify(updatedCollectionList));
+
+      //update collection data in user words
+      if (deleteWords) {
+        //remove words from deleted collection
+        await removeWordList(targetCollection._id);
+      } else {
+        //update collection in word list
+        await updateCollectionData(targetCollection._id);
+      }
+    }
+    closeDeleteForm();
+  }
+
+  //edit collection data: title, default state
+  async function handleUpdate(collectionObj) {
+    const token = localStorage.getItem('token');
+    const updatedCollection = await updateCollectionDB(targetCollection._id, token, collectionObj);
+
+    closeMenu();
+
+    if (updatedCollection.error) {
+      //error text
+      //setError({ serverError });
+      console.log(updatedCollection.error);
+    } else {
+      dispatch(updateDefaultState(updatedCollection));
+
+
+      //update session storage (add new collection and remove current default value)
+      const updatedCollections =  updateCollectionsStorage(collections, updatedCollection);
+      sessionStorage.setItem('collections', JSON.stringify(updatedCollections));
+      console.log(updatedCollection)
+    }
   }
 
   //edit collection data: title, default state
@@ -209,7 +261,8 @@ function Collections() {
               <span className='collection__def' >default</span>
             </Tooltip>
           }
-          <button type='button' className='collection__menu-btn' id="basic-button" onClick={(e) => openMenu(e, i)}>
+          {/* context menu */}
+          <button type='button' className='collection__menu-btn' id='basic-button' onClick={(e) => openMenu(e, i)}>
             <GoKebabHorizontal size='22px' color='#fff' />
           </button>
           <Menu
@@ -226,14 +279,29 @@ function Collections() {
             <MenuItem onClick={openDeleteForm}>Delete</MenuItem>
             <MenuItem onClick={() => handleUpdate({ default: true })}>Set as default</MenuItem>
           </Menu>
+
+          {/* pattern and collection name */}
           <div className='collection__overlay' style={getStyle(i.style.colors).find((s) => s.pattern === i.style.pattern).style}></div>
           <h3 className='collection__title' onClick={() => console.log(i._id)}>{i.collectionName}</h3>
 
+          {/* deleting overlay */}
           {targetCollection._id === i._id && deleteFormActive &&
             <div className='collection__dlt-overlay'>
-              <p>What would you like to remove?</p>
-              <button className='collection__dlt-btn' type='button'>Collection only</button>
-              <button className='collection__dlt-btn' type='button'>Collection and words</button>
+              <p>What would you like to delete?</p>
+              <button
+                className='collection__dlt-btn'
+                type='button'
+                onClick={() => handleDeleteCollection(false)} //false - don't delete words
+              >
+                Collection only
+              </button>
+              <button
+                className='collection__dlt-btn'
+                type='button'
+                onClick={() => handleDeleteCollection(true)} //true - delete collection and words
+              >
+                  Collection and words
+                </button>
               <CloseBtn
                 width='13px'
                 color='#fff'

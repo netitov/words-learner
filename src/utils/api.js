@@ -9,7 +9,7 @@ async function fetchAPI(path, method, headers, body) {
         'Accept': 'application/json',
         ...headers
       },
-      body: method === 'GET' ? undefined : JSON.stringify(body)
+      body: method === 'GET' ? undefined : JSON.stringify(body) //body must be an object
     };
 
     const response = await fetch(`${SERVER_API}/${path}`, options);
@@ -118,7 +118,19 @@ export async function addToList(arr, token) {
 //delete word from user learning list
 export async function deleteFromList(word, token) {
   const headers = {'Authorization': `Bearer ${token}`};
-  return fetchAPI(`userwords/${word}`, 'POST', headers);
+  return fetchAPI(`userwords/${word}`, 'DELETE', headers);
+}
+
+//delete array of words from user learning list
+export async function deleteArrayFromListDB(collectionId, token) {
+  const headers = {'Authorization': `Bearer ${token}`};
+  return fetchAPI('userwords', 'DELETE', headers, collectionId);
+}
+
+//delete array of words from user learning list
+export async function updateListDB(collectionId, token) {
+  const headers = {'Authorization': `Bearer ${token}`};
+  return fetchAPI('userwords', 'PATCH', headers, collectionId);
 }
 
 //get user learning list
@@ -139,13 +151,13 @@ export async function getCollections(token) {
 }
 
 //creare user colletions of words
-export async function createCollection(collectionObj, token) {
+export async function createCollectionDB(collectionObj, token) {
   const headers = {'Authorization': `Bearer ${token}`};
   return fetchAPI('collections', 'POST', headers, collectionObj);
 }
 
 //delete user collection
-export async function deleteCollection(collectionId, token) {
+export async function deleteCollectionDB(collectionId, token) {
   const headers = {'Authorization': `Bearer ${token}`};
   return fetchAPI(`collections/${collectionId}`, 'DELETE', headers);
 }

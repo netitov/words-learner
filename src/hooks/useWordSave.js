@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addNewWords, deleteWord } from '../store/userWords';
-import { addToList, deleteFromList } from '../utils/api';
+import { addNewWords, deleteWord, deleteWordsArray, updateWordState } from '../store/userWords';
+import { addToList, deleteFromList, deleteArrayFromListDB, updateListDB } from '../utils/api';
 import { useSelector } from 'react-redux';
 
 function useWordSave() {
@@ -21,8 +21,8 @@ function useWordSave() {
   async function saveWord(obj) {
     const arr = [obj];
     const response = await addToList(arr, token);
-    if (response.err) {
-      return response.err;
+    if (response.error) {
+      return response.error;
     } else {
       dispatch(addNewWords(arr));
       sessionStorage.setItem('userWords', JSON.stringify([...userWords, ...arr]));
@@ -30,11 +30,11 @@ function useWordSave() {
     }
   };
 
-  //save word in user learning list
+  //remove word from user learning list
   async function removeWord(word) {
     const response = await deleteFromList(word, token);
-    if (response.err) {
-      return response.err;
+    if (response.error) {
+      return response.error;
     } else {
       //update state
       dispatch(deleteWord(word));
@@ -45,6 +45,42 @@ function useWordSave() {
 
       return response.data;
     }
+  };
+
+  //remove word list from user learning list
+  async function removeWordList(collectionId) {
+    const deletedWords = await deleteArrayFromListDB({ collectionId }, token);
+    if (deletedWords.error) {
+      return deletedWords.error;
+    } else if (deletedWords.length > 0) {
+      //update state
+      dispatch(deleteWordsArray(deletedWords));
+      //update storage
+      const wordsStorage = JSON.parse(sessionStorage.getItem('userWords'));
+      const wordsToDelete = deletedWords.map(wordObj => wordObj._id);
+      const updatedUserWordsArray = wordsStorage.filter(word => !wordsToDelete.includes(word._id));
+      sessionStorage.setItem('userWords', JSON.stringify(updatedUserWordsArray));
+    }
+    return deletedWords;
+  };
+
+  async function updateCollectionData(collectionId) {
+    const updatedWords = await updateListDB({ collectionId }, token);
+    if (updatedWords.error) {
+      console.log(updatedWords.error);
+    } else if (updatedWords.length > 0) {
+      //update state
+      dispatch(updateWordState(updatedWords));
+      //update storage
+      const wordsStorage = JSON.parse(sessionStorage.getItem('userWords'));
+      const wordsToUpdate = updatedWords.map(wordObj => wordObj._id);
+      const newList = wordsStorage.map(wordObj => {
+        const matchingUpdatedWords = wordsToUpdate.find(i => i._id === wordObj._id);
+        return matchingUpdatedWords ? matchingUpdatedWords : wordObj;
+      });
+      sessionStorage.setItem('userWords', JSON.stringify(newList));
+    }
+    return updatedWords;
   };
 
   function closeSnackbar() {
@@ -81,7 +117,7 @@ function useWordSave() {
     }
   }
 
-  return { handleWordList, closeSnackbar, checkList, isChecked, snackbarActive, removeWord } ;
+  return { handleWordList, closeSnackbar, checkList, isChecked, snackbarActive, removeWord, removeWordList, updateCollectionData } ;
 }
 
 export default useWordSave;
