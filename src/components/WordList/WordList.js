@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Spinner from '../Spinner/Spinner';
 import Languages from '../Languages/Languages';
 import { useSelector } from 'react-redux';
@@ -16,6 +16,8 @@ function WordList() {
   const [words, setWords] = useState([]);
 
   const pathRef = useRef();
+  const path = useLocation().pathname;
+  const currentCollectionId = path.substring(path.lastIndexOf('/') + 1);
 
   const currentInputLang = useSelector((state) => state.inputLang);
   const currentOutputLang = useSelector((state) => state.outputLang);
@@ -47,6 +49,8 @@ function WordList() {
   //set initial rows
   useEffect(() => {
     setWords(userWords.slice(0, initRows));
+    //const test = userWords.filter((i) => i.source.includes(currentCollectionId))
+    //console.log(test)
   }, [userWords])
 
   //lazy loading of table rows

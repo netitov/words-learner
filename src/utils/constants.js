@@ -72,8 +72,6 @@ export const accountNav = [
   },
 ];
 
-
-
 export function getStyle(obj) {
 
   const { frontColor, backColor } = obj;

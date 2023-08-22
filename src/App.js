@@ -159,6 +159,7 @@ function App() {
       }
     } else {
       //if collections are in storage - use them
+      console.log(storage)
       dispatch(setCollections(storage));
     }
   }

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { getStyle, tooltipOption } from '../../utils/constants';
 import { BsBookmarksFill } from 'react-icons/bs';
 import { GoKebabHorizontal } from 'react-icons/go';
@@ -7,8 +8,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { addCollection, updateCollectionState, updateDefaultState, deleteCollection } from '../../store/collections';
 import { createCollectionDB, deleteCollectionDB, updateCollectionDB } from '../../utils/api';
 import Tooltip from '@mui/material/Tooltip';
-import Menu from '@mui/material/Menu';
+import Popper from '@mui/material/Popper';
+import Paper from '@mui/material/Paper';
 import MenuItem from '@mui/material/MenuItem';
+import MenuList from '@mui/material/MenuList';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Grow from '@mui/material/Grow';
 import useWordSave from '../../hooks/useWordSave';
 
 function Collections() {
@@ -21,6 +26,8 @@ function Collections() {
   const [targetCollection, setTargetCollection] = useState({});
   const [deleteFormActive, setDeleteFormActive] = useState(false);
 
+  const [open, setOpen] = React.useState(false);
+
   const collections = useSelector((state) => state.collections);
   const dispatch = useDispatch();
 
@@ -28,6 +35,7 @@ function Collections() {
   const { removeWordList, updateCollectionData } = useWordSave();
 
   const menuActive = Boolean(anchorEl);
+  const anchorRef = React.useRef(null);
 
   const patternColors = [
     {
@@ -46,14 +54,16 @@ function Collections() {
 
   function openMenu(e, i) {
     setAnchorEl(e.target);
+    setOpen(true);
     //set collection where menu was opened
     setTargetCollection(i);
     //drop preveious form
     setDeleteFormActive(false);
   }
 
-  function closeMenu() {
+  function closeMenu(e) {
     setAnchorEl(null);
+    setOpen(false);
   }
 
   //open form for creating new collection
@@ -67,7 +77,7 @@ function Collections() {
   }
 
   //close form for new collection and clear input
-  function closeForm() {
+  function closeForm(e) {
     setFormAсtive(false);
     setCollectName('');
   }
@@ -124,9 +134,9 @@ function Collections() {
     }
   }
 
-  function openDeleteForm() {
+  function openDeleteForm(e) {
     setDeleteFormActive(true);
-    closeMenu();
+    closeMenu(e);
   }
 
   function closeDeleteForm() {
@@ -225,10 +235,10 @@ function Collections() {
       </div>
 
       {/* collection: all saved words */}
-      <div className='collection collection_all'>
+      <Link className='collection collection_all' to='/account/words'>
         <BsBookmarksFill className='collection__bm-icon'/>
         <h3 className='collection__title collection__title_all'>All saved words</h3>
-      </div>
+      </Link>
 
       {/* form for new collection */}
       <div className={`collection collections__form${formActive ? ' collections__form_active' : ''}`} >
@@ -255,34 +265,62 @@ function Collections() {
 
       {/* created collections by user */}
       {collections.map((i) => (
-        <div className='collection' key={i._id} >
-          {i.default &&
-            <Tooltip title='Words will be saved in this collection by default' componentsProps={{ tooltip: { sx: tooltipOption, } }}>
-              <span className='collection__def' >default</span>
-            </Tooltip>
-          }
-          {/* context menu */}
-          <button type='button' className='collection__menu-btn' id='basic-button' onClick={(e) => openMenu(e, i)}>
-            <GoKebabHorizontal size='22px' color='#fff' />
-          </button>
-          <Menu
-            id='ctx-menu'
-            anchorEl={anchorEl}
-            open={menuActive}
-            onClose={closeMenu}
-            className='collection__cxt-menu'
-            MenuListProps={{
-              'aria-labelledby': 'ctx-menu',
-            }}
-          >
-            <MenuItem onClick={closeMenu}>Open collection</MenuItem>
-            <MenuItem onClick={openDeleteForm}>Delete</MenuItem>
-            <MenuItem onClick={() => handleUpdate({ default: true })}>Set as default</MenuItem>
-          </Menu>
+        <div className='collection' key={i._id}>
+          <Link to={`/account/words/collections/${i._id}`}>
+            {i.default &&
+              <Tooltip title='Words will be saved in this collection by default' componentsProps={{ tooltip: { sx: tooltipOption, } }}>
+                <span className='collection__def' >default</span>
+              </Tooltip>
+            }
+            {/* pattern and collection name */}
+            <div className='collection__overlay' style={getStyle(i.style.colors).find((s) => s.pattern === i.style.pattern).style}></div>
+            <h3 className='collection__title' onClick={() => console.log(i._id)}>{i.collectionName}</h3>
+          </Link>
 
-          {/* pattern and collection name */}
-          <div className='collection__overlay' style={getStyle(i.style.colors).find((s) => s.pattern === i.style.pattern).style}></div>
-          <h3 className='collection__title' onClick={() => console.log(i._id)}>{i.collectionName}</h3>
+          {/* context menu */}
+          <div>
+            <button
+              type='button'
+              className='collection__menu-btn'
+              id='ctx-menu-btn'
+              ref={anchorRef}
+              onClick={(e) => openMenu(e, i)}
+            >
+              <GoKebabHorizontal size='22px' color='#fff' />
+            </button>
+            <Popper
+              open={open}
+              anchorEl={anchorRef.current}
+              role={undefined}
+              placement="bottom-start"
+              transition
+              disablePortal
+            >
+              {({ TransitionProps, placement }) => (
+                <Grow
+                  {...TransitionProps}
+                  style={{
+                    transformOrigin:
+                      placement === 'bottom-start' ? 'left top' : 'left bottom',
+                  }}
+                >
+                  <Paper className='collection__cxt-menu'>
+                    <ClickAwayListener onClickAway={closeMenu}>
+                      <MenuList
+                        autoFocusItem={open}
+                        id='composition-menu'
+                        aria-labelledby='composition-button'
+                      >
+                        <MenuItem onClick={closeMenu}>Open collection</MenuItem>
+                        <MenuItem onClick={openDeleteForm}>Delete</MenuItem>
+                        <MenuItem onClick={() => handleUpdate({ default: true })}>Set as default</MenuItem>
+                      </MenuList>
+                    </ClickAwayListener>
+                  </Paper>
+                </Grow>
+              )}
+            </Popper>
+          </div>
 
           {/* deleting overlay */}
           {targetCollection._id === i._id && deleteFormActive &&

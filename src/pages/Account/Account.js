@@ -58,6 +58,7 @@ function Account() {
           <Route path='/frequency' element={<Frequency account={true} />} />
           <Route path='/words' element={<WordList />} />
           <Route path='/words/collections' element={<Collections />} />
+          <Route path='/words/collections/*' element={<WordList />} />
           <Route path='/*' element={<CardNav />} />
         </Routes>
       </div>
