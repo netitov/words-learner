@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { getStyle, tooltipOption } from '../../utils/constants';
+import { getStyle, tooltipOption, errorMessages } from '../../utils/constants';
 import { BsBookmarksFill } from 'react-icons/bs';
 import { GoKebabHorizontal } from 'react-icons/go';
 import CloseBtn from '../CloseBtn/CloseBtn';
@@ -15,6 +15,7 @@ import MenuList from '@mui/material/MenuList';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Grow from '@mui/material/Grow';
 import useWordSave from '../../hooks/useWordSave';
+import { showError, closeError } from '../../store/error';
 
 function Collections() {
 
@@ -26,7 +27,7 @@ function Collections() {
   const [targetCollection, setTargetCollection] = useState({});
   const [deleteFormActive, setDeleteFormActive] = useState(false);
 
-  const [menuActive, setMenuActive] = React.useState(false);
+  const [menuActive, setMenuActive] = useState(false);
 
   const collections = useSelector((state) => state.collections);
   const dispatch = useDispatch();
@@ -106,7 +107,13 @@ function Collections() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    if (collectName) {
+    //check if user entered a collection name
+    if (!collectName) {
+      dispatch(showError('Please fill in a collection name'));
+      //check if collection already taken, show error
+    } else if (collections.some(i => i.collectionName === collectName)) {
+      dispatch(showError('Sorry, this name is already taken. Please try another one'));
+    } else {
       const token = localStorage.getItem('token');
       const collectObj = {
         collectionName: collectName,
@@ -117,8 +124,9 @@ function Collections() {
       //create collection in DB
       const createdCollection = await createCollectionDB(collectObj, token);
 
+      //handle error
       if (createdCollection.error) {
-        return createdCollection.error;
+        dispatch(showError(errorMessages.general));
       } else {
         closeForm();
 
@@ -147,8 +155,9 @@ function Collections() {
     const deletedCollection = await deleteCollectionDB(targetCollection._id, token);
 
     if (deletedCollection.error) {
-      console.log(deletedCollection.error);
       //error handler - display error snack
+      dispatch(showError(errorMessages.general));
+
     } else {
       //update state and storage
       dispatch(deleteCollection(deletedCollection._id));
@@ -217,7 +226,7 @@ function Collections() {
   }
 
   return (
-    <div className='collections' >
+    <div className='collections'>
 
       {/* btn: add new collection */}
       <div className='collection-new'>
@@ -356,6 +365,14 @@ function Collections() {
         </div>
       ))}
 
+      {/* <Snackbar
+        snackbarActive={true}
+        elClass='collections__snack'
+        closeSnack={closeError}
+        transformPos='_left'
+        closeBtnColor='#37636c'
+        text={'Something went wrong'}
+      /> */}
 
     </div>
   )

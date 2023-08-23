@@ -174,3 +174,7 @@ export function getStyle(obj) {
   ];
   return patterns;
 }
+
+export const errorMessages = {
+  general: 'Something went wrong 😞. Please try again later'
+}

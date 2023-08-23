@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { addNewWords, deleteWord, deleteWordsArray, updateWordState, setUserWords } from '../store/userWords';
 import { addToList, deleteFromList, deleteArrayFromListDB, updateListDB } from '../utils/api';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { showError } from '../store/error';
+import { errorMessages } from '../utils/constants';
 
 function useWordSave() {
-  const [snackbarActive, setSnackbarActive] = useState(false);
+  const [snackbarActive, setSnackbarActive] = useState(false);//for error display
   const [isChecked, setIsChecked] = useState(false);
 
   const dispatch = useDispatch();
@@ -22,6 +23,7 @@ function useWordSave() {
     const arr = [obj];
     const addedWords = await addToList(arr, token);
     if (addedWords.error) {
+      dispatch(showError(errorMessages.general));
       return addedWords.error;
     } else {
       dispatch(addNewWords(addedWords));
@@ -34,6 +36,7 @@ function useWordSave() {
   async function removeWord(word) {
     const response = await deleteFromList(word, token);
     if (response.error) {
+      dispatch(showError(errorMessages.general));
       return response.error;
     } else {
       //update state
@@ -51,6 +54,7 @@ function useWordSave() {
   async function removeWordList(collectionId) {
     const updatedWords = await deleteArrayFromListDB({ collectionId }, token);
     if (updatedWords.error) {
+      dispatch(showError(errorMessages.general));
       return updatedWords.error;
     } else if (updatedWords.length > 0) {
       //update storage and state
@@ -63,7 +67,8 @@ function useWordSave() {
   async function updateCollectionData(collectionId) {
     const updatedWords = await updateListDB({ collectionId }, token);
     if (updatedWords.error) {
-      console.log(updatedWords.error);
+      dispatch(showError(errorMessages.general));
+      return updatedWords.error;
     } else if (updatedWords.length > 0) {
       //update storage and state
       dispatch(setUserWords(updatedWords));

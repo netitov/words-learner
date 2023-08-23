@@ -12,6 +12,7 @@ import randomWordsReducer from './randomWords';
 import quizReducer from './quiz';
 import filtersReducer from './filters';
 import collectionsReducer from './collections';
+import errorReducer from './error';
 
 const store = configureStore({
   reducer: {
@@ -27,6 +28,7 @@ const store = configureStore({
     quiz: quizReducer,
     filters: filtersReducer,
     collections: collectionsReducer,
+    error: errorReducer,
     devTools: process.env.NODE_ENV !== 'production',
   },
 });

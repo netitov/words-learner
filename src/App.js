@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import Home from './pages/Home/Home';
 import LoginPage from './pages/Auth/LoginPage';
@@ -17,6 +17,8 @@ import { setRandomWords } from './store/randomWords';
 import { setUserWords } from './store/userWords';
 import { setCollections } from './store/collections';
 import useRandomWordsFetch from './hooks/useRandomWordsFetch';
+import ErrorPopup from './components/ErrorPopup/ErrorPopup';
+import { AnimatePresence } from 'framer-motion';
 
 
 function App() {
@@ -39,6 +41,7 @@ function App() {
   const randomWordsInLoading = useSelector((state) => state.randomWords.isLoading);//remove?
   const randomWords = useSelector((state) => state.randomWords.data);
   const userWords = useSelector((state) => state.userWords);
+  const errorMessage = useSelector((state) => state.error.errorMessage);
 
 
   async function tokenCheck(token) {
@@ -210,6 +213,10 @@ function App() {
         <div className={`page__loading-overlay${isLoading ? ' page__loading-overlay_active' : ''}`}>
           <Spinner isLoading={isLoading}/>
         </div>
+        <AnimatePresence>
+          { errorMessage && <ErrorPopup /> }
+        </AnimatePresence>
+
     </div>
   </div>
   )

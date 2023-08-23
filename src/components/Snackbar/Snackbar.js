@@ -14,7 +14,7 @@ function Snackbar({ snackbarActive, elClass, text, children, closeSnack, closeBt
       <CloseBtn
         width='0.7em'
         color={closeBtnColor || '#fff'}
-        strokeWidth='5px'
+        strokeWidth='7px'
         onBtnClick={closeSnack}
       />
 

@@ -66,7 +66,7 @@
   transition: all 0.3s;
 }
 
-.collection:hover .collection__title {
+.collection:hover .collection__title:not(input) {
   color: var(--prime-yellow);
   transform: translateY(-5px);
 }

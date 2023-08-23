@@ -1,6 +1,5 @@
-import { configureStore, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
-// Изначальное состояние
 const initialState = {
   isLoggedIn: false,
   userData: {
@@ -9,7 +8,6 @@ const initialState = {
   },
 };
 
-// Создаем slice (кусок) состояния с помощью createSlice
 const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -25,6 +23,5 @@ const userSlice = createSlice({
   },
 });
 
-// Экспортируем экшены из slice
 export const { login, logout } = userSlice.actions;
 export default userSlice.reducer;

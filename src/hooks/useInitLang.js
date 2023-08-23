@@ -31,6 +31,5 @@ export function useInitLang() {
     localStorage.setItem('userLang', JSON.stringify(activeLangOutput));
   }
 
-  // Если вам не нужно возвращать функции, просто верните пустой объект или null
   return { setInitLang };
 }
