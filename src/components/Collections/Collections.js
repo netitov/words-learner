@@ -26,16 +26,14 @@ function Collections() {
   const [targetCollection, setTargetCollection] = useState({});
   const [deleteFormActive, setDeleteFormActive] = useState(false);
 
-  const [open, setOpen] = React.useState(false);
+  const [menuActive, setMenuActive] = React.useState(false);
 
   const collections = useSelector((state) => state.collections);
   const dispatch = useDispatch();
 
-
   const { removeWordList, updateCollectionData } = useWordSave();
 
-  const menuActive = Boolean(anchorEl);
-  const anchorRef = React.useRef(null);
+  const anchorRef = useRef(null);
 
   const patternColors = [
     {
@@ -52,9 +50,9 @@ function Collections() {
     }
   ];
 
-  function openMenu(e, i) {
-    setAnchorEl(e.target);
-    setOpen(true);
+  function openMenu(i, e) {
+    setAnchorEl(e.currentTarget);
+    setMenuActive(true);
     //set collection where menu was opened
     setTargetCollection(i);
     //drop preveious form
@@ -63,7 +61,7 @@ function Collections() {
 
   function closeMenu(e) {
     setAnchorEl(null);
-    setOpen(false);
+    setMenuActive(false);
   }
 
   //open form for creating new collection
@@ -77,7 +75,7 @@ function Collections() {
   }
 
   //close form for new collection and clear input
-  function closeForm(e) {
+  function closeForm() {
     setFormAсtive(false);
     setCollectName('');
   }
@@ -134,9 +132,9 @@ function Collections() {
     }
   }
 
-  function openDeleteForm(e) {
+  function openDeleteForm() {
     setDeleteFormActive(true);
-    closeMenu(e);
+    closeMenu();
   }
 
   function closeDeleteForm() {
@@ -241,31 +239,34 @@ function Collections() {
       </Link>
 
       {/* form for new collection */}
-      <div className={`collection collections__form${formActive ? ' collections__form_active' : ''}`} >
-        <div className='collection__overlay' style={formStyle}></div>
-        <form className='collection__form' onSubmit={handleSubmit}>
-          <input
-            type='text'
-            className='collection__title collection__title_input'
-            placeholder='enter collection name'
-            value={collectName}
-            onChange={(e) => setCollectName(e.target.value)}
-            maxLength='55'
+      {formActive && (
+        <div className={`collection collections__form${formActive ? ' collections__form_active' : ''}`}
+        >
+          <div className='collection__overlay' style={formStyle}></div>
+          <form className='collection__form' onSubmit={handleSubmit}>
+            <input
+              type='text'
+              className='collection__title collection__title_input'
+              placeholder='enter collection name'
+              value={collectName}
+              onChange={(e) => setCollectName(e.target.value)}
+              maxLength='55'
+            />
+            <button type='submit' className='collection__btn'>Create collection</button>
+          </form>
+          <CloseBtn
+            width='13px'
+            color='#fff'
+            strokeWidth='13'
+            onBtnClick={closeForm}
+            elClass='collection__close-btn'
           />
-          <button type='submit' className='collection__btn'>Create collection</button>
-        </form>
-        <CloseBtn
-          width='13px'
-          color='#fff'
-          strokeWidth='13'
-          onBtnClick={closeForm}
-          elClass='collection__close-btn'
-        />
-      </div>
+        </div>
+      )}
 
       {/* created collections by user */}
       {collections.map((i) => (
-        <div className='collection' key={i._id}>
+        <div className='collection' key={i._id} >
           <Link to={`/account/words/collections/${i._id}`}>
             {i.default &&
               <Tooltip title='Words will be saved in this collection by default' componentsProps={{ tooltip: { sx: tooltipOption, } }}>
@@ -274,7 +275,7 @@ function Collections() {
             }
             {/* pattern and collection name */}
             <div className='collection__overlay' style={getStyle(i.style.colors).find((s) => s.pattern === i.style.pattern).style}></div>
-            <h3 className='collection__title' onClick={() => console.log(i._id)}>{i.collectionName}</h3>
+            <h3 className='collection__title'>{i.collectionName}</h3>
           </Link>
 
           {/* context menu */}
@@ -283,43 +284,45 @@ function Collections() {
               type='button'
               className='collection__menu-btn'
               id='ctx-menu-btn'
-              ref={anchorRef}
-              onClick={(e) => openMenu(e, i)}
+              /* ref={anchorEl} */
+              onClick={(e) => openMenu(i, e)}
             >
               <GoKebabHorizontal size='22px' color='#fff' />
             </button>
-            <Popper
-              open={open}
-              anchorEl={anchorRef.current}
-              role={undefined}
-              placement="bottom-start"
-              transition
-              disablePortal
-            >
-              {({ TransitionProps, placement }) => (
-                <Grow
-                  {...TransitionProps}
-                  style={{
-                    transformOrigin:
-                      placement === 'bottom-start' ? 'left top' : 'left bottom',
-                  }}
-                >
-                  <Paper className='collection__cxt-menu'>
-                    <ClickAwayListener onClickAway={closeMenu}>
-                      <MenuList
-                        autoFocusItem={open}
-                        id='composition-menu'
-                        aria-labelledby='composition-button'
-                      >
-                        <MenuItem onClick={closeMenu}>Open collection</MenuItem>
-                        <MenuItem onClick={openDeleteForm}>Delete</MenuItem>
-                        <MenuItem onClick={() => handleUpdate({ default: true })}>Set as default</MenuItem>
-                      </MenuList>
-                    </ClickAwayListener>
-                  </Paper>
-                </Grow>
-              )}
-            </Popper>
+            {targetCollection._id === i._id && (
+              <Popper
+                open={menuActive}
+                anchorEl={anchorEl}
+                role={undefined}
+                placement='bottom-start'
+                transition
+                disablePortal
+              >
+                {({ TransitionProps, placement }) => (
+                  <Grow
+                    {...TransitionProps}
+                    style={{
+                      transformOrigin:
+                        placement === 'bottom-start' ? 'left top' : 'left bottom',
+                    }}
+                  >
+                    <Paper className='collection__cxt-menu'>
+                      <ClickAwayListener onClickAway={closeMenu}>
+                        <MenuList
+                          autoFocusItem={menuActive}
+                          id='composition-menu'
+                          aria-labelledby='composition-button'
+                        >
+                          <MenuItem onClick={closeMenu}>Open collection</MenuItem>
+                          <MenuItem onClick={openDeleteForm}>Delete</MenuItem>
+                          <MenuItem onClick={() => handleUpdate({ default: true })}>Set as default</MenuItem>
+                        </MenuList>
+                      </ClickAwayListener>
+                    </Paper>
+                  </Grow>
+                )}
+              </Popper>
+            )}
           </div>
 
           {/* deleting overlay */}
@@ -350,9 +353,9 @@ function Collections() {
             </div>
           }
 
-
         </div>
       ))}
+
 
     </div>
   )

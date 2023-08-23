@@ -14,6 +14,7 @@ function WordList() {
   const [langListActive, setLangListActive] = useState({ type: '', value: false });
   const [activeLangBtn, setActiveLangBtn] = useState({ lang: '', type: '' });
   const [words, setWords] = useState([]);
+  const [initWords, setInitWords] = useState([]);
 
   const pathRef = useRef();
   const path = useLocation().pathname;
@@ -48,34 +49,45 @@ function WordList() {
 
   //set initial rows
   useEffect(() => {
-    setWords(userWords.slice(0, initRows));
-    //const test = userWords.filter((i) => i.source.includes(currentCollectionId))
-    //console.log(test)
-  }, [userWords])
+    if (currentCollectionId === 'words') {
+      setWords(userWords.slice(0, initRows));
+      setInitWords(userWords);
+    } else {
+      const wordsFromCurrentCollection = userWords.filter((i) => i.source.some(el => el.collectionId === currentCollectionId));
+      setWords(wordsFromCurrentCollection.slice(0, initRows));
+      setInitWords(wordsFromCurrentCollection);
+    }
+
+  }, [userWords, path])
 
   //lazy loading of table rows
   useEffect(() => {
-    function displayMoreRows() {
-      const elementPos = pathRef.current.getBoundingClientRect().top;
-      const elementHeight = pathRef.current.offsetHeight;
-      const windowHeight = window.innerHeight;
-      //run function before last element scrolled and if not all rows displayed
-      if ((elementPos < windowHeight - elementHeight + rowHeight) && (words.length < userWords.length)) {
-        setWords(prevWords => {
-          const newVisibleRowCount = Math.min((prevWords.length + rowsStep), userWords.length);
-          return userWords.slice(0, newVisibleRowCount);
-        });
-      }
-    }
+    if (initWords.length > initRows) {
 
-    window.addEventListener('scroll', displayMoreRows);
-    return () => window.removeEventListener('scroll', displayMoreRows);
-  }, [userWords, words]);
+        function displayMoreRows() {
+        const elementPos = pathRef.current.getBoundingClientRect().top;
+        const elementHeight = pathRef.current.offsetHeight;
+        const windowHeight = window.innerHeight;
+        //run function before last element scrolled and if not all rows displayed
+        if ((elementPos < windowHeight - elementHeight + rowHeight) && (words.length < userWords.length)) {
+          setWords(prevWords => {
+            const newVisibleRowCount = Math.min((prevWords.length + rowsStep), userWords.length);
+            return initWords.slice(0, newVisibleRowCount);
+          });
+        }
+      }
+
+
+      window.addEventListener('scroll', displayMoreRows);
+      return () => window.removeEventListener('scroll', displayMoreRows);
+    }
+  }, [userWords, initWords]);
 
 
   return (
     <div className='wordlist'>
 
+      {/* buttons filters and routes */}
       <div className='wordlist__btn-container'>
         <Link to='/account/translator' className='wordlist__btn'>
           <svg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'>
@@ -98,21 +110,22 @@ function WordList() {
         </button>
       </div>
 
+      {/* words table */}
       <table className='wordlist__table wordlist-table' ref={pathRef}>
         <thead>
           <tr>
             <th className='wordlist-table__th wordlist-table__th_checkbox'>
               {/* list of available languages */}
-              <Languages
+              {/* <Languages
                 languages={languages}
                 isActive={langListActive}
                 activeBtn={activeLangBtn}
                 commentActive={true}
                 closeLangList={closeLangList}
-              />
+              /> */}
             </th>
             <th>word</th>
-            <th className='wordlist-table__th wordlist-table__th_btn' /* onClick={() => props.openLangListWords('random')} */
+            <th className='wordlist-table__th wordlist-table__th_btn'
               onClick={toggleLangList}
             >
               translation ({currentInputLang.code === 'en' ? currentOutputLang.code : currentInputLang.code})
@@ -143,7 +156,20 @@ function WordList() {
               <td className='wordlist-table__td wordlist-table__td_emph'>{i.word}</td>
               <td>{i.translation}</td>
               <td className='wordlist-table__td'>
-                <span className='wordlist-table__tag'>Some book</span>
+                {/* active reference to other collection if current location is not qual*/}
+                {i.source.map((s) => (
+                  s.collectionId === currentCollectionId ||
+                  (s.collectionId === '' && currentCollectionId === 'words') ? (
+                    <span className='wordlist-table__tag' key={s.collectionId}>
+                      {!s.collectionName || s.collectionName === '' ? 'All words' : s.collectionName}
+                    </span>
+                  ) : (
+                    <Link className='wordlist-table__tag' to={`/account/words/collections/${s.collectionId}`} key={s.collectionId}>
+                      {!s.collectionName || s.collectionName === '' ? 'All words' : s.collectionName}
+                    </Link>
+                  )
+                ))}
+
               </td>
               <td>
                 <div className='wordlist-table__progress'>

@@ -1,17 +1,22 @@
 .wordlist {
-  flex: 1 0 auto;
+  /* flex: 1 0 auto; */
   position: relative;
   animation: fade-in 0.5s ease-out;
+
+  width: 100%;
 }
 
 .wordlist-table {
   width: 100%;
   min-width: 400px;
+  max-width: 900px;
   color: #fff;
 
   background-color: var(--darker-blue);
   border-radius: 15px;
   padding: 10px;
+
+  table-layout: fixed;
 }
 
 .wordlist-table__row {
@@ -115,6 +120,16 @@
   z-index: 2;
 }
 
+.wordlist-table th:first-of-type {
+  width: 70px;
+}
+
+
+/* .wordlist-table td:first-of-type {
+  width: 50px;
+  display: block;
+} */
+
 .wordlist-table tbody tr {
   background-color: var(--prime-blue);
 }
@@ -155,6 +170,11 @@
   background-color: var(--bck-svg-color);
   color: var(--super-light-green);
   font-size: 0.9em;
+  transition: background-color 0.3s;
+}
+
+a.wordlist-table__tag:hover {
+  background-color: #8cb9b970;
 }
 
 .wordlist-table__progress {

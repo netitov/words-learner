@@ -13,9 +13,9 @@ function useWordSave() {
   const currentInputLang = useSelector((state) => state.inputLang);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const userWords = useSelector((state) => state.userWords);
+  const collections = useSelector((state) => state.collections);
 
   const token = localStorage.getItem('token');
-
 
   //save word in user learning list
   async function saveWord(obj) {
@@ -107,11 +107,12 @@ function useWordSave() {
       await removeWord(word);
     } else {
       setIsChecked(true);
+      const sourceData = collections.find(i => i.default) || { _id: '', collectionName: '' };
       const obj = {
         word,
         translation: userLang.lang === currentInputLang.lang ? word : translation,
         translationLang: userLang.code,
-        source: ['-']
+        source: [{ collectionId: sourceData._id, collectionName: sourceData.collectionName }]
       }
       await saveWord(obj);
     }

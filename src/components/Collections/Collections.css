@@ -230,6 +230,10 @@ div.collection__cxt-menu li:hover {
   background-color: rgb(95 95 95);
 }
 
+.collection .MuiPopper-root {
+  z-index: 1;
+}
+
 .collection__dlt-overlay {
   position: absolute;
   top: 0;
