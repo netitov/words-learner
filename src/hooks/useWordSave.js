@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addNewWords, deleteWord, deleteWordsArray, updateWordState } from '../store/userWords';
+import { addNewWords, deleteWord, deleteWordsArray, updateWordState, setUserWords } from '../store/userWords';
 import { addToList, deleteFromList, deleteArrayFromListDB, updateListDB } from '../utils/api';
 import { useSelector } from 'react-redux';
 
@@ -20,13 +20,13 @@ function useWordSave() {
   //save word in user learning list
   async function saveWord(obj) {
     const arr = [obj];
-    const response = await addToList(arr, token);
-    if (response.error) {
-      return response.error;
+    const addedWords = await addToList(arr, token);
+    if (addedWords.error) {
+      return addedWords.error;
     } else {
-      dispatch(addNewWords(arr));
-      sessionStorage.setItem('userWords', JSON.stringify([...userWords, ...arr]));
-      return response.data;
+      dispatch(addNewWords(addedWords));
+      sessionStorage.setItem('userWords', JSON.stringify([...userWords, ...addedWords]));
+      return addedWords;
     }
   };
 
@@ -49,19 +49,15 @@ function useWordSave() {
 
   //remove word list from user learning list
   async function removeWordList(collectionId) {
-    const deletedWords = await deleteArrayFromListDB({ collectionId }, token);
-    if (deletedWords.error) {
-      return deletedWords.error;
-    } else if (deletedWords.length > 0) {
-      //update state
-      dispatch(deleteWordsArray(deletedWords));
-      //update storage
-      const wordsStorage = JSON.parse(sessionStorage.getItem('userWords'));
-      const wordsToDelete = deletedWords.map(wordObj => wordObj._id);
-      const updatedUserWordsArray = wordsStorage.filter(word => !wordsToDelete.includes(word._id));
-      sessionStorage.setItem('userWords', JSON.stringify(updatedUserWordsArray));
+    const updatedWords = await deleteArrayFromListDB({ collectionId }, token);
+    if (updatedWords.error) {
+      return updatedWords.error;
+    } else if (updatedWords.length > 0) {
+      //update storage and state
+      dispatch(setUserWords(updatedWords));
+      sessionStorage.setItem('userWords', JSON.stringify(updatedWords));
     }
-    return deletedWords;
+    return updatedWords;
   };
 
   async function updateCollectionData(collectionId) {
@@ -69,16 +65,9 @@ function useWordSave() {
     if (updatedWords.error) {
       console.log(updatedWords.error);
     } else if (updatedWords.length > 0) {
-      //update state
-      dispatch(updateWordState(updatedWords));
-      //update storage
-      const wordsStorage = JSON.parse(sessionStorage.getItem('userWords'));
-      const wordsToUpdate = updatedWords.map(wordObj => wordObj._id);
-      const newList = wordsStorage.map(wordObj => {
-        const matchingUpdatedWords = wordsToUpdate.find(i => i._id === wordObj._id);
-        return matchingUpdatedWords ? matchingUpdatedWords : wordObj;
-      });
-      sessionStorage.setItem('userWords', JSON.stringify(newList));
+      //update storage and state
+      dispatch(setUserWords(updatedWords));
+      sessionStorage.setItem('userWords', JSON.stringify(updatedWords));
     }
     return updatedWords;
   };
@@ -107,12 +96,12 @@ function useWordSave() {
       await removeWord(word);
     } else {
       setIsChecked(true);
-      const sourceData = collections.find(i => i.default) || { _id: '', collectionName: '' };
+      const sourceData = collections.find(i => i.default);
       const obj = {
         word,
         translation: userLang.lang === currentInputLang.lang ? word : translation,
         translationLang: userLang.code,
-        source: [{ collectionId: sourceData._id, collectionName: sourceData.collectionName }]
+        source: sourceData ? [{ collectionId: sourceData._id, collectionName: sourceData.collectionName }] : []
       }
       await saveWord(obj);
     }

@@ -20,6 +20,7 @@ import { GiSettingsKnobs } from 'react-icons/gi';
 import { useSelector, useDispatch } from 'react-redux';
 import { setFilters } from '../../store/filters';
 import useRandomWordsFetch from '../../hooks/useRandomWordsFetch';
+import useWordSave from '../../hooks/useWordSave';
 
 function RandomWords(props) {
 

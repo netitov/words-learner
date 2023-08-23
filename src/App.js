@@ -18,6 +18,7 @@ import { setUserWords } from './store/userWords';
 import { setCollections } from './store/collections';
 import useRandomWordsFetch from './hooks/useRandomWordsFetch';
 
+
 function App() {
 
   const [isLoading, setIsLoading] = useState(true);
@@ -90,7 +91,7 @@ function App() {
         word: i.word,
         translation: i.translation,
         translationLang: i.lang,
-        source: ['random']
+        source: []
       };
       return newObj;
     })
@@ -136,10 +137,10 @@ function App() {
       } else {
         //if user doesn't have saved words yet - use random words for exapmle
         const words = randomWords.slice(0, 5);
-        dispatch(setUserWords(words))
-        sessionStorage.setItem('userWords', JSON.stringify(words));
         //add random words to user list
-        await addRandomWordsToList(words);
+        const addedRandomWords = await addRandomWordsToList(words);
+        dispatch(setUserWords(addedRandomWords));
+        sessionStorage.setItem('userWords', JSON.stringify(addedRandomWords));
       }
     } else {
       //if words are in storage - use them
@@ -159,7 +160,6 @@ function App() {
       }
     } else {
       //if collections are in storage - use them
-      console.log(storage)
       dispatch(setCollections(storage));
     }
   }

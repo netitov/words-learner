@@ -83,7 +83,6 @@ function WordList() {
     }
   }, [userWords, initWords]);
 
-
   return (
     <div className='wordlist'>
 
@@ -157,19 +156,21 @@ function WordList() {
               <td>{i.translation}</td>
               <td className='wordlist-table__td'>
                 {/* active reference to other collection if current location is not qual*/}
-                {i.source.map((s) => (
-                  s.collectionId === currentCollectionId ||
-                  (s.collectionId === '' && currentCollectionId === 'words') ? (
-                    <span className='wordlist-table__tag' key={s.collectionId}>
-                      {!s.collectionName || s.collectionName === '' ? 'All words' : s.collectionName}
-                    </span>
-                  ) : (
-                    <Link className='wordlist-table__tag' to={`/account/words/collections/${s.collectionId}`} key={s.collectionId}>
-                      {!s.collectionName || s.collectionName === '' ? 'All words' : s.collectionName}
-                    </Link>
-                  )
-                ))}
-
+                {i.source?.length === 0 ? (
+                  <span className='wordlist-table__tag'>All words</span>
+                ) : (
+                  i.source?.map((s) => (
+                    s.collectionId === currentCollectionId ? (
+                      <span className='wordlist-table__tag' key={s.collectionId}>
+                        {!s.collectionName ? 'All words' : s.collectionName}
+                      </span>
+                    ) : (
+                      <Link className='wordlist-table__tag' to={`/account/words/collections/${s.collectionId}`} key={s.collectionId}>
+                        {!s.collectionName ? 'All words' : s.collectionName}
+                      </Link>
+                    )
+                  ))
+                )}
               </td>
               <td>
                 <div className='wordlist-table__progress'>
