@@ -16,6 +16,7 @@ import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Grow from '@mui/material/Grow';
 import useWordSave from '../../hooks/useWordSave';
 import { showError, closeError } from '../../store/error';
+import CollectionProgress from '../CollectionProgress/CollectionProgress';
 
 function Collections() {
 
@@ -30,6 +31,7 @@ function Collections() {
   const [menuActive, setMenuActive] = useState(false);
 
   const collections = useSelector((state) => state.collections);
+  const userWords = useSelector((state) => state.userWords);
   const dispatch = useDispatch();
 
   const { removeWordList, updateCollectionData } = useWordSave();
@@ -285,6 +287,12 @@ function Collections() {
             {/* pattern and collection name */}
             <div className='collection__overlay' style={getStyle(i.style.colors).find((s) => s.pattern === i.style.pattern).style}></div>
             <h3 className='collection__title'>{i.collectionName}</h3>
+
+            {/* learning progress data */}
+            <CollectionProgress
+              userWords={userWords}
+              collection={i}
+            />
           </Link>
 
           {/* context menu */}
@@ -364,15 +372,6 @@ function Collections() {
 
         </div>
       ))}
-
-      {/* <Snackbar
-        snackbarActive={true}
-        elClass='collections__snack'
-        closeSnack={closeError}
-        transformPos='_left'
-        closeBtnColor='#37636c'
-        text={'Something went wrong'}
-      /> */}
 
     </div>
   )
