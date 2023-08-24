@@ -1,5 +1,6 @@
 import React, { useMemo, useEffect, useState } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import Footer from '../../components/Footer/Footer';
 import AuthHeader from '../../components/AuthHeader/AuthHeader';
 import SideNav from '../../components/Navigation/SideNav';
@@ -13,12 +14,28 @@ import Collections from '../../components/Collections/Collections';
 function Account() {
 
   const [translatorHeight, setTranslatorHeight] = useState(400);
+  const [collectLocation, setCollectLocation] = useState('');
   const location = useLocation().pathname;
+  const collectionPattern = /^\/account\/words\/collections\/.*/;
+
+  const collections = useSelector((state) => state.collections);
 
   //current route for display in heading and navigation
   const getCurrentElement = useMemo(() => {
       return accountNav.find((i) => location.startsWith(i.route));
   }, [location]);
+
+
+  //update current collection
+  useEffect(() => {
+    if (collectionPattern.test(location)) {
+      const currentCollectionId = location.substring(location.lastIndexOf('/') + 1);
+      setCollectLocation(collections.find((i) => i._id === currentCollectionId)?.collectionName);
+    } else if (collectLocation !== '') {
+      setCollectLocation('');
+    }
+  }, [location, collections]);
+
 
   //expand translation container for fitting languages box
   function handleTranslatorHeight(height) {
@@ -29,13 +46,19 @@ function Account() {
     }
   }
 
-
   return (
     <div className='account-page'>
       <AuthHeader />
       <div className='account-page__heading-box'>
         <h2 className='account-page__heading'>{getCurrentElement?.title}</h2>
         {getCurrentElement?.icon}
+        {collectLocation && (
+          <p className='account-page__location'>
+            <Link to='/account/collections'>All collections</Link> &#8811; &nbsp;
+            <span>{collectLocation}</span>
+          </p>
+        )}
+
       </div>
 
       <div className='account-page__box' style={{ minHeight: translatorHeight + 'px' }}>
@@ -57,7 +80,7 @@ function Account() {
           />
           <Route path='/frequency' element={<Frequency account={true} />} />
           <Route path='/words' element={<WordList />} />
-          <Route path='/words/collections' element={<Collections />} />
+          <Route path='/collections' element={<Collections />} />
           <Route path='/words/collections/*' element={<WordList />} />
           <Route path='/*' element={<CardNav />} />
         </Routes>

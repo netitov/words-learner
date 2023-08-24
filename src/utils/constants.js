@@ -6,6 +6,7 @@ import { GiFilmStrip } from 'react-icons/gi';
 import { MdOutlineQuiz } from 'react-icons/md';
 import { BsBookmarks } from 'react-icons/bs';
 import { RxDashboard } from 'react-icons/rx';
+import { BsBookmark } from 'react-icons/bs';
 
 export const charsLimit = '100';
 
@@ -53,6 +54,11 @@ export const accountNav = [
   {
     route: '/account/words',
     title: 'Word list',
+    icon: <BsBookmark />
+  },
+  {
+    route: '/account/collections',
+    title: 'Collections',
     icon: <BsBookmarks />
   },
   {

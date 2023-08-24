@@ -101,7 +101,7 @@ function WordList() {
           </svg>
           Add a word
         </Link>
-        <Link className='wordlist__btn' to='/account/words/collections'>
+        <Link className='wordlist__btn' to='/account/collections'>
           <BsBookmarks className='wordlist__btn-icon'/>
           Go to Collections
         </Link>

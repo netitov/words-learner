@@ -5,6 +5,8 @@
   gap: 20px;
   justify-content: center;
   max-width: 900px;
+
+  animation: fade-in 0.4s ease;
 }
 
 canvas{

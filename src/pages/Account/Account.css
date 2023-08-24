@@ -5,7 +5,7 @@
   justify-content: space-between;
   align-items: center;
   background-color: var(--prime-blue);
-  gap: 1.5em;
+  gap: 3.5em;
 }
 
 .account-page__box {
@@ -22,6 +22,12 @@
   width: var(--page-width);
   max-width: var(--max-width);
 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  min-height: 99px;
+
 }
 
 .account-page__heading {
@@ -29,9 +35,22 @@
   font-size: 4em;
   font-weight: 300;
   letter-spacing: 5px;
-  /* margin: 0; */
+  margin: 0;
   position: relative;
   text-align: center;
+}
+
+.account-page__location {
+  color: #fff;
+  font-size: 1.1em;
+}
+
+.account-page__location > a:hover {
+  border-bottom: 1px solid #fff;
+}
+
+.account-page__location > span {
+  color: var(--prime-yellow);
 }
 
 .account-page__heading-box > svg {

@@ -237,7 +237,7 @@ function Collections() {
               placeholder='enter collection name'
               value={collectName}
               onChange={(e) => setCollectName(e.target.value)}
-              maxLength='55'
+              maxLength='60'
             />
             <button type='submit' className='collection__btn'>Create collection</button>
           </form>
