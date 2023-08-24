@@ -3,10 +3,10 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = [];
 
 //remove default value from all collections exept selected
-const handleUpdateDefaultState = (collections, newDefaultId) => {
+const handleUpdateDefaultState = (collections, updatedCollection) => {
   return collections.map(i => ({
     ...i,
-    default: i._id === newDefaultId ? true : false
+    default: i._id === updatedCollection._id ? updatedCollection.default : false
   }));
 };
 
@@ -31,7 +31,7 @@ const collectionsSlice = createSlice({
     },
     updateDefaultState(state, action) {
       const updatedCollection = action.payload;
-      const updatedCollections = handleUpdateDefaultState(state, updatedCollection._id);
+      const updatedCollections = handleUpdateDefaultState(state, updatedCollection);
       return updatedCollections;
     },
     updateCollectionState(state, action) {

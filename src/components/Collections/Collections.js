@@ -188,38 +188,14 @@ function Collections() {
 
     if (updatedCollection.error) {
       //error text
-      //setError({ serverError });
+      dispatch(showError(errorMessages.general));
       console.log(updatedCollection.error);
     } else {
       dispatch(updateDefaultState(updatedCollection));
 
-
       //update session storage (add new collection and remove current default value)
       const updatedCollections =  updateCollectionsStorage(collections, updatedCollection);
       sessionStorage.setItem('collections', JSON.stringify(updatedCollections));
-      console.log(updatedCollection)
-    }
-  }
-
-  //edit collection data: title, default state
-  async function handleUpdate(collectionObj) {
-    const token = localStorage.getItem('token');
-    const updatedCollection = await updateCollectionDB(targetCollection._id, token, collectionObj);
-
-    closeMenu();
-
-    if (updatedCollection.error) {
-      //error text
-      //setError({ serverError });
-      console.log(updatedCollection.error);
-    } else {
-      dispatch(updateDefaultState(updatedCollection));
-
-
-      //update session storage (add new collection and remove current default value)
-      const updatedCollections =  updateCollectionsStorage(collections, updatedCollection);
-      sessionStorage.setItem('collections', JSON.stringify(updatedCollections));
-      console.log(updatedCollection)
     }
   }
 
@@ -330,9 +306,18 @@ function Collections() {
                           id='composition-menu'
                           aria-labelledby='composition-button'
                         >
-                          <MenuItem onClick={closeMenu}>Open collection</MenuItem>
+                          <MenuItem onClick={closeMenu}>
+                            <Link to={`/account/words/collections/${i._id}`}>Open collection</Link>
+                          </MenuItem>
                           <MenuItem onClick={openDeleteForm}>Delete</MenuItem>
-                          <MenuItem onClick={() => handleUpdate({ default: true })}>Set as default</MenuItem>
+                          {i.default ? (
+                            <MenuItem onClick={() => handleUpdate({ default: false })}>Reset default</MenuItem>
+                          ) : (
+                            <MenuItem onClick={() => handleUpdate({ default: true })}>Set as default</MenuItem>
+                          )
+
+                          }
+
                         </MenuList>
                       </ClickAwayListener>
                     </Paper>

@@ -105,14 +105,19 @@ function WordList() {
           <BsBookmarks className='wordlist__btn-icon'/>
           Go to Collections
         </Link>
-        <Link className='wordlist__btn' to='#'>
-          <MdOutlineQuiz className='wordlist__btn-icon'/>
-          Take a quiz
-        </Link>
-        <button type='button' className='wordlist__btn'>
-          <CiFilter className='wordlist__btn-icon' />
-          Hide learned words
-        </button>
+        {words.length > 0 &&
+          <Link className='wordlist__btn' to='#'>
+            <MdOutlineQuiz className='wordlist__btn-icon'/>
+            Take a quiz
+          </Link>
+        }
+        {words.length > 0 &&
+          <button type='button' className='wordlist__btn'>
+            <CiFilter className='wordlist__btn-icon' />
+            Hide learned words
+          </button>
+        }
+
       </div>
 
       {/* words table */}
