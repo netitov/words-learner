@@ -1,0 +1,57 @@
+.c-sum {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 35px;
+  gap: 20px;
+  justify-content: center;
+  max-width: 900px;
+}
+
+canvas{
+  position:relative;
+  z-index:1;
+}
+
+.c-sum__card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  width: 200px;
+  min-width: 200px;
+  min-height: 110px;
+  /* width: 200px;
+  height: 130px; */
+  padding: 10px 5px;
+  position: relative;
+  color: #fff;
+  background-color: var(--darker-blue);
+  border-radius: 10px;
+  gap: 10px;
+}
+
+.c-sum__value {
+  font-size: 2.3em;
+  font-weight: 400;
+  margin: 0;
+}
+
+.c-sum__category {
+  font-size: 0.9em;
+}
+
+.c-sum__result-box {
+  position: absolute;
+  bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.c-sum__result {
+  position: absolute;
+  bottom: 39px;
+  font-size: 1.4em;
+}

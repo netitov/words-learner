@@ -17,7 +17,7 @@ export const tooltipOption = {
   lineHeight: 1.3,
   padding: '5px',
   WebkitBackdropFilter: 'blur(4px)',
-  backdropFilter: 'blur(4px)'
+  backdropFilter: 'blur(4px)',
 };
 
 export const defaultLang = {

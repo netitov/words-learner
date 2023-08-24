@@ -31,5 +31,6 @@
 @import url(/src/components/Collections/Collections.css);
 @import url(/src/components/ErrorPopup/ErrorPopup.css);
 @import url(/src/components/CollectionProgress/CollectionProgress.css);
+@import url(/src/components/CollectionSummary/CollectionSummary.css);
 
 

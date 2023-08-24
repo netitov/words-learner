@@ -8,6 +8,7 @@ import { BsBookmarks } from 'react-icons/bs';
 import { CiFilter } from 'react-icons/ci';
 import useWordSave from '../../hooks/useWordSave';
 import Bookmark from '../Bookmark/Bookmark';
+import CollectionSummary from '../CollectionSummary/CollectionSummary';
 
 function WordList() {
 
@@ -85,6 +86,11 @@ function WordList() {
 
   return (
     <div className='wordlist'>
+
+      {/* collection dashboard */}
+      <CollectionSummary
+        totalWords={words.length}
+      />
 
       {/* buttons filters and routes */}
       <div className='wordlist__btn-container'>

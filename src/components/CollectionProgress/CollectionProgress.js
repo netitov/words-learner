@@ -7,7 +7,7 @@ function CollectionProgress({ userWords, collection }) {
   const collectionWords = userWords.filter((w) => w.source.some(el => el.collectionId === collection._id)).length;
 
   return (
-    <Tooltip title='Learning progress: learned / all words' componentsProps={{ tooltip: { sx: tooltipOption, } }}>
+    <Tooltip title='Learning progress: learned / total words' componentsProps={{ tooltip: { sx: tooltipOption, } }}>
       <div className='collection-chart__progress'>
         <div className='collection-chart__progress-chart'>
           <div className='collection-chart__progress-done' style={{ width: '35%' }}></div>
