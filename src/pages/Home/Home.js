@@ -8,52 +8,22 @@ import About from '../../components/About/About';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import { useSelector, useDispatch } from 'react-redux';
-
+import useHandleQuiz from '../../hooks/useHandleQuiz';
+import { AnimatePresence } from 'framer-motion';
 
 function Home() {
 
   const [animation, setAnimation] = useState(false);
-  const [quizActive, setQuizActive] = useState(false);
+  //const [quizActive, setQuizActive] = useState(false);
 
   const pathRef = useRef();
-  const dispatch = useDispatch();
+  const { closeQuiz, quizActive, startQuiz } = useHandleQuiz();
 
+  const randomWords = useSelector((state) => state.randomWords.data);
 
   function handleLearnList() {
 
   }
-
-  //QUIZ
-  //open quiz
-  function startQuiz() {
-    setQuizActive(true);
-  }
-
-  function closeQuiz(e) {
-    setQuizActive(false);
-  }
-
-  // close quiz on esc and overlay click
-  useEffect(() => {
-    function handleEscClose(e) {
-      if (e.key === 'Escape') {
-        setQuizActive(false);
-      }
-    }
-
-    function handleOverlayClose(e) {
-      if (e.target.classList[0] === 'quiz') {
-        setQuizActive(false);
-      }
-    }
-    document.addEventListener('keyup', handleEscClose);
-    document.addEventListener('click', handleOverlayClose);
-
-    return () => {
-      document.removeEventListener('keyup', handleEscClose);
-      document.removeEventListener('click', handleOverlayClose);
-    };
-  }, [])
 
   //run animation
   useEffect(() => {
@@ -108,10 +78,16 @@ function Home() {
             </div>
             <button className='main__quiz-btn' type='button' onClick={startQuiz}>Start test</button>
           </div>
-          <Quiz
-            quizActive={quizActive}
-            closeQuiz={closeQuiz}
-          />
+          {/* quiz modal */}
+          <AnimatePresence>
+            {quizActive &&
+              <Quiz
+                quizActive={quizActive}
+                closeQuiz={closeQuiz}
+                quizWords={randomWords}
+              />
+            }
+          </AnimatePresence>
         </div>
 
       </main>

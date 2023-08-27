@@ -1,7 +1,7 @@
 .spinner {
   border: 2px solid transparent;
-  border-top: 3px solid var(--main-green);
-  border-right: 3px solid var(--main-green);
+  border-top: 3px solid var(--prime-blue);
+  border-right: 3px solid var(--prime-blue);
   border-radius: 50%;
   width: 27px;
   height: 27px;

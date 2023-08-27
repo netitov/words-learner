@@ -168,6 +168,12 @@ export async function updateCollectionDB(collectionId, token, collectionObj) {
   return fetchAPI(`collections/${collectionId}`, 'PATCH', headers, collectionObj);
 }
 
+//update user collection
+export async function getQuizDataDB(wordsArr) {
+  return fetchAPI('word-data-quiz', 'POST', undefined, wordsArr);
+}
+
+
 
 
 

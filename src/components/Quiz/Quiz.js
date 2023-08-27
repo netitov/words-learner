@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { IoCheckmarkCircleOutline } from 'react-icons/io5';
 import { IoCloseCircleOutline } from 'react-icons/io5';
 import Spinner from '../Spinner/Spinner';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import useRandomWordsFetch from '../../hooks/useRandomWordsFetch';
+import { getQuizDataDB } from '../../utils/api';
+import { showError } from '../../store/error';
+import { errorMessages } from '../../utils/constants';
+import { motion } from 'framer-motion';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -14,7 +18,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 function Quiz(props) {
 
   const [questions, setQuestions] = useState([]);
-  const [activeQuestion, setActiveQuestion] = useState({ question: '', options: [] });
+  const [activeQuestion, setActiveQuestion] = useState({ translation: '', options: [] });
   const [passedQuests, setPassedQuests] = useState([]);
   const [progress, setProgress] = useState({ percent: '0%', quest: 1 });
   const [result, setResult] = useState({ quests: 0, correctAnsw: 0 });
@@ -24,6 +28,7 @@ function Quiz(props) {
   const randomWords = useSelector((state) => state.randomWords.data);
 
   const { requestRandomWords } = useRandomWordsFetch();
+  const dispatch = useDispatch();
 
 
   function handleComment(percent) {
@@ -43,15 +48,15 @@ function Quiz(props) {
 
   function setNextQuestion(i) {
     //run if answer is given
-    if (passedQuests.some(el => el.question === i.question)) {
+    if (passedQuests.some(el => el.translation === i.translation)) {
       const completedPart = Math.round(passedQuests.length/questions.length * 100);
 
-      const currPosition = questions.findIndex((i) => i.question === activeQuestion.question);
-      const quest = ((currPosition + 1) > (questions.length - 1)) ? { question: '' } : questions[currPosition + 1];
+      const currPosition = questions.findIndex((i) => i.translation === activeQuestion.translation);
+      const quest = ((currPosition + 1) > (questions.length - 1)) ? { word: '' } : questions[currPosition + 1];
       setActiveQuestion(quest);
 
       //progress line
-      const nextQuestPos = questions.findIndex((i) => i.question === quest.question);
+      const nextQuestPos = questions.findIndex((i) => i.translation === quest.translation);
       setProgress({ percent: completedPart + '%', quest: nextQuestPos + 1 });
 
       //quiz result
@@ -67,11 +72,11 @@ function Quiz(props) {
 
   //chech answer
   function handleAnswer(quest, answ) {
-    if (!passedQuests.some((question) => question.question === quest.question)) {
+    if (!passedQuests.some((question) => question.translation === quest.translation)) {
       const obj = {
         ...quest,
         passed: true,
-        correct: quest.correctAnswer === answ,
+        correct: quest.word === answ,
         answer: answ
       };
       setPassedQuests(prevItems => [...prevItems, obj]);
@@ -79,29 +84,33 @@ function Quiz(props) {
   }
 
   //apply styles for options buttons (answers)
-  function handleAnswerBtn(word) {
-    const answeredQuestion = passedQuests.find((question) => question.question === activeQuestion.question);
-
+  function handleAnswerBtn(text) {
+    const answeredQuestion = passedQuests.find((question) => question.translation === activeQuestion.translation);
     if (!answeredQuestion) {
       return '';
-    } else if (answeredQuestion.answer === word) {
-      if (answeredQuestion.correctAnswer === word) {
+    } else if (answeredQuestion.answer === text) {
+      if (answeredQuestion.word === text) {
         return ' quiz__option_correct quiz__option_passed';
       } else {
         return ' quiz__option_incorrect quiz__option_passed';
       }
-    } else if (activeQuestion.correctAnswer === word) {
+    } else if (activeQuestion.word === text) {
       return ' quiz__option_correct quiz__option_passed';
     }
     return ' quiz__option_passed';
   }
 
   function droppData() {
-    setActiveQuestion({ question: '', options: [] });
+    setActiveQuestion({ translation: '', options: [] });
     setPassedQuests([]);
     setProgress({ percent: '0%', quest: 1 });
     setResult({ quests: 0, correctAnsw: 0 });
     setComment('');
+    //setActiveQuestion(questions[0]);
+  }
+
+  function startOver() {
+    droppData();
     setActiveQuestion(questions[0]);
   }
 
@@ -114,7 +123,6 @@ function Quiz(props) {
   async function updateWords() {
     setIsLoading(true);
     await requestRandomWords();
-    setIsLoading(false);
   }
 
   //create questions and answers for quiz (from random words)
@@ -176,21 +184,31 @@ function Quiz(props) {
     return quizArr;
   }
 
-  function setQuizQuestions() {
-    const quizArr = createQuizQuestions();
-    setQuestions(quizArr);
-    setActiveQuestion(quizArr[0]);
-    sessionStorage.setItem('quizQuestions', JSON.stringify(quizArr));
+  async function setQuizQuestions(wordsArr) {
+    //const quizArr = createQuizQuestions();
+    setIsLoading(true);
+    const quizData = await getQuizDataDB(wordsArr);
+
+    //handle error
+    if (quizData.error) {
+      dispatch(showError(errorMessages.general));
+    } else {
+      setQuestions(quizData);
+      setActiveQuestion(quizData[0]);
+    }
+
+    setIsLoading(false);
+    //sessionStorage.setItem('quizQuestions', JSON.stringify(quizArr));
   }
 
-  //get initial quiz questions and update when randomWords changed
+  //get initial quiz questions and update when words props changed
   useEffect(() => {
-    if (randomWords.length > 0) {
+    if (props.quizWords.length > 0) {
       //dropp data and go to the first quest
       droppData();
-      setQuizQuestions();
+      setQuizQuestions(props.quizWords);
     }
-  }, [randomWords])
+  }, [props.quizWords])
 
   const data = {
     labels: ['correct answers', 'incorrect answers'],
@@ -225,7 +243,13 @@ function Quiz(props) {
 
 
   return (
-    <div className={`quiz${props.quizActive ? ' quiz_active' : ''}`}>
+    <motion.div
+      /* className={`quiz${props.quizActive ? ' quiz_active' : ''}`} */
+      className={`quiz quiz_active`}
+      initial={{  opacity: 0 }}
+      animate={{  opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
       <div className='quiz__container'>
 
         {/* progress */}
@@ -248,7 +272,7 @@ function Quiz(props) {
           </div>
 
           <div className='quiz__btn-box'>
-            <button className='quiz__btn quiz__btn-result' type='button' onClick={droppData}>Start over</button>
+            <button className='quiz__btn quiz__btn-result' type='button' onClick={startOver}>Start over</button>
             <button className='quiz__btn quiz__btn-result' type='button' onClick={updateWords}>Update words</button>
             <button className='quiz__btn quiz__btn-result' type='button' onClick={handleClose}>Close</button>
           </div>
@@ -263,12 +287,12 @@ function Quiz(props) {
         {questions.map((i) => (
 
           <div
-            className={`quiz__quest-box${i.question === activeQuestion.question ? ' quiz__quest-box_active' : ''}`}
-            key={i.question}
+            className={`quiz__quest-box${i.translation === activeQuestion.translation ? ' quiz__quest-box_active' : ''}`}
+            key={i.translation}
           >
             {/* question box */}
             <div className='quiz__quest'>
-              <h3>{i.question}</h3>
+              <h3>{i.translation}</h3>
             </div>
 
             {/* box with answers */}
@@ -291,7 +315,7 @@ function Quiz(props) {
             {/* btn next */}
             <button
               type='button'
-              className={`quiz__btn quiz__btn-next${passedQuests.some(el => el.question === i.question) ? ' quiz__btn-next_active' : ''}`}
+              className={`quiz__btn quiz__btn-next${passedQuests.some(el => el.translation === i.translation) ? ' quiz__btn-next_active' : ''}`}
               onClick={() => setNextQuestion(i)}
             >
               Next
@@ -316,7 +340,7 @@ function Quiz(props) {
 
       </div>
 
-    </div>
+    </motion.div>
   )
 }
 
