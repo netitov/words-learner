@@ -9,12 +9,16 @@ import { CiFilter } from 'react-icons/ci';
 import useWordSave from '../../hooks/useWordSave';
 import Bookmark from '../Bookmark/Bookmark';
 import CollectionSummary from '../CollectionSummary/CollectionSummary';
+import useHandleQuiz from '../../hooks/useHandleQuiz';
+import { AnimatePresence } from 'framer-motion';
+import Quiz from '../Quiz/Quiz';
 
 function WordList() {
 
   const [langListActive, setLangListActive] = useState({ type: '', value: false });
   const [activeLangBtn, setActiveLangBtn] = useState({ lang: '', type: '' });
   const [words, setWords] = useState([]);
+  const [quizWords, setQuizWords] = useState([]);
   const [initWords, setInitWords] = useState([]);
 
   const pathRef = useRef();
@@ -31,6 +35,7 @@ function WordList() {
   const rowHeight = 46;
 
   const { removeWord } = useWordSave();
+  const { closeQuiz, quizActive, startQuiz } = useHandleQuiz();
 
 
   function toggleLangList(e) {
@@ -48,15 +53,31 @@ function WordList() {
     setLangListActive({ value: false });
   }
 
-  //set initial rows
+  function shuffleArray(array) {
+    return array.slice().sort(() => Math.random() - 0.5);
+  }
+
+  //continue quiz: update questions
+  function updateQuiz() {
+    const randomArr = shuffleArray(initWords);
+    setQuizWords(randomArr.slice(0, initRows));
+  }
+
+  //set initial rows and words for quiz
   useEffect(() => {
+    //display all saved words of location is words
     if (currentCollectionId === 'words') {
-      setWords(userWords.slice(0, initRows));
+      const wordsSlice = userWords.slice(0, initRows);
+      setWords(wordsSlice);//words for table
       setInitWords(userWords);
+      setQuizWords(shuffleArray(wordsSlice));//shuffle words for quiz
     } else {
+      //display words from specific collection
       const wordsFromCurrentCollection = userWords.filter((i) => i.source.some(el => el.collectionId === currentCollectionId));
-      setWords(wordsFromCurrentCollection.slice(0, initRows));
+      const wordsSlice = wordsFromCurrentCollection.slice(0, initRows);
+      setWords(wordsSlice);
       setInitWords(wordsFromCurrentCollection);
+      setQuizWords(shuffleArray(wordsSlice));
     }
 
   }, [userWords, path])
@@ -64,8 +85,7 @@ function WordList() {
   //lazy loading of table rows
   useEffect(() => {
     if (initWords.length > initRows) {
-
-        function displayMoreRows() {
+      function displayMoreRows() {
         const elementPos = pathRef.current.getBoundingClientRect().top;
         const elementHeight = pathRef.current.offsetHeight;
         const windowHeight = window.innerHeight;
@@ -77,12 +97,11 @@ function WordList() {
           });
         }
       }
-
-
       window.addEventListener('scroll', displayMoreRows);
       return () => window.removeEventListener('scroll', displayMoreRows);
     }
   }, [userWords, initWords]);
+
 
   return (
     <div className='wordlist'>
@@ -106,10 +125,10 @@ function WordList() {
           Go to Collections
         </Link>
         {words.length > 0 &&
-          <Link className='wordlist__btn' to='#'>
+          <button className='wordlist__btn' type='button' onClick={startQuiz}>
             <MdOutlineQuiz className='wordlist__btn-icon'/>
             Take a quiz
-          </Link>
+          </button>
         }
         {words.length > 0 &&
           <button type='button' className='wordlist__btn'>
@@ -196,6 +215,20 @@ function WordList() {
           ))}
         </tbody>
       </table>
+
+      {/* quiz */}
+      <AnimatePresence>
+        {quizActive &&
+          <Quiz
+            quizActive={quizActive}
+            closeQuiz={closeQuiz}
+            quizWords={quizWords}
+            account={true}
+            updateQuiz={updateQuiz}
+          />
+        }
+      </AnimatePresence>
+
     </div>
 
   )

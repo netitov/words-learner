@@ -330,6 +330,11 @@
   z-index: 3;
 }
 
+div.quiz__overlay > .spinner {
+  border-top: 3px solid var(--prime-blue);
+  border-right: 3px solid var(--prime-blue);
+}
+
 .quiz__login {
   margin-top: 35px;
   font-size: 1.2em;

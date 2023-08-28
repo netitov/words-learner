@@ -14,7 +14,6 @@ import { motion } from 'framer-motion';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-
 function Quiz(props) {
 
   const [questions, setQuestions] = useState([]);
@@ -26,6 +25,7 @@ function Quiz(props) {
   const [isLoading, setIsLoading] = useState(false);
 
   const randomWords = useSelector((state) => state.randomWords.data);
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
   const { requestRandomWords } = useRandomWordsFetch();
   const dispatch = useDispatch();
@@ -185,7 +185,6 @@ function Quiz(props) {
   }
 
   async function setQuizQuestions(wordsArr) {
-    //const quizArr = createQuizQuestions();
     setIsLoading(true);
     const quizData = await getQuizDataDB(wordsArr);
 
@@ -273,14 +272,22 @@ function Quiz(props) {
 
           <div className='quiz__btn-box'>
             <button className='quiz__btn quiz__btn-result' type='button' onClick={startOver}>Start over</button>
-            <button className='quiz__btn quiz__btn-result' type='button' onClick={updateWords}>Update words</button>
+            {/* if test is taken from user account shuffle saved words, otherwise update random words */}
+            {props.account ? (
+              <button className='quiz__btn quiz__btn-result' type='button' onClick={props.updateQuiz}>Continue</button>
+              ) : (
+              <button className='quiz__btn quiz__btn-result' type='button' onClick={updateWords}>Update words</button>
+              )
+            }
             <button className='quiz__btn quiz__btn-result' type='button' onClick={handleClose}>Close</button>
           </div>
 
-          <p className='quiz__login'>
-            <Link to='#'>Sign up</Link> / <Link to='#'>Sign in</Link>
-            &nbsp;to save your results, create your own word list and much more
-          </p>
+          {!isLoggedIn &&
+            <p className='quiz__login'>
+              <Link to='#'>Sign up</Link> / <Link to='#'>Sign in</Link>
+              &nbsp;to save your results, create your own word list and much more
+            </p>
+          }
         </div>
 
         {/* quiz */}
@@ -331,6 +338,7 @@ function Quiz(props) {
           <Spinner isLoading={isLoading}/>
         </div>
 
+        {/* close btn */}
         <button className='quiz__close-btn btn-cross' type='button' onClick={handleClose}>
           <svg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'>
             <line x1='0' x2='100' y1='0' y2='100' />
