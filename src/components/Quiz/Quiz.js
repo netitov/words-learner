@@ -7,8 +7,9 @@ import Spinner from '../Spinner/Spinner';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import useRandomWordsFetch from '../../hooks/useRandomWordsFetch';
-import { getQuizDataDB } from '../../utils/api';
+import { getQuizWordsAPI, saveQuizDataAPI } from '../../utils/api';
 import { showError } from '../../store/error';
+import { addResult } from '../../store/qiuzResults';
 import { errorMessages } from '../../utils/constants';
 import { motion } from 'framer-motion';
 
@@ -23,6 +24,7 @@ function Quiz(props) {
   const [result, setResult] = useState({ quests: 0, correctAnsw: 0 });
   const [comment, setComment] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [quizId, setQuizId] = useState('');
 
   const randomWords = useSelector((state) => state.randomWords.data);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
@@ -70,16 +72,71 @@ function Quiz(props) {
     }
   }
 
-  //chech answer
-  function handleAnswer(quest, answ) {
-    if (!passedQuests.some((question) => question.translation === quest.translation)) {
-      const obj = {
+  async function saveQuizData() {
+    const token = localStorage.getItem('token');
+    const savedQuiz = await saveQuizDataAPI(token);
+
+    if (!savedQuiz.error) {
+      //add result to storage
+      const storage = JSON.parse(sessionStorage.getItem('quizResults'));
+      storage.push(savedQuiz);
+      sessionStorage.setItem('quizResults', JSON.stringify(storage));
+
+      //update redux state
+      dispatch(addResult(savedQuiz));
+      return savedQuiz;
+    } else {
+      return savedQuiz;
+    }
+  }
+
+  //check answer
+  async function handleAnswer(quest, answ) {
+    if (isQuestionNotPassed(quest)) {
+      const updatedQuest = {
         ...quest,
         passed: true,
         correct: quest.word === answ,
         answer: answ
       };
-      setPassedQuests(prevItems => [...prevItems, obj]);
+
+      updatePassedQuests(updatedQuest);
+
+      //save quiz data and results if quiz opened from account (user logged in)
+      if (props.account) {
+        await handleQuizDataSave(updatedQuest);
+      }
+    }
+  }
+
+  function isQuestionNotPassed(question) {
+    return !passedQuests.some((q) => q.translation === question.translation);
+  }
+
+  function updatePassedQuests(updatedQuest) {
+    setPassedQuests((prevItems) => [...prevItems, updatedQuest]);
+  }
+
+  async function handleQuizDataSave(updatedQuest) {
+    //save quiz data after first question passed
+    if (passedQuests.length === 0) {
+      const quizData = await saveQuizData();
+
+      if (!quizData.error) {
+        setQuizId(quizData._id);
+        props.saveQuizResult({
+          wordId: updatedQuest._id,
+          value: updatedQuest.word === updatedQuest.answer,
+          testId: quizData._id
+        });
+      }
+    } else {
+      //save quiz result
+      props.saveQuizResult({
+        wordId: updatedQuest._id,
+        value: updatedQuest.word === updatedQuest.answer,
+        testId: quizId
+      });
     }
   }
 
@@ -106,6 +163,7 @@ function Quiz(props) {
     setProgress({ percent: '0%', quest: 1 });
     setResult({ quests: 0, correctAnsw: 0 });
     setComment('');
+    setQuizId('');
     //setActiveQuestion(questions[0]);
   }
 
@@ -119,10 +177,23 @@ function Quiz(props) {
     droppData();
   }
 
-  //search new words
+  //update quiz words
   async function updateWords() {
+    //run spinner
     setIsLoading(true);
-    await requestRandomWords();
+    let updatedWords = [];
+
+    //if quiz is taken from account - update words from learned list, otherwise - get new random words
+    if (props.account) {
+      updatedWords = props.updateQuiz();
+    } else {
+      updatedWords = await requestRandomWords();
+    }
+
+    //dropp quiz progress
+    droppData();
+    //set new quiz questions
+    setQuizQuestions(updatedWords);
   }
 
   //create questions and answers for quiz (from random words)
@@ -186,7 +257,8 @@ function Quiz(props) {
 
   async function setQuizQuestions(wordsArr) {
     setIsLoading(true);
-    const quizData = await getQuizDataDB(wordsArr);
+    //get words for options(answers)
+    const quizData = await getQuizWordsAPI(wordsArr);
 
     //handle error
     if (quizData.error) {
@@ -200,14 +272,14 @@ function Quiz(props) {
     //sessionStorage.setItem('quizQuestions', JSON.stringify(quizArr));
   }
 
-  //get initial quiz questions and update when words props changed
+  //get initial quiz questions
   useEffect(() => {
     if (props.quizWords.length > 0) {
       //dropp data and go to the first quest
       droppData();
       setQuizQuestions(props.quizWords);
     }
-  }, [props.quizWords])
+  }, [])
 
   const data = {
     labels: ['correct answers', 'incorrect answers'],
@@ -273,12 +345,13 @@ function Quiz(props) {
           <div className='quiz__btn-box'>
             <button className='quiz__btn quiz__btn-result' type='button' onClick={startOver}>Start over</button>
             {/* if test is taken from user account shuffle saved words, otherwise update random words */}
-            {props.account ? (
-              <button className='quiz__btn quiz__btn-result' type='button' onClick={props.updateQuiz}>Continue</button>
-              ) : (
-              <button className='quiz__btn quiz__btn-result' type='button' onClick={updateWords}>Update words</button>
-              )
-            }
+            <button
+              className='quiz__btn quiz__btn-result'
+              type='button'
+              onClick={updateWords}
+            >
+              {props.account ? 'Continue' : 'Update words'}
+            </button>
             <button className='quiz__btn quiz__btn-result' type='button' onClick={handleClose}>Close</button>
           </div>
 

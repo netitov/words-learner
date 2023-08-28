@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Spinner from '../Spinner/Spinner';
 import Languages from '../Languages/Languages';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { MdOutlineQuiz } from 'react-icons/md';
 import { BsBookmarks } from 'react-icons/bs';
 import { CiFilter } from 'react-icons/ci';
@@ -12,6 +12,8 @@ import CollectionSummary from '../CollectionSummary/CollectionSummary';
 import useHandleQuiz from '../../hooks/useHandleQuiz';
 import { AnimatePresence } from 'framer-motion';
 import Quiz from '../Quiz/Quiz';
+import { addResultToListAPI } from '../../utils/api';
+import { updateWordState } from '../../store/userWords';
 
 function WordList() {
 
@@ -37,6 +39,8 @@ function WordList() {
   const { removeWord } = useWordSave();
   const { closeQuiz, quizActive, startQuiz } = useHandleQuiz();
 
+  const dispatch = useDispatch();
+
 
   function toggleLangList(e) {
     const lang = currentInputLang.code === 'en' ? currentOutputLang.lang : currentInputLang.lang;
@@ -60,7 +64,31 @@ function WordList() {
   //continue quiz: update questions
   function updateQuiz() {
     const randomArr = shuffleArray(initWords);
-    setQuizWords(randomArr.slice(0, initRows));
+    const randomArrSlice = randomArr.slice(0, initRows);
+    setQuizWords(randomArrSlice);
+    return randomArrSlice;
+  }
+
+  //save quiz results by word to db
+  async function saveQuizResult(resultObj) {
+    const token = localStorage.getItem('token');
+    const updatedWord = await addResultToListAPI(resultObj, token);
+    console.log(updatedWord)
+    console.log(resultObj)
+    if (!updatedWord.error) {
+      //add result to storage
+      const storage = JSON.parse(sessionStorage.getItem('userWords'));
+      const updatedStorage = storage.map(wordObj => {
+          return wordObj._id === updatedWord._id ? updatedWord : wordObj;
+      });
+      sessionStorage.setItem('userWords', JSON.stringify(updatedStorage));
+
+      //update redux state
+      dispatch(updateWordState([updatedWord]));
+      return updatedWord;
+    } else {
+      return updatedWord;
+    }
   }
 
   //set initial rows and words for quiz
@@ -225,6 +253,7 @@ function WordList() {
             quizWords={quizWords}
             account={true}
             updateQuiz={updateQuiz}
+            saveQuizResult={saveQuizResult}
           />
         }
       </AnimatePresence>

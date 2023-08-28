@@ -7,7 +7,8 @@ import LinkRequestPage from './pages/Auth/LinkRequestPage';
 import PasswordResetPage from './pages/Auth/PasswordResetPage';
 import { login, userData } from './store/user';
 import { useSelector, useDispatch } from 'react-redux';
-import { getUserData, requestRandomWords,  getWordList, addToList, getCollections } from './utils/api';
+import { getUserData, requestRandomWords,  getWordList,
+  addToList, getCollections, getQuizResultsAPI } from './utils/api';
 import Spinner from './components/Spinner/Spinner';
 import Account from './pages/Account/Account';
 import useLangsFetch from './hooks/useLangsFetch';
@@ -16,6 +17,7 @@ import { selectOutputLang } from './store/outputLang';
 import { setRandomWords } from './store/randomWords';
 import { setUserWords } from './store/userWords';
 import { setCollections } from './store/collections';
+import { setQuizResults } from './store/qiuzResults';
 import useRandomWordsFetch from './hooks/useRandomWordsFetch';
 import ErrorPopup from './components/ErrorPopup/ErrorPopup';
 import { AnimatePresence } from 'framer-motion';
@@ -107,8 +109,8 @@ function App() {
     const token = localStorage.getItem('token');
     //fetch words
     const wordList = await getWordList(token);
-    if (wordList.err) {
-      console.log(wordList.err);
+    if (wordList.error) {
+      console.log(wordList.error);
       return [];
     } else {
       return wordList;
@@ -120,8 +122,8 @@ function App() {
     const token = localStorage.getItem('token');
     //fetch words
     const collections = await getCollections(token);
-    if (collections.err) {
-      console.log(collections.err);
+    if (collections.error) {
+      console.log(collections.error);
       return [];
     } else {
       return collections;
@@ -167,13 +169,40 @@ function App() {
     }
   }
 
-  //set initial list of user words and collections
+  //set user quiz results
+  async function initializeQuizResults() {
+    const storage = JSON.parse(sessionStorage.getItem('quizResults'));
+    if (!storage) {
+      //if results not in session storage - fetch them and add to session storage
+      const token = localStorage.getItem('token');
+      const results = await getQuizResultsAPI(token);
+      if (!results.error || results.length !== 0) {
+        dispatch(setQuizResults(results));
+        sessionStorage.setItem('quizResults', JSON.stringify(results));
+      }
+    } else {
+      //if results are in storage - use them
+      dispatch(setQuizResults(storage));
+    }
+  }
+
+  //set initial list of user words
   useEffect(() => {
     if (randomWords.length > 0 && isLoggedIn) {
+      //get and set user word list
       initializeUserWords();
-      initializeWordsCollections();
     }
   }, [randomWords, isLoggedIn])
+
+  //set initial list of user collections and quiz results
+  useEffect(() => {
+    if (isLoggedIn) {
+      //get and set user collection
+      initializeWordsCollections();
+      //get and set user quiz results
+      initializeQuizResults();
+    }
+  }, [isLoggedIn])
 
 
   //RANDOM WORDS

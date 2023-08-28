@@ -22,7 +22,7 @@ function useRandomWordsFetch() {
     //fetch random words
     const response = await getRandomWords(newFilters);
 
-    if (!response.err) {
+    if (!response.error) {
       //save filters
       dispatch(setFilters(newFilters));
       //convert object
@@ -33,8 +33,11 @@ function useRandomWordsFetch() {
       //save to storage to avoid repeated fetch
       sessionStorage.setItem('randomWords', JSON.stringify(newObj));
       dispatch(setRandomWords(newObj));
+
+      dispatch(setLoading(false));
+      return response;
     } else {
-      console.log(response.err)
+      console.log(response.error)
     }
 
     dispatch(setLoading(false));

@@ -6,7 +6,7 @@ import { GoKebabHorizontal } from 'react-icons/go';
 import CloseBtn from '../CloseBtn/CloseBtn';
 import { useSelector, useDispatch } from 'react-redux';
 import { addCollection, updateCollectionState, updateDefaultState, deleteCollection } from '../../store/collections';
-import { createCollectionDB, deleteCollectionDB, updateCollectionDB } from '../../utils/api';
+import { createCollectionAPI, deleteCollectionAPI, updateCollectionAPI } from '../../utils/api';
 import Tooltip from '@mui/material/Tooltip';
 import Popper from '@mui/material/Popper';
 import Paper from '@mui/material/Paper';
@@ -123,8 +123,8 @@ function Collections() {
         default: true
       };
 
-      //create collection in DB
-      const createdCollection = await createCollectionDB(collectObj, token);
+      //create collection in API
+      const createdCollection = await createCollectionAPI(collectObj, token);
 
       //handle error
       if (createdCollection.error) {
@@ -154,7 +154,7 @@ function Collections() {
 
   async function handleDeleteCollection(deleteWords) {
     const token = localStorage.getItem('token');
-    const deletedCollection = await deleteCollectionDB(targetCollection._id, token);
+    const deletedCollection = await deleteCollectionAPI(targetCollection._id, token);
 
     if (deletedCollection.error) {
       //error handler - display error snack
@@ -182,7 +182,7 @@ function Collections() {
   //edit collection data: title, default state
   async function handleUpdate(collectionObj) {
     const token = localStorage.getItem('token');
-    const updatedCollection = await updateCollectionDB(targetCollection._id, token, collectionObj);
+    const updatedCollection = await updateCollectionAPI(targetCollection._id, token, collectionObj);
 
     closeMenu();
 

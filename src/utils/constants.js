@@ -61,11 +61,11 @@ export const accountNav = [
     title: 'Collections',
     icon: <BsBookmarks />
   },
-  {
+  /* {
     route: '/account/quiz',
     title: 'Tests',
     icon: <MdOutlineQuiz />
-  },
+  }, */
   {
     route: '/account/progress',
     title: 'Progress',

@@ -139,6 +139,12 @@ export async function getWordList(token) {
   return fetchAPI('userwords', 'GET', headers);
 }
 
+//add quiz result to word list
+export async function addResultToListAPI(wordObj, token) {
+  const headers = {'Authorization': `Bearer ${token}`};
+  return fetchAPI('userwords/result', 'POST', headers, wordObj);
+}
+
 export async function getRandomWords(obj) {
   const queryParams = new URLSearchParams(obj);
   return fetchAPI(`random-words?${queryParams}`, 'GET');
@@ -151,26 +157,36 @@ export async function getCollections(token) {
 }
 
 //creare user colletions of words
-export async function createCollectionDB(collectionObj, token) {
+export async function createCollectionAPI(collectionObj, token) {
   const headers = {'Authorization': `Bearer ${token}`};
   return fetchAPI('collections', 'POST', headers, collectionObj);
 }
 
 //delete user collection
-export async function deleteCollectionDB(collectionId, token) {
+export async function deleteCollectionAPI(collectionId, token) {
   const headers = {'Authorization': `Bearer ${token}`};
   return fetchAPI(`collections/${collectionId}`, 'DELETE', headers);
 }
 
 //update user collection
-export async function updateCollectionDB(collectionId, token, collectionObj) {
+export async function updateCollectionAPI(collectionId, token, collectionObj) {
   const headers = {'Authorization': `Bearer ${token}`};
   return fetchAPI(`collections/${collectionId}`, 'PATCH', headers, collectionObj);
 }
 
-//update user collection
-export async function getQuizDataDB(wordsArr) {
+//get words for quiz
+export async function getQuizWordsAPI(wordsArr) {
   return fetchAPI('word-data-quiz', 'POST', undefined, wordsArr);
+}
+
+export async function getQuizResultsAPI(token) {
+  const headers = {'Authorization': `Bearer ${token}`};
+  return fetchAPI('test', 'GET', headers);
+}
+
+export async function saveQuizDataAPI(token) {
+  const headers = {'Authorization': `Bearer ${token}`};
+  return fetchAPI('test', 'POST', headers);
 }
 
 
