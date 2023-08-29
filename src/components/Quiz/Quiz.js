@@ -334,7 +334,7 @@ function Quiz(props) {
 
           <div className='quiz__chart'>
             <Doughnut data={data} options={options}/>
-            <span className='quiz__chart-result'>{result.correctAnsw / result.quests * 100}%</span>
+            <span className='quiz__chart-result'>{Math.round(result.correctAnsw / result.quests * 100)}%</span>
           </div>
 
           <div className='quiz__comment-box'>

@@ -184,3 +184,6 @@ export function getStyle(obj) {
 export const errorMessages = {
   general: 'Something went wrong 😞. Please try again later'
 }
+
+//min number of tests to learn a word
+export const minPassedTests = 3;

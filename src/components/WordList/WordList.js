@@ -15,6 +15,8 @@ import Quiz from '../Quiz/Quiz';
 import { addResultToListAPI } from '../../utils/api';
 import { updateWordState } from '../../store/userWords';
 import { setFilters } from '../../store/filters';
+import RefTooltip from '../RefTooltip/RefTooltip';
+import { minPassedTests } from '../../utils/constants';
 
 function WordList() {
 
@@ -38,7 +40,6 @@ function WordList() {
   const initRows = 10;
   const rowsStep = 10;
   const rowHeight = 46;
-  const learnThreshold = 3; //minimal numbler of taken tests
 
   const { removeWord } = useWordSave();
   const { closeQuiz, quizActive, startQuiz } = useHandleQuiz();
@@ -67,18 +68,19 @@ function WordList() {
 
   //continue quiz: update questions
   function updateQuiz() {
-    const randomArr = shuffleArray(initWords);
-    const randomArrSlice = randomArr.slice(0, initRows);
-    setQuizWords(randomArrSlice);
-    return randomArrSlice;
+    const wordsToLearn = getNotLearnedWords(initWords);
+    //use not learned words if they left, otherwise all words from current collection
+    const wordsToLearnSlice = (wordsToLearn.length > 0 ? wordsToLearn : initWords).slice(0, initRows);
+    const randomSlice = shuffleArray(wordsToLearnSlice);
+    //const randomArrSlice = randomArr.slice(0, initRows);
+    setQuizWords(randomSlice);
+    return randomSlice;
   }
 
   //save quiz results by word to db
   async function saveQuizResult(resultObj) {
     const token = localStorage.getItem('token');
     const updatedWord = await addResultToListAPI(resultObj, token);
-    console.log(updatedWord)
-    console.log(resultObj)
     if (!updatedWord.error) {
       //add result to storage
       const storage = JSON.parse(sessionStorage.getItem('userWords'));
@@ -96,60 +98,65 @@ function WordList() {
   }
 
   //get words learning progress
-  /* const getProgress = useMemo(() => {
-    return (arr) => {
-      const correctAnswers = arr.filter(i => i.value).length;
-      const totalQuestions = arr.length;
-      return totalQuestions === 0 ? 0 : Math.round((correctAnswers / totalQuestions) * 100);
-    };
-  }, [words]); */
-
-  //get words learning progress
   function getProgress(arr) {
     const correctAnswers = arr.filter(i => i.value).length;
     //3 is a goal. If value more than 100% - use 100%
-    return correctAnswers === 0 ? 0 : Math.min(Math.round((correctAnswers / learnThreshold) * 100), 100);
+    return correctAnswers === 0 ? 0 : Math.min(Math.round((correctAnswers / minPassedTests) * 100), 100);
   }
 
   //show words for which the quiz was passed less than 3 times
-  function filterLearnedWords(arr) {
+  function getNotLearnedWords(arr) {
     return arr.filter((i) => {
       const learnedWords = i.results.filter(el => el.value === true).length;
 
-      return learnedWords < learnThreshold;
+      return learnedWords < minPassedTests;
     });
   }
 
-  //show/hide fitered words
+  //show/hide filtered words
   function toggFilterdWords() {
     if (isFilterActive) {
       //dropp filtered words if filter removed
       setFilteredWords([]);
       setIsFilterActive(false);
     } else {
-      setFilteredWords(filterLearnedWords(words));
+      setFilteredWords(getNotLearnedWords(words));
       setIsFilterActive(true);
     }
   }
 
   //set initial rows and words for quiz
-  useEffect(() => {
-    //display all saved words of location is words
-    if (currentCollectionId === 'words') {
-      const wordsSlice = userWords.slice(0, initRows);
-      setWords(wordsSlice);//words for table
-      setInitWords(userWords);
-      setQuizWords(shuffleArray(wordsSlice));//shuffle words for quiz
-    } else {
-      //display words from specific collection
-      const wordsFromCurrentCollection = userWords.filter((i) => i.source.some(el => el.collectionId === currentCollectionId));
-      const wordsSlice = wordsFromCurrentCollection.slice(0, initRows);
-      setWords(wordsSlice);
-      setInitWords(wordsFromCurrentCollection);
-      setQuizWords(shuffleArray(wordsSlice));
-    }
+  function getWordsData(wordsArray, currentCollectionId) {
+    //get all user words or words from specific collection depends on location
+    const filteredWords = currentCollectionId === 'words'
+      ? wordsArray
+      : wordsArray.filter(i => i.source.some(el => el.collectionId === currentCollectionId));
 
-  }, [userWords, path])
+    //first part words to show
+    const wordsSlice = filteredWords.slice(0, initRows);
+    //get not learned words for quiz
+    const notLearnedWords = getNotLearnedWords(filteredWords).slice(0, initRows);
+    //if there are no not learned words - use all words
+    const wordsToLearn = notLearnedWords.length > 0 ? notLearnedWords : wordsSlice;
+
+    return {
+      wordsSlice,
+      wordsToLearn,
+      initWords: filteredWords,
+    };
+  }
+
+  useEffect(() => {
+    const { wordsSlice, wordsToLearn, initWords } = getWordsData(userWords, currentCollectionId);
+
+    //words for specific location
+    setWords(wordsSlice);
+    //all user words
+    setInitWords(initWords);
+    //shuffled words for quiz
+    setQuizWords(shuffleArray(wordsToLearn));
+  }, [userWords, path]);
+
 
   //lazy loading of table rows
   useEffect(() => {
@@ -178,6 +185,7 @@ function WordList() {
       {/* collection dashboard */}
       <CollectionSummary
         totalWords={words.length}
+        learnedWords={words.length - getNotLearnedWords(words).length}
       />
 
       {/* buttons filters and routes */}
@@ -200,8 +208,11 @@ function WordList() {
           </button>
         }
         {/* show btn if there are learned words */}
-        {filterLearnedWords(words).length !== words.length &&
-          <button type='button' className={`wordlist__btn${isFilterActive ? ' wordlist__btn_active' : ''}`} onClick={toggFilterdWords}>
+        {getNotLearnedWords(words).length !== words.length &&
+          <button type='button'
+            className={`wordlist__btn${isFilterActive ? ' wordlist__btn_active' : ''}`}
+            onClick={toggFilterdWords}
+          >
             <CiFilter className='wordlist__btn-icon' />
             {isFilterActive ? 'Show learned words' : 'Hide learned words'}
           </button>
@@ -230,7 +241,12 @@ function WordList() {
               translation ({currentInputLang.code === 'en' ? currentOutputLang.code : currentInputLang.code})
             </th>
             <th>collection</th>
-            <th>progress</th>
+            <th className='wordlist-table__th wordlist-table__th_progress'>
+              <span>progress</span>
+              <RefTooltip color='#dbecec'>
+                <p>Pass the quiz at least 3 times to reach 100% progress</p>
+              </RefTooltip>
+            </th>
 
           </tr>
 

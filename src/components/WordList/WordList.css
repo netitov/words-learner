@@ -133,11 +133,10 @@
   width: 70px;
 }
 
-
-/* .wordlist-table td:first-of-type {
-  width: 50px;
-  display: block;
-} */
+.wordlist-table__th_progress {
+  display: flex;
+  gap: 3px;
+}
 
 .wordlist-table tbody tr {
   background-color: var(--prime-blue);
