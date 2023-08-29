@@ -108,6 +108,15 @@
   stroke: var(--prime-yellow)
 }
 
+.wordlist__btn_active {
+  color: var(--prime-yellow);
+  border: 1px solid var(--prime-yellow);
+}
+
+.wordlist__btn_active > svg > line {
+  stroke: var(--prime-yellow)
+}
+
 .wordlist-table th {
   padding: 10px 0;
   font-weight: 300;

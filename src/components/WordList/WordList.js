@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Spinner from '../Spinner/Spinner';
 import Languages from '../Languages/Languages';
@@ -14,6 +14,7 @@ import { AnimatePresence } from 'framer-motion';
 import Quiz from '../Quiz/Quiz';
 import { addResultToListAPI } from '../../utils/api';
 import { updateWordState } from '../../store/userWords';
+import { setFilters } from '../../store/filters';
 
 function WordList() {
 
@@ -22,6 +23,8 @@ function WordList() {
   const [words, setWords] = useState([]);
   const [quizWords, setQuizWords] = useState([]);
   const [initWords, setInitWords] = useState([]);
+  const [isFilterActive, setIsFilterActive] = useState(false);
+  const [filteredWords, setFilteredWords] = useState([]);
 
   const pathRef = useRef();
   const path = useLocation().pathname;
@@ -35,6 +38,7 @@ function WordList() {
   const initRows = 10;
   const rowsStep = 10;
   const rowHeight = 46;
+  const learnThreshold = 3; //minimal numbler of taken tests
 
   const { removeWord } = useWordSave();
   const { closeQuiz, quizActive, startQuiz } = useHandleQuiz();
@@ -88,6 +92,43 @@ function WordList() {
       return updatedWord;
     } else {
       return updatedWord;
+    }
+  }
+
+  //get words learning progress
+  /* const getProgress = useMemo(() => {
+    return (arr) => {
+      const correctAnswers = arr.filter(i => i.value).length;
+      const totalQuestions = arr.length;
+      return totalQuestions === 0 ? 0 : Math.round((correctAnswers / totalQuestions) * 100);
+    };
+  }, [words]); */
+
+  //get words learning progress
+  function getProgress(arr) {
+    const correctAnswers = arr.filter(i => i.value).length;
+    //3 is a goal. If value more than 100% - use 100%
+    return correctAnswers === 0 ? 0 : Math.min(Math.round((correctAnswers / learnThreshold) * 100), 100);
+  }
+
+  //show words for which the quiz was passed less than 3 times
+  function filterLearnedWords(arr) {
+    return arr.filter((i) => {
+      const learnedWords = i.results.filter(el => el.value === true).length;
+
+      return learnedWords < learnThreshold;
+    });
+  }
+
+  //show/hide fitered words
+  function toggFilterdWords() {
+    if (isFilterActive) {
+      //dropp filtered words if filter removed
+      setFilteredWords([]);
+      setIsFilterActive(false);
+    } else {
+      setFilteredWords(filterLearnedWords(words));
+      setIsFilterActive(true);
     }
   }
 
@@ -158,10 +199,11 @@ function WordList() {
             Take a quiz
           </button>
         }
-        {words.length > 0 &&
-          <button type='button' className='wordlist__btn'>
+        {/* show btn if there are learned words */}
+        {filterLearnedWords(words).length !== words.length &&
+          <button type='button' className={`wordlist__btn${isFilterActive ? ' wordlist__btn_active' : ''}`} onClick={toggFilterdWords}>
             <CiFilter className='wordlist__btn-icon' />
-            Hide learned words
+            {isFilterActive ? 'Show learned words' : 'Hide learned words'}
           </button>
         }
 
@@ -195,7 +237,8 @@ function WordList() {
         </thead>
 
         <tbody>
-          {words.map((i, index) => (
+          {/* use filtered words if filter active otherwise - all words */}
+          {(isFilterActive ? filteredWords : words).map((i, index) => (
             <tr
               key={i.word}
               className='wordlist-table__row'
@@ -213,7 +256,7 @@ function WordList() {
               <td className='wordlist-table__td wordlist-table__td_emph'>{i.word}</td>
               <td>{i.translation}</td>
               <td className='wordlist-table__td'>
-                {/* active reference to other collection if current location is not qual*/}
+                {/* active reference to other collection if current location is not equal*/}
                 {i.source?.length === 0 ? (
                   <span className='wordlist-table__tag'>All words</span>
                 ) : (
@@ -233,9 +276,9 @@ function WordList() {
               <td>
                 <div className='wordlist-table__progress'>
                   <div className='wordlist-table__progress-chart'>
-                    <div className='wordlist-table__progress-done' style={{ width: '35%' }}></div>
+                    <div className='wordlist-table__progress-done' style={{ width: `${getProgress(i.results)}%` }}></div>
                   </div>
-                  <span>35%</span>
+                  <span>{getProgress(i.results)}%</span>
                 </div>
               </td>
 

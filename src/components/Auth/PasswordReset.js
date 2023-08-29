@@ -55,7 +55,7 @@ function PasswordReset() {
       question="Don't have an account?"
       route='/signup'
       refBtn='Sign up'
-      btnText='Send reset link'
+      btnText='Update password'
       addElement={<p className='auth__description'>Please enter your new password below to reset your password</p>}
       error={error}
       setError={setError}
