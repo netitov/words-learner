@@ -133,7 +133,7 @@
   width: 70px;
 }
 
-.wordlist-table__th_progress {
+.wordlist-table__progress-head {
   display: flex;
   gap: 3px;
 }

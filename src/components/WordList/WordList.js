@@ -241,11 +241,13 @@ function WordList() {
               translation ({currentInputLang.code === 'en' ? currentOutputLang.code : currentInputLang.code})
             </th>
             <th>collection</th>
-            <th className='wordlist-table__th wordlist-table__th_progress'>
-              <span>progress</span>
-              <RefTooltip color='#dbecec'>
-                <p>Pass the quiz at least 3 times to reach 100% progress</p>
-              </RefTooltip>
+            <th className='wordlist-table__th'>
+              <div className='wordlist-table__progress-head'>
+                <span>progress</span>
+                <RefTooltip color='#dbecec'>
+                  <p>Pass the quiz at least 3 times to reach 100% progress</p>
+                </RefTooltip>
+                </div>
             </th>
 
           </tr>

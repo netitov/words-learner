@@ -389,7 +389,7 @@ function RandomWords(props) {
                     />
                   </Tooltip>
                   {/* list of available languages */}
-                  <Languages
+                  {/* <Languages
                     languages={languages}
                     isActive={langListActive}
                     //selectLang={props.selectLang}
@@ -398,7 +398,7 @@ function RandomWords(props) {
                     //inputText={props.inputText}
                     commentActive={true}
                     closeLangList={closeLangList}
-                  />
+                  /> */}
                 </th>
                 <th>word</th>
                 <th className='wtable__th wtable__th_btn' /* onClick={() => props.openLangListWords('random')} */

@@ -116,7 +116,9 @@ function Dictionary(props) {
                 <td>
                   <div className='table__block table__block_transl'>
                     <div className='table__btn-word'>
-                      <button className='table__btn table__btn_transl' onClick={() => openMenu(i.text)}>{i.text}</button>
+                      <button className='table__btn table__btn_transl' onClick={() => openMenu(i.text)}>
+                        {i.text}
+                      </button>
                       <Menu
                         menuActive={activeMenu === i.text ? true : false}
                         addTranslate={() => props.addTranslate(i.text, true)}

@@ -3,6 +3,7 @@ import { VscCheck } from 'react-icons/vsc';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectInputLang } from '../../store/inputLang';
 import { selectOutputLang } from '../../store/outputLang';
+import { motion } from 'framer-motion';
 
 function Languages(props) {
 
@@ -101,22 +102,27 @@ function Languages(props) {
     };
   }, [props.isActive])
 
-  //update parent height for fitting child - only in account
+  //update parent height for fitting list of languages - only in account
   useEffect(() => {
-    if (langRef.current && props.account) {
+    if (langRef.current) {
       if (props.isActive.value) {
-        const height = langRef.current.getBoundingClientRect().height;
-        props.onHeightChange(height);
-      } else {
-        props.onHeightChange(0);
+        setTimeout(() => {
+          const height = langRef.current.clientHeight;
+          props.onHeightChange(height);
+        })
       }
     }
   }, [props.isActive]);
 
 
-
   return (
-    <div className={`languages-wrapper${props.isActive.value ? ' languages-wrapper_active' : ''}`} ref={langRef}>
+    <motion.div
+      className={`languages-wrapper languages-wrapper_active`}
+      ref={langRef}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
       <div className={`languages${activityClass}${typeClass}`}>
         <input
           className={`languages__search${props.activeBtn.type === 'input' || props.activeBtn.type === 'random' ? ' languages__search_input' : ''}`}
@@ -148,12 +154,14 @@ function Languages(props) {
             )
           })}
         </ul>
-
-        <span
-          className={`languages__not-found${languages.length < 1 ? ' languages__not-found_active' : ''}`}
-        >
-          No data &#128532;
-        </span>
+        {/* message if language not found */}
+        {languages.length < 1 &&
+          <span
+            className={`languages__not-found`}
+          >
+            No data &#128532;
+          </span>
+        }
 
         <span className={`languages__comment${props.source === 'random' && input === '' ? ' languages__comment_active' : ''}`}>
           At the moment, this feature only supports the following languages.
@@ -161,7 +169,7 @@ function Languages(props) {
 
       </div>
 
-    </div>
+    </motion.div>
   )
 }
 

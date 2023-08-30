@@ -8,8 +8,9 @@
   /* min-height: 100vh; */
   box-sizing: border-box;
   width: var(--page-width);
+  min-height: 600px;
 
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .translator-wrapper > h2 {

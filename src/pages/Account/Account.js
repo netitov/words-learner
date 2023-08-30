@@ -13,7 +13,6 @@ import Collections from '../../components/Collections/Collections';
 
 function Account() {
 
-  const [translatorHeight, setTranslatorHeight] = useState(400);
   const [collectLocation, setCollectLocation] = useState('');
   const location = useLocation().pathname;
   const collectionPattern = /^\/account\/words\/collections\/.*/;
@@ -36,16 +35,6 @@ function Account() {
     }
   }, [location, collections]);
 
-
-  //expand translation container for fitting languages box
-  function handleTranslatorHeight(height) {
-    if(height > 0) {
-      setTranslatorHeight(height + 42);
-    } else {
-      setTranslatorHeight(400);
-    }
-  }
-
   return (
     <div className='account-page'>
       <AuthHeader />
@@ -61,7 +50,7 @@ function Account() {
 
       </div>
 
-      <div className='account-page__box' style={{ minHeight: translatorHeight + 'px' }}>
+      <div className='account-page__box'>
         <SideNav route={getCurrentElement?.route}/>
         <Routes>
           <Route path='/navigation' element={<CardNav />} />
@@ -70,7 +59,6 @@ function Account() {
             element={
               <Translate
                 account={true}
-                onHeightChange={handleTranslatorHeight}
                 chartColor='#dbecec73'
                 chartFontColor='#fff'
                 columnChartColor='#ffd987'

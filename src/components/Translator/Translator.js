@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { charsLimit, tooltipOption } from '../../utils/constants';
+import { charsLimit, tooltipOption, errorMessages } from '../../utils/constants';
 import { AiOutlineQuestionCircle } from 'react-icons/ai';
 import Tooltip from '@mui/material/Tooltip';
 import Spinner from '../Spinner/Spinner';
@@ -20,6 +20,8 @@ import { selectOutputLang } from '../../store/outputLang';
 import useWordSave from '../../hooks/useWordSave';
 import Bookmark from '../Bookmark/Bookmark';
 import Snackbar from '../Snackbar/Snackbar';
+import { showError } from '../../store/error';
+import { AnimatePresence } from 'framer-motion';
 
 function Translate(props) {
 
@@ -32,9 +34,10 @@ function Translate(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [frequency, setFrequency] = useState({ word: '', fr: 0, text: '', filmPer: 0 });
   const [translFreqs, setTranslFreqs] = useState([]);
-  const [snackbarErrorActive, setSnackbarErrorActive] = useState(false);
+  const [translatorHeight, setTranslatorHeight] = useState(600);
 
   const pathRef = useRef();
+  const compRef = useRef();
   const dispatch = useDispatch();
 
   const { handleWordList, closeSnackbar, checkList, isChecked, snackbarActive } = useWordSave();
@@ -52,6 +55,7 @@ function Translate(props) {
     setActiveBtn({ lang: e.target.textContent, type });
     if (type === langListActive.type) {
       setLangListActive({ type: '', value: false });
+
     }
     else {
       setLangListActive({ type: type, value: true });
@@ -60,7 +64,20 @@ function Translate(props) {
   }
 
   function closeLangList() {
+    if (!props.account) {
+      //scroll back to comp beginning ('cause page can be scrolled while langage select)
+      compRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      //scroll to the page top in account (because account element takes all page height)
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    }
+    //close lang list
     setLangListActive({ value: false });
+    //get back normal height to parent element
+    handleTranslatorHeight(0);
   }
 
   async function getTranslation(text) {
@@ -70,31 +87,33 @@ function Translate(props) {
     const response = await translate({ langs, text, inDictionary });
     setIsLoading(false);
 
-    //use translation
-    const translation = response.text === undefined ? response[0].tr[0].text : response.text[0];
-    const otherTranslations = (response.text === undefined && response.length > 0) ? response : [];
-    setTranslation(translation);
-    setOtherTransl(otherTranslations);
-    setTranslFreqs([]);
+    if (response.error) {
+      dispatch(showError(errorMessages.general));
+    } else {
+      //use translation
+      const translation = response.text === undefined ? response[0].tr[0].text : response.text[0];
+      const otherTranslations = (response.text === undefined && response.length > 0) ? response : [];
+      setTranslation(translation);
+      setOtherTransl(otherTranslations);
+      setTranslFreqs([]);
 
-    //check if word in user word list
-    checkList(translation, text);
+      //check if word in user word list
+      checkList(translation, text);
 
-    //get frequency if english is selected
-    if (chars.split(' ').length === 1) {
-      if (currentInputLang.lang === 'English') {
-        getFrequency(chars);
-      } else if (currentOutputLang.lang === 'English') {
-        getFrequency(translation);
-      } else setFrequency({ word: '', fr: 0, text: '' });
+      //get frequency if english is selected
+      if (chars.split(' ').length === 1) {
+        if (currentInputLang.lang === 'English') {
+          getFrequency(chars);
+        } else if (currentOutputLang.lang === 'English') {
+          getFrequency(translation);
+        } else setFrequency({ word: '', fr: 0, text: '' });
+      }
     }
   }
 
   function swapLangs() {
     //setActiveLangInput(activeLangOutput);
     //setActiveLangOutput(activeLangInput);
-
-
     dispatch(selectInputLang(currentOutputLang));
     dispatch(selectOutputLang(currentInputLang));
     setChars(translation);
@@ -148,6 +167,16 @@ function Translate(props) {
     setTranslFreqs(foundFreqs);
   }
 
+   //expand translation container for fitting languages box
+   function handleTranslatorHeight(height) {
+    if(height > 0) {
+      setTranslatorHeight(height + 50);
+    } else {
+      setTranslatorHeight(600);
+    }
+  }
+
+
   //call translate function
   useEffect(() => {
     if(chars.length > 0) {
@@ -183,8 +212,9 @@ function Translate(props) {
     return () => window.removeEventListener('scroll', runAnimation);
   }, []);
 
+
   return (
-    <div className='translator-wrapper' id='translator'>
+    <div className='translator-wrapper' id='translator' style={{ minHeight: translatorHeight + 'px' }} ref={compRef}>
       <h2 className='translator-wrapper__heading heading2'>Translate and compare</h2>
 
       <div className={`translator${animation ? ' translator_active' : ''}`} ref={pathRef}>
@@ -337,37 +367,36 @@ function Translate(props) {
             <Spinner
               isLoading={isLoading}
             />
-            <Snackbar
-              snackbarActive={snackbarActive}
-              elClass='translator__snack'
-              closeSnack={closeSnackbar}
-              transformPos='_left'
-            >
-              <p className='translator__snack-text'>
-                <Link to='/signup'>Sign up</Link> / <Link to='/login'>Log in</Link>
-                &nbsp;to create your own word list and much more
-              </p>
-            </Snackbar>
+            {/* message for user on word save if user is not logged in */}
+            {!isLoggedIn &&
+              <Snackbar
+                snackbarActive={snackbarActive}
+                elClass='translator__snack'
+                closeSnack={closeSnackbar}
+                transformPos='_left'
+              >
+                <p className='translator__snack-text'>
+                  <Link to='/signup'>Sign up</Link> / <Link to='/login'>Log in</Link>
+                  &nbsp;to create your own word list and much more
+                </p>
+              </Snackbar>
+            }
 
-            <Snackbar
-              snackbarActive={snackbarErrorActive}
-              elClass='translator__snack translator__snack_err'
-              text='Something went wrong, please try again later'
-              closeSnack={() => setSnackbarErrorActive(false)}
-              transformPos='_left'
-            />
           </div>
 
         </div>
-
-        <Languages
-          languages={languages}
-          isActive={langListActive}
-          activeBtn={activeBtn}
-          closeLangList={closeLangList}
-          account={props.account}
-          onHeightChange={props.onHeightChange}
-        />
+        {/* <AnimatePresence> */}
+          {langListActive.value &&
+            <Languages
+              languages={languages}
+              isActive={langListActive}
+              activeBtn={activeBtn}
+              closeLangList={closeLangList}
+              account={props.account}
+              onHeightChange={handleTranslatorHeight}
+            />
+          }
+        {/* </AnimatePresence> */}
 
         <Dictionary
           otherTransl={otherTransl}

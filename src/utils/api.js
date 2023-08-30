@@ -46,7 +46,7 @@ export async function checkFrequency(word) {
 }
 
 //find word (and translate) in dictionary api, if text is shorter 3 words. Otherwise, use translation api
-export async function translate({ langs, text, inDictionary }) {
+/* export async function translate({ langs, text, inDictionary }) {
   console.log({ langs, text, inDictionary })
   try {
     const response = await fetch(`${SERVER_API}/translate`, {
@@ -59,6 +59,10 @@ export async function translate({ langs, text, inDictionary }) {
   } catch (err) {
     console.error(err);
   }
+} */
+
+export async function translate({ langs, text, inDictionary }) {
+  return fetchAPI('translate', 'POST', undefined, { langs, text, inDictionary });
 }
 
 //get list of available languages for translations from server
