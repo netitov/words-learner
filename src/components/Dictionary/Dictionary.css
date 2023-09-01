@@ -131,27 +131,45 @@ td {
   text-overflow: ellipsis; */
 }
 
-.table__btn_transl {
+div.table__btn-word > .table__btn_active {
+  color: #fff;
+  background-color: var(--darker-blue);
+}
+
+.table__btn-transl {
   background: var(--super-light-green);
 }
 
-.table__btn_transl:hover {
+.table__btn-transl:hover {
   background: #bbdcdc;
   color: var(--main-green);
 }
 
-.table__btn_syn {
+div.table__btn-word > .table__btn-transl_active {
+  background-color: var(--prime-yellow);
+}
+
+.table__btn-syn {
   background: var(--white);
 }
 
-.table__btn_syn:hover {
+.table__btn-syn:hover {
   background: #e2e9e9;
   color: var(--main-green);
+}
+
+.table__btn-syn_active {
+  background-color: var(--main-blue);
 }
 
 .table__btn-word {
   position: relative;
 
+}
+
+.table__btn > span {
+  font-size: 0.8em;
+  margin-right: 2px;
 }
 
 .table__expand-btn {

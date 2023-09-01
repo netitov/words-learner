@@ -14,14 +14,12 @@ import { RiArrowLeftRightFill } from 'react-icons/ri';
 import { translate, checkFrequency } from '../../utils/api';
 import { getFreqCat } from '../../utils/getFreqCat';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { selectInputLang } from '../../store/inputLang';
 import { selectOutputLang } from '../../store/outputLang';
 import useWordSave from '../../hooks/useWordSave';
 import Bookmark from '../Bookmark/Bookmark';
 import Snackbar from '../Snackbar/Snackbar';
 import { showError } from '../../store/error';
-import { AnimatePresence } from 'framer-motion';
 
 function Translate(props) {
 
@@ -29,18 +27,21 @@ function Translate(props) {
   const [animation, setAnimation] = useState(false);
   const [langListActive, setLangListActive] = useState({ type: '', value: false });
   const [chars, setChars] = useState('');
-  const [translation, setTranslation] = useState('');
+  const [translation, setTranslation] = useState([]);
+  const [savedTranslation, setSavedTranslation] = useState([]);
+  const [savedTranslationSyn, setSavedTranslationSyn] = useState([]);
   const [otherTransl, setOtherTransl] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [frequency, setFrequency] = useState({ word: '', fr: 0, text: '', filmPer: 0 });
   const [translFreqs, setTranslFreqs] = useState([]);
   const [translatorHeight, setTranslatorHeight] = useState(600);
+  const [translationResponse, setTranslationResponse] = useState([]);
 
   const pathRef = useRef();
   const compRef = useRef();
   const dispatch = useDispatch();
 
-  const { handleWordList, closeSnackbar, checkList, isChecked, snackbarActive } = useWordSave();
+  const { handleWordList, closeSnackbar, checkList, isChecked, setIsChecked, snackbarActive, updateWordData } = useWordSave();
 
   const currentInputLang = useSelector((state) => state.inputLang);
   const currentOutputLang = useSelector((state) => state.outputLang);
@@ -80,6 +81,81 @@ function Translate(props) {
     handleTranslatorHeight(0);
   }
 
+  //check translations in user word list
+  function findSavedWords(translatedWords, savedWords) {
+    const foundTranslations = [];
+    const userLang = JSON.parse(localStorage.getItem('userLang'));
+    const isDifferentLang = userLang?.lang !== currentInputLang.lang;
+
+    //check translated word in user word list
+    translatedWords.forEach((translatedWord) => {
+      translatedWord.tr?.forEach((word) => {
+        if (isDifferentLang) {
+          if (savedWords.find(sw => sw.word === chars && sw.translation === word.text)) {
+            foundTranslations.push(word.text);
+          }
+        } else {
+          if (savedWords.find(sw => sw.word === word.text)) {
+            foundTranslations.push(word.text);
+            // /props.userWords.some(i => i.word === props.translation && i.translation === word);
+          }
+        }
+
+        //check synonum of translated word in user word list
+        word?.syn?.forEach((synonym) => {
+          if (isDifferentLang) {
+            if (savedWords.find(sw => sw.word === chars && sw.translation === synonym.text)) {
+              foundTranslations.push(synonym.text);
+            }
+          } else {
+            if (savedWords.find(sw => sw.word === synonym.text)) {
+              foundTranslations.push(synonym.text);
+            }
+          }
+        });
+      });
+    });
+
+    return foundTranslations;
+  }
+
+  //check translations in user word list
+  function findSavedSyns(translatedWords, savedWords, translation) {
+    const foundTranslations = [];
+    const userLang = JSON.parse(localStorage.getItem('userLang'));
+    const isDifferentLang = userLang?.lang !== currentInputLang.lang;
+
+    //check translated word (synonyms) in user word list
+    translatedWords.forEach((translatedWord) => {
+      translatedWord.tr?.forEach((word) => {
+
+        word?.mean?.forEach((synonym) => {
+          if (isDifferentLang) {
+            if (savedWords.find(sw => sw.word === synonym.text)) {
+              foundTranslations.push(synonym.text);
+            }
+          } else if (savedWords.find(sw => sw.word === translation && sw.translation === synonym.text)) {
+            foundTranslations.push(synonym.text);
+          }
+
+        });
+      });
+    });
+
+    return foundTranslations;
+  }
+
+  //display in dictionary which word is saved
+  function updateDictionaryState(wordsArr, translation) {
+    //words for column Translation
+    const savedWords = wordsArr.length > 0 ? findSavedWords(wordsArr, userWords) : [];
+    setSavedTranslation(savedWords);
+    //words for column Synonyms
+    const savedWordsSyn = wordsArr.length > 0 ? findSavedSyns(wordsArr, userWords, translation) : [];
+    setSavedTranslationSyn(savedWordsSyn);
+  }
+
+  //translate text
   async function getTranslation(text) {
     //get translation
     const langs = currentInputLang.code + '-' + currentOutputLang.code;
@@ -91,14 +167,20 @@ function Translate(props) {
       dispatch(showError(errorMessages.general));
     } else {
       //use translation
+      setTranslationResponse(response);
       const translation = response.text === undefined ? response[0].tr[0].text : response.text[0];
       const otherTranslations = (response.text === undefined && response.length > 0) ? response : [];
       setTranslation(translation);
       setOtherTransl(otherTranslations);
       setTranslFreqs([]);
 
-      //check if word in user word list
-      checkList(translation, text);
+      //check saved words if user logged in to display them in dictionary
+      if (isLoggedIn) {
+        updateDictionaryState(response, translation);
+
+        //check if word in user word list: to display bookmark in translator
+        checkList(translation, text);
+      }
 
       //get frequency if english is selected
       if (chars.split(' ').length === 1) {
@@ -176,7 +258,6 @@ function Translate(props) {
     }
   }
 
-
   //call translate function
   useEffect(() => {
     if(chars.length > 0) {
@@ -189,8 +270,12 @@ function Translate(props) {
       setIsLoading(false);
       setFrequency({ word: '', fr: 0, text: '', filmPer: 0 });
       setTranslFreqs([]);
+      setSavedTranslation([]);
+      setSavedTranslationSyn([]);
+      setTranslationResponse([]);
       //setSnackbarActive();
       closeSnackbar();
+      setIsChecked(false);
     }
   }, [chars, currentInputLang, currentOutputLang]);
 
@@ -211,6 +296,13 @@ function Translate(props) {
     window.addEventListener('scroll', runAnimation);
     return () => window.removeEventListener('scroll', runAnimation);
   }, []);
+
+  //update dictionary state if userWords updated
+  useEffect(() => {
+    if (isLoggedIn && translationResponse.length > 0) {
+      updateDictionaryState(translationResponse, translation);
+    }
+  }, [userWords])
 
 
   return (
@@ -359,7 +451,7 @@ function Translate(props) {
             <Bookmark
               toggleBookmark={() => handleWordList(chars, translation)}
               isChecked={isChecked}
-              title='add to the learning list'
+              title={!isChecked ? 'add to the learning list' : 'remove from the learning list'}
               propClass='translator__btn'
               width='18px'
               height='18px'
@@ -401,10 +493,17 @@ function Translate(props) {
         <Dictionary
           otherTransl={otherTransl}
           addTranslate={addTranslate}
-          handleLearnList={props.handleLearnList}
+          handleLearnList={(word, wordTransl, isSaved) => handleWordList(word, wordTransl, isSaved, true)} //true: call from dictionary
           compareFreq={compareFreq}
           outputLang={currentOutputLang.lang}
           inputLang={currentInputLang.lang}
+          chars={chars}
+          userWords={userWords}
+          savedTranslation={savedTranslation}
+          savedTranslationSyn={savedTranslationSyn}
+          handleUpdateList={(word, translation) => updateWordData(word, translation)}
+          isChecked={isChecked}
+          translation={translation}
         />
 
         <HorizontalChart

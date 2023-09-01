@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { addNewWords, deleteWord, deleteWordsArray, updateWordState, setUserWords } from '../store/userWords';
-import { addToList, deleteFromList, deleteArrayFromListDB, updateListDB } from '../utils/api';
+import { addToList, deleteFromList, deleteArrayFromListDB, updateListDB, updateWordTranslationAPI } from '../utils/api';
 import { useSelector, useDispatch } from 'react-redux';
 import { showError } from '../store/error';
 import { errorMessages } from '../utils/constants';
@@ -21,11 +21,15 @@ function useWordSave() {
   //save word in user learning list
   async function saveWord(obj) {
     const arr = [obj];
+    //add to DB
     const addedWords = await addToList(arr, token);
     if (addedWords.error) {
       dispatch(showError(errorMessages.general));
       return addedWords.error;
     } else {
+      //add bookmark icon
+      setIsChecked(true);
+      //update state and storage
       dispatch(addNewWords(addedWords));
       sessionStorage.setItem('userWords', JSON.stringify([...userWords, ...addedWords]));
       return addedWords;
@@ -39,13 +43,14 @@ function useWordSave() {
       dispatch(showError(errorMessages.general));
       return response.error;
     } else {
+      //remove bookmark icon
+      setIsChecked(false);
       //update state
       dispatch(deleteWord(word));
       //update storage
       const wordsStorage = JSON.parse(sessionStorage.getItem('userWords'));
       const updatedUserWordsArray = wordsStorage.filter(i => i.word !== word);
       sessionStorage.setItem('userWords', JSON.stringify(updatedUserWordsArray));
-
       return response.data;
     }
   };
@@ -77,6 +82,28 @@ function useWordSave() {
     return updatedWords;
   };
 
+  //update word data in DB
+  async function updateWordData(word, translation) {
+    const wordsStorage = JSON.parse(sessionStorage.getItem('userWords'));
+
+    const updatedWord = await updateWordTranslationAPI({ word, translation }, token);
+
+    if (updatedWord.error) {
+      dispatch(showError(errorMessages.general));
+      return updatedWord.error;
+    } else {
+      //update storage and state
+      dispatch(updateWordState(updatedWord));
+
+      //update session storage
+      const updatedWords = wordsStorage?.map(wordObj => {
+        return wordObj._id ===  updatedWord._id ? updatedWord : wordObj;
+      });
+      sessionStorage.setItem('userWords', JSON.stringify(updatedWords));
+    }
+    return updatedWord;
+  };
+
   function closeSnackbar() {
     setSnackbarActive(false);
   };
@@ -91,20 +118,21 @@ function useWordSave() {
   }
 
    //prepare word for saving/ deleting in learning list + check if user logged in
-   async function handleWordList(text, translation) {
+   async function handleWordList(text, translation, isSaved, isDictionary) {
     const userLang = JSON.parse(localStorage.getItem('userLang'));
     const word = userLang.lang === currentInputLang.lang ? translation : text;
+    //show error-message if user is not logged in
     if (!isLoggedIn) {
       setSnackbarActive(true);
-    } else if (isChecked) {
-      setIsChecked(false);
+      //isSaved: for words saving from dictionary
+    } else if ((isChecked && !isDictionary) || isSaved) {
+      //remove words if it's saved
       await removeWord(word);
     } else {
-      setIsChecked(true);
       const sourceData = collections.find(i => i.default);
       const obj = {
         word,
-        translation: userLang.lang === currentInputLang.lang ? word : translation,
+        translation: userLang.lang === currentInputLang.lang ? text : translation,
         translationLang: userLang.code,
         source: sourceData ? [{ collectionId: sourceData._id, collectionName: sourceData.collectionName }] : []
       }
@@ -112,7 +140,9 @@ function useWordSave() {
     }
   }
 
-  return { handleWordList, closeSnackbar, checkList, isChecked, snackbarActive, removeWord, removeWordList, updateCollectionData } ;
+  return { handleWordList, closeSnackbar, checkList, isChecked, setIsChecked, snackbarActive,
+    removeWord, removeWordList, updateCollectionData, updateWordData
+  } ;
 }
 
 export default useWordSave;

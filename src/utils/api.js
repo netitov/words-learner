@@ -137,6 +137,12 @@ export async function updateListDB(collectionId, token) {
   return fetchAPI('userwords', 'PATCH', headers, collectionId);
 }
 
+//update translation of a word in DB
+export async function updateWordTranslationAPI(wordObj, token) {
+  const headers = {'Authorization': `Bearer ${token}`};
+  return fetchAPI(`userwords/${wordObj.word}`, 'PATCH', headers, wordObj);
+}
+
 //get user learning list
 export async function getWordList(token) {
   const headers = {'Authorization': `Bearer ${token}`};

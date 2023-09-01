@@ -28,9 +28,9 @@ function Menu(props) {
           <MdTranslate />
           <span>translate</span>
         </li>
-        <li className='menu__li' onClick={props.addToList}>
+        <li className='menu__li' onClick={props.handleList}>
           <BsBookmarks />
-          <span>add to the learning list</span>
+          <span>{props.isSaved() ? 'remove from the learning list' : 'add to the learning list'}</span>
         </li>
         <li
           className={`menu__li${!props.compareFreqActive ? ' menu__li_inactive' : ''}`}

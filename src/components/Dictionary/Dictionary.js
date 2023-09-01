@@ -71,6 +71,26 @@ function Dictionary(props) {
     setExpandBtnActive(prevState => !prevState);
   }
 
+  //select function: update current word translation or add/remove word from learn list
+  function handleWordUpdate(text) {
+    const userLang = JSON.parse(localStorage.getItem('userLang'));
+    if (userLang.lang !== props.inputLang && !props.savedTranslation.includes(text) && props.savedTranslation.length > 0) {
+      props.handleUpdateList(props.chars, text);
+    } else {
+      props.handleLearnList(props.chars, text, props.savedTranslation.includes(text));
+    }
+  }
+
+  //select function: update current word translation for Synonym or add/remove word from learn list
+  function handleSynUpdate(text) {
+    const userLang = JSON.parse(localStorage.getItem('userLang'));
+    if (userLang.lang === props.inputLang && !props.savedTranslationSyn.includes(text) && props.isChecked) {
+      props.handleUpdateList(props.translation, text);
+    } else {
+      props.handleLearnList(text, props.translation, props.savedTranslationSyn.includes(text));
+    }
+  }
+
   return (
     <div className={`dictionary${props.otherTransl.length > 0 ? ' dictionary_active' : ''}`} ref={ref}>
       <h2 className='dictionary__heading'>All translations</h2>
@@ -111,29 +131,40 @@ function Dictionary(props) {
           <tbody>
             {otherTransl.map((i, index) => (
               <tr key={i.text} className={`table__row${index > optionsLimit && !expandBtnActive ? ' table__row_hidden' : ''}`}>
+
                 <td>{i.pos}</td>
 
+                {/* translation column */}
                 <td>
                   <div className='table__block table__block_transl'>
                     <div className='table__btn-word'>
-                      <button className='table__btn table__btn_transl' onClick={() => openMenu(i.text)}>
-                        {i.text}
+                      <button
+                        className={`table__btn table__btn-transl${props.savedTranslation.includes(i.text) ? ' table__btn-transl_active' : ''}`}
+                        onClick={() => openMenu(i.text)}
+                      >
+                        {props.savedTranslation.includes(i.text) ? <span>✔</span> : ''}{i.text}
                       </button>
                       <Menu
                         menuActive={activeMenu === i.text ? true : false}
                         addTranslate={() => props.addTranslate(i.text, true)}
-                        handleLearnList={props.handleLearnList}
+                        handleList={() => handleWordUpdate(i.text)}
+                        isSaved={() => props.savedTranslation.includes(i.text)}
                         compareFreq={() => props.compareFreq(i, true)}
                         compareFreqActive={props.outputLang === 'English' ? true : false}
                       />
                     </div>
                     {i.syn?.map((s) => (
                       <div className='table__btn-word' key={s.text}>
-                        <button className='table__btn table__btn_transl' onClick={() => openMenu(s.text)}>{s.text}</button>
+                        <button
+                          className={`table__btn table__btn-transl${props.savedTranslation.includes(s.text) ? ' table__btn-transl_active' : ''}`}
+                          onClick={() => openMenu(s.text)}>
+                          {props.savedTranslation.includes(s.text) ? <span>✔</span> : ''}{s.text}
+                        </button>
                         <Menu
                           menuActive={activeMenu === s.text ? true : false}
                           addTranslate={() => props.addTranslate(i.text, true)}
-                          handleLearnList={props.handleLearnList}
+                          handleList={() => handleWordUpdate(s.text)}
+                          isSaved={() => props.savedTranslation.includes(s.text)}
                           compareFreq={() => props.compareFreq(i, true)}
                           compareFreqActive={props.outputLang === 'English' ? true : false}
                         />
@@ -142,17 +173,24 @@ function Dictionary(props) {
                   </div>
                 </td>
 
+                {/* synonyms column */}
                 <td>
                   <div className='table__block table__block_syn'>
                     {
                       i.mean ?
                       i.mean?.map((m) => (
                         <div className='table__btn-word' key={m.text}>
-                          <button className='table__btn table__btn_syn' onClick={() => openMenu(m.text)}>{m.text}</button>
+                          <button
+                            className={`table__btn table__btn-syn${props.savedTranslationSyn.includes(m.text) ? ' table__btn-syn_active' : ''}`}
+                            onClick={() => openMenu({ translation: i.text, syn: m.text })}>
+                              {props.savedTranslationSyn.includes(m.text) ? <span>✔</span> : ''}{m.text}
+                            </button>
                           <Menu
-                            menuActive={activeMenu === m.text ? true : false}
+                            /* double check for menu because there might be several same synonyms  */
+                            menuActive={activeMenu?.syn === m.text && activeMenu?.translation === i.text ? true : false}
                             addTranslate={() => props.addTranslate(m.text, false)}
-                            handleLearnList={() => props.handleLearnList(m.text)}
+                            handleList={() => handleSynUpdate(m.text)}
+                            isSaved={() => props.savedTranslationSyn.includes(m.text)}
                             compareFreq={() => props.compareFreq(i.mean)}
                             compareFreqActive={props.inputLang === 'English' ? true : false}
                           />
@@ -167,14 +205,16 @@ function Dictionary(props) {
           </tbody>
 
         </table>
+
+        {/* pagination btn */}
         <button
           className={`table__expand-btn${otherTransl.length <= (optionsLimit + 1) ? ' table__expand-btn_inactive' : '' }`}
           type='button'
           onClick={handleExpandBtn}>
           Show {`${expandBtnActive ? 'fewer' : 'more'}`} options
         </button>
-      </div>
 
+      </div>
 
     </div>
   )

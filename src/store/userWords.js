@@ -2,10 +2,9 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = [];
 
-const handleUpdateWords = (words, updatingWords) => {
+const handleUpdateWords = (words, updatingWord) => {
   return words.map(wordObj => {
-    const matchingUpdatedWords = updatingWords.find(i => i._id === wordObj._id);
-    return matchingUpdatedWords ? matchingUpdatedWords : wordObj;
+    return wordObj._id ===  updatingWord._id ? updatingWord : wordObj;
   });
 };
 
