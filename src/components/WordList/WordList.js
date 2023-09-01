@@ -37,8 +37,9 @@ function WordList() {
   const languages = useSelector((state) => state.enDictionLangs);
   const userWords = useSelector((state) => state.userWords);
 
-  const initRows = 10;
+  const initRows = 100;
   const rowsStep = 10;
+  const quizQuests = 10;
   const rowHeight = 46;
 
   const { removeWord } = useWordSave();
@@ -70,9 +71,8 @@ function WordList() {
   function updateQuiz() {
     const wordsToLearn = getNotLearnedWords(initWords);
     //use not learned words if they left, otherwise all words from current collection
-    const wordsToLearnSlice = (wordsToLearn.length > 0 ? wordsToLearn : initWords).slice(0, initRows);
+    const wordsToLearnSlice = (wordsToLearn.length > 0 ? wordsToLearn : initWords).slice(0, quizQuests);
     const randomSlice = shuffleArray(wordsToLearnSlice);
-    //const randomArrSlice = randomArr.slice(0, initRows);
     setQuizWords(randomSlice);
     return randomSlice;
   }
@@ -133,11 +133,11 @@ function WordList() {
       : wordsArray.filter(i => i.source.some(el => el.collectionId === currentCollectionId));
 
     //first part words to show
-    const wordsSlice = filteredWords.slice(0, initRows);
+    const wordsSlice = filteredWords;/* .slice(0, initRows); */
     //get not learned words for quiz
-    const notLearnedWords = getNotLearnedWords(filteredWords).slice(0, initRows);
+    const notLearnedWords = getNotLearnedWords(filteredWords).slice(0, quizQuests);
     //if there are no not learned words - use all words
-    const wordsToLearn = notLearnedWords.length > 0 ? notLearnedWords : wordsSlice;
+    const wordsToLearn = notLearnedWords.length > 0 ? notLearnedWords : wordsSlice.slice(0, quizQuests);
 
     return {
       wordsSlice,
@@ -146,9 +146,9 @@ function WordList() {
     };
   }
 
+  // set initial data/ update if list words or location changed
   useEffect(() => {
     const { wordsSlice, wordsToLearn, initWords } = getWordsData(userWords, currentCollectionId);
-
     //words for specific location
     setWords(wordsSlice);
     //all user words
@@ -159,9 +159,12 @@ function WordList() {
 
 
   //lazy loading of table rows
-  useEffect(() => {
+  /* useEffect(() => {
+
     if (initWords.length > initRows) {
       function displayMoreRows() {
+        console.log(prevWordsNumber, initWords.length)
+        //prevWordsNumber = initWords.length;
         const elementPos = pathRef.current.getBoundingClientRect().top;
         const elementHeight = pathRef.current.offsetHeight;
         const windowHeight = window.innerHeight;
@@ -173,10 +176,11 @@ function WordList() {
           });
         }
       }
+
       window.addEventListener('scroll', displayMoreRows);
       return () => window.removeEventListener('scroll', displayMoreRows);
     }
-  }, [userWords, initWords]);
+  }, [userWords, initWords]); */
 
 
   return (

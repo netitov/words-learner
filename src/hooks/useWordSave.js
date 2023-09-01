@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { addNewWords, deleteWord, deleteWordsArray, updateWordState, setUserWords } from '../store/userWords';
+import { addNewWords, deleteWord, deleteWordsArray, updateWord, setUserWords } from '../store/userWords';
 import { addToList, deleteFromList, deleteArrayFromListDB, updateListDB, updateWordTranslationAPI } from '../utils/api';
 import { useSelector, useDispatch } from 'react-redux';
 import { showError } from '../store/error';
@@ -84,24 +84,31 @@ function useWordSave() {
 
   //update word data in DB
   async function updateWordData(word, translation) {
-    const wordsStorage = JSON.parse(sessionStorage.getItem('userWords'));
 
-    const updatedWord = await updateWordTranslationAPI({ word, translation }, token);
-
-    if (updatedWord.error) {
-      dispatch(showError(errorMessages.general));
-      return updatedWord.error;
+    if (!isLoggedIn) {
+      setSnackbarActive(true);
+      //isSaved: for words saving from dictionary
     } else {
-      //update storage and state
-      dispatch(updateWordState(updatedWord));
+      const wordsStorage = JSON.parse(sessionStorage.getItem('userWords'));
 
-      //update session storage
-      const updatedWords = wordsStorage?.map(wordObj => {
-        return wordObj._id ===  updatedWord._id ? updatedWord : wordObj;
-      });
-      sessionStorage.setItem('userWords', JSON.stringify(updatedWords));
+      const updatedWord = await updateWordTranslationAPI({ word, translation }, token);
+
+      if (updatedWord.error) {
+        dispatch(showError(errorMessages.general));
+        return updatedWord.error;
+      } else {
+        //update storage and state
+        dispatch(updateWord(updatedWord));
+
+        //update session storage
+        const updatedWords = wordsStorage?.map(wordObj => {
+          return wordObj._id ===  updatedWord._id ? updatedWord : wordObj;
+        });
+        sessionStorage.setItem('userWords', JSON.stringify(updatedWords));
+      }
+      return updatedWord;
     }
-    return updatedWord;
+
   };
 
   function closeSnackbar() {

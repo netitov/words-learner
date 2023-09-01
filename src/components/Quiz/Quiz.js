@@ -18,7 +18,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 function Quiz(props) {
 
   const [questions, setQuestions] = useState([]);
-  const [activeQuestion, setActiveQuestion] = useState({ translation: '', options: [] });
+  const [activeQuestion, setActiveQuestion] = useState({ translation: '', options: [], _id: '' });
   const [passedQuests, setPassedQuests] = useState([]);
   const [progress, setProgress] = useState({ percent: '0%', quest: 1 });
   const [result, setResult] = useState({ quests: 0, correctAnsw: 0 });
@@ -53,7 +53,7 @@ function Quiz(props) {
     if (passedQuests.some(el => el.translation === i.translation)) {
       const completedPart = Math.round(passedQuests.length/questions.length * 100);
 
-      const currPosition = questions.findIndex((i) => i.translation === activeQuestion.translation);
+      const currPosition = questions.findIndex((i) => i._id === activeQuestion._id);
       const quest = ((currPosition + 1) > (questions.length - 1)) ? { word: '' } : questions[currPosition + 1];
       setActiveQuestion(quest);
 
@@ -99,7 +99,6 @@ function Quiz(props) {
         correct: quest.word === answ,
         answer: answ
       };
-
       updatePassedQuests(updatedQuest);
 
       //save quiz data and results if quiz opened from account (user logged in)
@@ -110,7 +109,7 @@ function Quiz(props) {
   }
 
   function isQuestionNotPassed(question) {
-    return !passedQuests.some((q) => q.translation === question.translation);
+    return !passedQuests.some((q) => q._id === question._id);
   }
 
   function updatePassedQuests(updatedQuest) {
@@ -142,7 +141,8 @@ function Quiz(props) {
 
   //apply styles for options buttons (answers)
   function handleAnswerBtn(text) {
-    const answeredQuestion = passedQuests.find((question) => question.translation === activeQuestion.translation);
+    const answeredQuestion = passedQuests.find((question) => question._id === activeQuestion._id);
+
     if (!answeredQuestion) {
       return '';
     } else if (answeredQuestion.answer === text) {
@@ -158,7 +158,7 @@ function Quiz(props) {
   }
 
   function droppData() {
-    setActiveQuestion({ translation: '', options: [] });
+    setActiveQuestion({ translation: '', options: [], _id: '' });
     setPassedQuests([]);
     setProgress({ percent: '0%', quest: 1 });
     setResult({ quests: 0, correctAnsw: 0 });
@@ -367,8 +367,8 @@ function Quiz(props) {
         {questions.map((i) => (
 
           <div
-            className={`quiz__quest-box${i.translation === activeQuestion.translation ? ' quiz__quest-box_active' : ''}`}
-            key={i.translation}
+            className={`quiz__quest-box${i._id === activeQuestion._id ? ' quiz__quest-box_active' : ''}`}
+            key={i._id}
           >
             {/* question box */}
             <div className='quiz__quest'>

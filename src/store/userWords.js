@@ -2,11 +2,19 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = [];
 
-const handleUpdateWords = (words, updatingWord) => {
+const handleUpdateWord = (words, updatingWord) => {
   return words.map(wordObj => {
     return wordObj._id ===  updatingWord._id ? updatingWord : wordObj;
   });
 };
+
+const handleUpdateWordsArr = (words, updatingWords) => {
+  return words.map(wordObj => {
+    const matchingUpdatedWords = updatingWords.find(i => i._id === wordObj._id);
+    return matchingUpdatedWords ? matchingUpdatedWords : wordObj;
+  });
+};
+
 
 const userWordsSlice = createSlice({
   name: 'userWords',
@@ -28,11 +36,16 @@ const userWordsSlice = createSlice({
     },
     updateWordState(state, action) {
       const updatingWords = action.payload;
-      const updatedWords = handleUpdateWords(state, updatingWords);
+      const updatedWords = handleUpdateWordsArr(state, updatingWords);
+      return updatedWords;
+    },
+    updateWord(state, action) {
+      const updatingWords = action.payload;
+      const updatedWords = handleUpdateWord(state, updatingWords);
       return updatedWords;
     }
   },
 });
 
-export const { setUserWords, addNewWords, deleteWord, deleteWordsArray, updateWordState } = userWordsSlice.actions;
+export const { setUserWords, addNewWords, deleteWord, deleteWordsArray, updateWordState, updateWord } = userWordsSlice.actions;
 export default userWordsSlice.reducer;
