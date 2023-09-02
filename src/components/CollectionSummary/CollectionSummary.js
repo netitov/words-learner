@@ -29,6 +29,9 @@ function CollectionSummary({ totalWords, learnedWords }) {
     plugins: {
       legend: {
         display: false,
+      },
+      datalabels: {
+        display: false
       }
     },
     elements: {

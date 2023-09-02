@@ -1,0 +1,30 @@
+.progress {
+  flex: 1;
+
+  animation: fade-in 0.4s ease;
+}
+
+.progress__chart-container {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.progress .area-chart {
+  width: 45%;
+  max-width: 450px;
+  min-width: 350px;
+  padding: 10px;
+  box-sizing: border-box;
+  background-color: var(--darker-blue);
+  border-radius: 10px;
+  flex-grow: 1;
+}
+
+.progress .area-chart > h3 {
+  font-size: 1.3em;
+  color: #fff;
+  font-weight: 300;
+  margin: 10px 0;
+  text-align: center;
+}

@@ -10,6 +10,7 @@ import Frequency from '../../components/Frequency/Frequency';
 import WordList from '../../components/WordList/WordList';
 import { accountNav } from '../../utils/constants';
 import Collections from '../../components/Collections/Collections';
+import Progress from '../../components/Progress/Progress';
 
 function Account() {
 
@@ -70,6 +71,7 @@ function Account() {
           <Route path='/words' element={<WordList />} />
           <Route path='/collections' element={<Collections />} />
           <Route path='/words/collections/*' element={<WordList />} />
+          <Route path='/progress' element={<Progress />} />
           <Route path='/*' element={<CardNav />} />
         </Routes>
       </div>
