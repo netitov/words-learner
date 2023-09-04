@@ -63,13 +63,17 @@ body {
   height: 100%;
   background-color: var(--prime-blue);
   z-index: 100;
-  display: none;
-
-}
-
-.page__loading-overlay_active {
   display: flex;
 }
+
+.page__loading-overlay > .spinner {
+  border-top: 3px solid var(--prime-yellow);
+  border-right: 3px solid var(--prime-yellow);
+}
+
+/* .page__loading-overlay_active {
+  display: flex;
+} */
 
 .page__loading-overlay_active > .spinner {
   border-right: 3px solid var(--prime-yellow);

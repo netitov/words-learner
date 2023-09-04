@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import Home from './pages/Home/Home';
 import LoginPage from './pages/Auth/LoginPage';
 import SignupPage from './pages/Auth/SignupPage';
@@ -20,7 +20,8 @@ import { setCollections } from './store/collections';
 import { setQuizResults } from './store/qiuzResults';
 import useRandomWordsFetch from './hooks/useRandomWordsFetch';
 import ErrorPopup from './components/ErrorPopup/ErrorPopup';
-import { AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import ProtectedRoute from './components/ProtectedRoute';
 
 
 function App() {
@@ -57,6 +58,7 @@ function App() {
       localStorage.removeItem('token');
     }
     setIsLoading(false);
+
   }
 
   //get user data if token exists
@@ -231,23 +233,44 @@ function App() {
   return (
     <div className='page'>
       <div className='page__wrapper'>
+
+        {/* loading overlay */}
+        <AnimatePresence>
+          {isLoading &&
+            <motion.div
+              className={`page__loading-overlay`}
+              initial={{ opacity: 1 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <Spinner isLoading={isLoading}/>
+            </motion.div>
+          }
+        </AnimatePresence>
+
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<LoginPage />} />
           <Route path='/signup' element={<SignupPage />} />
           <Route path='/password-reset' element={<LinkRequestPage />} />
           <Route path='/password-reset/:userId/:token' element={<PasswordResetPage />} />
-          <Route path='/account/*' element={<Account />} />
+          <Route path='/account/*'
+            element={
+              <ProtectedRoute isAuthenticated={isLoggedIn}>
+                <Account />
+              </ProtectedRoute>
+            }
+          />
+          <Route path='/*' element={<Navigate to='/' />} />
         </Routes>
-        <div className={`page__loading-overlay${isLoading ? ' page__loading-overlay_active' : ''}`}>
-          <Spinner isLoading={isLoading}/>
-        </div>
+
+        {/* error overlay */}
         <AnimatePresence>
           { errorMessage && <ErrorPopup /> }
         </AnimatePresence>
 
+      </div>
     </div>
-  </div>
   )
 }
 

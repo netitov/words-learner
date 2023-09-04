@@ -1,5 +1,6 @@
 main {
   overflow-x: hidden;
+  /* animation: fade-in 0.5s ease-out; */
 }
 
 .main__quiz {
