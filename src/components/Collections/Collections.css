@@ -107,15 +107,15 @@
 .collection__title {
   margin: 0;
   font-weight: 400;
-  background-color: #494949b0;
-  padding: 5px;
-  border-radius: 10px;
+  background-color: #37636c;
+  padding: 11px 5px;
+  /* border-radius: 10px; */
   color: #fff;
   z-index: 0;
   text-align: center;
   box-sizing: border-box;
   font-size: 1.1em;
-  width: 95%;
+  width: 100%;
   transition: all 0.3s;
 }
 
@@ -145,15 +145,21 @@
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  width: 95%;
+  width: 100%;
 }
 
 .collection__title_input {
-  width: 95%;
+  width: 100%;
   border: none;
   outline: none;
-  padding: 7px 5px;
+  padding: 9px 5px;
   min-height: 23px;
+  color: #000;
+  background-color: #fff;
+}
+
+.collection__title_input::placeholder {
+  color: #000;
 }
 
 .collection__title_input::placeholder {

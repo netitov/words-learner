@@ -11,8 +11,12 @@ function Progress() {
   const [addedWords, setAddedWords] = useState([]);
   const [learnedWords, setLearnedWords] = useState([]);
   const [collectionData, setCollectionData] = useState([]);
+  const [quizData, setQuizData] = useState([]);
+  const [months, setMonths] = useState([]);
+
   const userWords = useSelector((state) => state.userWords);
   const collections = useSelector((state) => state.collections);
+  const quizzes = useSelector((state) => state.quizResults);
 
   const collectionsLimit = 5;
 
@@ -30,7 +34,7 @@ function Progress() {
     return dateArray;
   }
 
-  //get monthly added words
+  //get monthly values
   function getChartsValue(arr, dateName) {
 
     const dates = getDatesArray();
@@ -134,6 +138,8 @@ function Progress() {
     setAddedWords(getChartsValue(userWords, 'createdAt'));
     setLearnedWords(getChartsValue(getLearnedWords(userWords), 'learnDate'));
     setCollectionData(getWordsByCollection().slice(0, collectionsLimit));
+    setMonths(getDatesArray());
+    setQuizData(getChartsValue(quizzes, 'date'))
   }, [userWords])
 
 
@@ -143,12 +149,13 @@ function Progress() {
         totalWords={userWords.length}
         learnedWords={getLearnedWords(userWords).length}
       />
+
       <div className='progress__chart-container'>
 
         {/* Added words chart */}
         <AreaChart
           title='Added words'
-          labels={addedWords.map(i => i.date)}
+          labels={months}
           values={addedWords.map(i => i.value)}
         />
 
@@ -163,8 +170,15 @@ function Progress() {
         {/* Learned words chart */}
         <AreaChart
           title='Learned words'
-          labels={learnedWords.map(i => i.date)}
+          labels={months}
           values={learnedWords.map(i => i.value)}
+        />
+
+        {/* Quizes taken*/}
+        <AreaChart
+          title='Quizzes taken'
+          labels={months}
+          values={quizData.map(i => i.value)}
         />
 
       </div>
