@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,8 +10,9 @@ import {
   Filler,
   Legend,
 } from 'chart.js';
+import Chart from 'chart.js/auto';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { Line } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 
 ChartJS.register(
   CategoryScale,
@@ -22,34 +23,28 @@ ChartJS.register(
   Tooltip,
   Filler,
   Legend,
-  ChartDataLabels
+  ChartDataLabels,
 );
 
-ChartJS.defaults.font.family = "'Noto Sans Display', 'Sans-serif', 'Arial', 'Helvetica'";
+//ChartJS.defaults.font.family = "'Noto Sans Display', 'Sans-serif', 'Arial', 'Helvetica'";
+ChartJS.defaults.color = '#bebebe'
 
 
-function AreaChart({ title, labels, values }) {
+function BarChart({ title, labels, dataset1, dataset2 }) {
 
 
   const options = {
+    indexAxis: 'y',
     responsive: true,
     plugins: {
       legend: {
         position: 'top',
-        display: false,
       },
       title: {
         display: false,
-        /* padding: {
-          bottom: 25,
-        },
-        font: {
-          size: 14,
-        }, */
-
       },
       datalabels: {
-        display: true,
+        display: false,
         anchor: 'end',
         align: 'end',
         font: {
@@ -69,9 +64,9 @@ function AreaChart({ title, labels, values }) {
           drawTicks: false,
         },
         ticks: {
-          padding: 10,
-          color: '#bebebe',
+          display: false
         },
+        stacked: true,
       },
       y: {
         grid: {
@@ -80,15 +75,17 @@ function AreaChart({ title, labels, values }) {
           drawTicks: false,
         },
         ticks: {
-          display: false,
+          /* display: false, */
+          color: '#bebebe'
         },
+        stacked: true,
       },
     },
     layout: {
       padding: {
         left: 10,
         rigt: 10,
-        top: 30,
+        top: 10,
         bottom: 0,
       },
     },
@@ -100,30 +97,30 @@ function AreaChart({ title, labels, values }) {
     labels: labels,
     datasets: [
       {
-        /* label: option, */
-        data: values,
-        borderRadius: 7,
-        borderColor: '#ffd987',
-        pointBackgroundColor: '#fff',
-        pointBorderColor: '#ffd987',
-        pointRadius: 4,
-        backgroundColor: ({ chart: { ctx } }) => {
-          const bg = ctx.createLinearGradient(0, 0, 0, 400);
-          bg.addColorStop(0, '#ffd98717'); //
-          bg.addColorStop(0.5, '#ffd98708');
-          return bg;
-        },
-        lineTension: 0.3,
-        fill: true,
+        label: 'learned words',
+        data: dataset1,
+        backgroundColor: '#7da1a9',
+        barThickness: 'flex',
+        maxBarThickness: 20,
+        borderRadius: [20, 20, 20, 20]
+
       },
+      {
+        label: 'not learned',
+        data: dataset2,
+        backgroundColor: '#7da1a92e',
+        barThickness: 'flex',
+        maxBarThickness: 20,
+        borderRadius: [20, 20, 20, 20]
+      }
 
     ],
   };
 
   return (
-    <div className='area-chart'>
+    <div className='bar-chart'>
       <h3>{title}</h3>
-      <Line
+      <Bar
         data={data}
         options={options}
       />
@@ -132,4 +129,4 @@ function AreaChart({ title, labels, values }) {
   );
 }
 
-export default AreaChart;
+export default BarChart;

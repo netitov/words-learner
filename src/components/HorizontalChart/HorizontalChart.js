@@ -8,6 +8,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+
 import { Bar } from 'react-chartjs-2';
 
 function HorizontalChart(props) {
@@ -76,7 +77,7 @@ function HorizontalChart(props) {
     labels: props.translFreqs.map((i) => i.word),
     datasets: [
       {
-        data: props.translFreqs.map((i) => i.fr),
+        data: props.translFreqs.map((i) => parseFloat(i.fr.toFixed(1))),
         backgroundColor: props.chartColor, //#fcc5546e
         barThickness: 'flex',
         maxBarThickness: 30,

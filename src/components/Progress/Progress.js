@@ -3,13 +3,18 @@ import CollectionSummary from '../CollectionSummary/CollectionSummary';
 import { useDispatch, useSelector } from 'react-redux';
 import { minPassedTests } from '../../utils/constants';
 import AreaChart from './AreaChart';
+import BarChart from './BarChart';
 import dayjs from 'dayjs';
 
 function Progress() {
 
   const [addedWords, setAddedWords] = useState([]);
   const [learnedWords, setLearnedWords] = useState([]);
+  const [collectionData, setCollectionData] = useState([]);
   const userWords = useSelector((state) => state.userWords);
+  const collections = useSelector((state) => state.collections);
+
+  const collectionsLimit = 5;
 
   //get last 6 months
   function getDatesArray() {
@@ -59,11 +64,76 @@ function Progress() {
     return arrayWithDate;
   }
 
+  function addWordsToCollection(arr, obj, collection, key) {
+    arr.forEach((w) => {
+      w?.source?.forEach((s) => {
+        if (collection._id === s.collectionId) {
+          if (obj[key] === 0) {
+            obj[key] = 1;
+          } else {
+            obj[key]++
+          }
+        }
+      })
+    })
+  }
+
+  function sortArrByDate(arr) {
+    const sortedArr = [...arr];
+
+    sortedArr.sort((a, b) => {
+      const dateA = new Date(a.createdAt);
+      const dateB = new Date(b.createdAt);
+      return dateB - dateA;
+    });
+
+    return sortedArr;
+  }
+
+  //get array of collections and words
+  function getWordsByCollection() {
+    const resultArr = [];
+
+    collections.forEach((c) => {
+      //limit collection name length
+      const collectionName = c.collectionName.substring(0, 12);
+
+      const obj = {
+        collectionName,
+        createdAt: c.createdAt,
+        totalWords: 0,
+        learnedWords: 0
+      };
+
+      //add total words
+      addWordsToCollection(userWords, obj, c, 'totalWords');
+
+      //add learned words
+      const learnedWords = getLearnedWords(userWords);
+      if(learnedWords.length > 0) {
+        addWordsToCollection(learnedWords, obj, c, 'learnedWords');
+      }
+
+      //if word doesn't have collection, put 'no collection'
+      //skip objects with no words
+      if (Object.keys(obj).length === 0) {
+        const emptySource = userWords.filter((w) => {
+          return w.source.length === 0;
+        })
+        emptySource.length > 0 && resultArr.push({ ['no collection']: emptySource.length })
+      } else {
+        obj.totalWords > 0 && resultArr.push(obj);
+      }
+    })
+
+    return sortArrByDate(resultArr);
+  }
 
   //set data for charts
   useEffect(() => {
     setAddedWords(getChartsValue(userWords, 'createdAt'));
     setLearnedWords(getChartsValue(getLearnedWords(userWords), 'learnDate'));
+    setCollectionData(getWordsByCollection().slice(0, collectionsLimit));
   }, [userWords])
 
 
@@ -80,6 +150,14 @@ function Progress() {
           title='Added words'
           labels={addedWords.map(i => i.date)}
           values={addedWords.map(i => i.value)}
+        />
+
+        {/* Collections chart */}
+        <BarChart
+          title='Collections'
+          labels={collectionData.map(i => i.collectionName)}
+          dataset1={collectionData.map(i => i.learnedWords)}
+          dataset2={collectionData.map(i => i.totalWords - i.learnedWords)}
         />
 
         {/* Learned words chart */}
