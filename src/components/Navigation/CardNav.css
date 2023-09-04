@@ -1,5 +1,6 @@
 .cardnav-wrapper {
   animation: fade-in 0.5s ease-out;
+  width: 100%;
 }
 
 .cardnav-wrapper > h2 {
@@ -18,7 +19,7 @@
 } */
 
 .cardnav {
-
+  max-width: 850px;
 }
 
 .cardnav > ul {

@@ -31,6 +31,7 @@
   padding: 7px;
   transition: background-color 0.3s;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 .sidenav__link:hover, .sidenav__link_active {

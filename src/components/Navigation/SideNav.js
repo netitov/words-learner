@@ -1,9 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { accountNav } from '../../utils/constants';
-
+import { FiLogOut } from 'react-icons/fi';
+import useAuth from '../../hooks/useAuth';
 
 function SideNav({ route }) {
+
+  const { handleLogout } = useAuth();
+
   return (
     <nav className='sidenav'>
       <ul>
@@ -15,6 +19,12 @@ function SideNav({ route }) {
             </Link>
           </li>
         ))}
+        <li>
+          <span className='sidenav__link' onClick={handleLogout}>
+            <FiLogOut />
+            SignOut
+          </span>
+        </li>
       </ul>
     </nav>
   )

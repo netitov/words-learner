@@ -7,6 +7,7 @@ import { MdOutlineQuiz } from 'react-icons/md';
 import { BsBookmarks } from 'react-icons/bs';
 import { RxDashboard } from 'react-icons/rx';
 import { BsBookmark } from 'react-icons/bs';
+import { FiLogOut } from 'react-icons/fi';
 
 export const charsLimit = '100';
 
@@ -75,6 +76,11 @@ export const accountNav = [
     route: '/account/info',
     title: 'Account info',
     icon: <VscAccount />
+  }, */
+  /* {
+    route: '/',
+    title: 'Signout',
+    icon: <FiLogOut />
   }, */
 ];
 

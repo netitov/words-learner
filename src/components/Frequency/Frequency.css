@@ -1,5 +1,6 @@
 .frequency-wrapper {
   background: var(--prime-blue);
+  overflow: hidden;
 }
 
 .frequency {
