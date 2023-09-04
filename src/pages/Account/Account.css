@@ -6,6 +6,7 @@
   align-items: center;
   background-color: var(--prime-blue);
   gap: 3.5em;
+
 }
 
 .account-page__box {
@@ -67,20 +68,13 @@
   & .translator-wrapper {
     padding: 0;
     margin: 0;
+    animation: fade-in 0.5s ease-out;
   }
 
   & .translator-wrapper > h2 {
     display: none;
   }
 
-  & .translator-wrapper {
-    padding: 0;
-    margin: 0;
-  }
-
-  & .translator-wrapper > h2 {
-    display: none;
-  }
 
   & .translator__box_input, .translator__box_output {
     transform: none;
@@ -196,6 +190,7 @@
   & .frequency-wrapper {
     width: 100%;
     background: none;
+    animation: fade-in 0.5s ease-out;
   }
 
   & .frequency {

@@ -4,7 +4,7 @@
   flex-wrap: wrap;
   flex: 1;
   gap: 30px;
-  animation: fade-in 0.4s ease-out;
+  animation: fade-in 0.5s ease-out;
 }
 
 .collection-new {
@@ -107,7 +107,7 @@
 .collection__title {
   margin: 0;
   font-weight: 400;
-  background-color: #37636c;
+  background-color: var(--prime-blue);
   padding: 11px 5px;
   /* border-radius: 10px; */
   color: #fff;

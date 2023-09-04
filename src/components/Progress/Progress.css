@@ -1,7 +1,7 @@
 .progress {
   flex: 1;
 
-  animation: fade-in 0.4s ease;
+  animation: fade-in 0.5s ease-out;
 }
 
 .progress__chart-container {

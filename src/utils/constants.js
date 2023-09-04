@@ -71,11 +71,11 @@ export const accountNav = [
     title: 'Progress',
     icon: <TfiStatsUp />
   },
-  {
+  /* {
     route: '/account/info',
     title: 'Account info',
     icon: <VscAccount />
-  },
+  }, */
 ];
 
 export function getStyle(obj) {
