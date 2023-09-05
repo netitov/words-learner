@@ -47,11 +47,8 @@ body {
 
 .page__wrapper {
   margin: auto;
-  /* width: var(--page-width); */
-  /* max-width: 1300px; */
   min-height: 100vh;
   display: flex;
-  /* justify-content: space-between; */
   flex-direction: column;
 }
 

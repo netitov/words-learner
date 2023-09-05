@@ -1,5 +1,5 @@
 import React, { useMemo, useEffect, useState } from 'react';
-import { Routes, Route, useLocation, Link } from 'react-router-dom';
+import { Routes, Route, useLocation, Link, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Footer from '../../components/Footer/Footer';
 import AuthHeader from '../../components/AuthHeader/AuthHeader';
@@ -72,7 +72,7 @@ function Account() {
           <Route path='/collections' element={<Collections />} />
           <Route path='/words/collections/*' element={<WordList />} />
           <Route path='/progress' element={<Progress />} />
-          <Route path='/*' element={<CardNav />} />
+          <Route path='/*' element={<Navigate to='/account/navigation' />} />
         </Routes>
       </div>
 
