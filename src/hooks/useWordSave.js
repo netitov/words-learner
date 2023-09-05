@@ -25,7 +25,7 @@ function useWordSave() {
     const addedWords = await addToList(arr, token);
     if (addedWords.error) {
       dispatch(showError(errorMessages.general));
-      return addedWords.error;
+      return addedWords;
     } else {
       //add bookmark icon
       setIsChecked(true);
@@ -41,7 +41,7 @@ function useWordSave() {
     const response = await deleteFromList(word, token);
     if (response.error) {
       dispatch(showError(errorMessages.general));
-      return response.error;
+      return response;
     } else {
       //remove bookmark icon
       setIsChecked(false);
@@ -143,7 +143,8 @@ function useWordSave() {
         translationLang: userLang.code,
         source: sourceData ? [{ collectionId: sourceData._id, collectionName: sourceData.collectionName }] : []
       }
-      await saveWord(obj);
+      const savedWords = await saveWord(obj);
+      return savedWords;
     }
   }
 

@@ -40,7 +40,7 @@ span.wtable__checkbox  {
 
 .wtable th {
   text-align: left;
-  padding: 0 10px;
+  padding: 10px;
   background-color: var(--white);
   font-weight: 300;
 }
@@ -206,6 +206,18 @@ span.words__slider {
 
 }
 
+.words__save-btn {
+  position: relative;
+}
+
+.words__save-btn > svg {
+  color: #757575;
+}
+
+.words__save-btn:hover {
+  background: var(--hover-green);
+}
+
 .words__slider span {
   &.MuiSlider-thumb:hover, &.Mui-focusVisible {
     box-shadow: 0px 0px 0px 7px rgb(55 99 108 / 19%);
@@ -336,6 +348,12 @@ div.words__select {
   /* background: #fee6b5; */
   color: #936400;
   border: 2px solid var(--prime-yellow);
+}
+
+.words__snack {
+  position: fixed;
+  bottom: 10%;
+  box-shadow: 0px 0px 12px 1px #00000078;
 }
 
 @media (max-width: 900px) {

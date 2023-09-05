@@ -32,8 +32,7 @@ async function fetchAPI(path, method, headers, body) {
   }
 }
 
-
-export async function checkFrequency(word) {
+/* export async function checkFrequency(word) {
   try {
     const response = await fetch(`${SERVER_API}/word-data/${word}`,
       { method: 'GET' }
@@ -43,26 +42,16 @@ export async function checkFrequency(word) {
   } catch (err) {
     console.error(err);
   }
-}
-
-//find word (and translate) in dictionary api, if text is shorter 3 words. Otherwise, use translation api
-/* export async function translate({ langs, text, inDictionary }) {
-  console.log({ langs, text, inDictionary })
-  try {
-    const response = await fetch(`${SERVER_API}/translate`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ langs, text, inDictionary })
-    });
-    const result = await response.json();
-    return result;
-  } catch (err) {
-    console.error(err);
-  }
 } */
 
+//translate text
 export async function translate({ langs, text, inDictionary }) {
   return fetchAPI('translate', 'POST', undefined, { langs, text, inDictionary });
+}
+
+//get words frequency
+export async function checkFrequency(word) {
+  return fetchAPI(`word-data/${word}`, 'GET');
 }
 
 //get list of available languages for translations from server

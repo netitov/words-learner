@@ -4,6 +4,8 @@ import { setRandomWords, setLoading } from '../store/randomWords';
 import { setFilters } from '../store/filters';
 import { getRandomWords } from '../utils/api';
 import { getFreqCat } from '../utils/getFreqCat';
+import { showError } from '../store/error';
+import { errorMessages } from '../utils/constants';
 
 function useRandomWordsFetch() {
   const dispatch = useDispatch();
@@ -37,7 +39,7 @@ function useRandomWordsFetch() {
       dispatch(setLoading(false));
       return response;
     } else {
-      console.log(response.error)
+      dispatch(showError(errorMessages.general));
     }
 
     dispatch(setLoading(false));

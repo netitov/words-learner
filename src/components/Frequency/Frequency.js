@@ -16,7 +16,10 @@ import { getFreqCat } from '../../utils/getFreqCat';
 import Bookmark from '../Bookmark/Bookmark';
 import Snackbar from '../Snackbar/Snackbar';
 import useWordSave from '../../hooks/useWordSave';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { errorMessages } from '../../utils/constants';
+import { showError } from '../../store/error';
+
 
 function Frequency(props) {
 
@@ -35,6 +38,8 @@ function Frequency(props) {
   const currentOutputLang = useSelector((state) => state.outputLang);
   const dictionLangs = useSelector((state) => state.dictionLangs);
 
+  const dispatch = useDispatch();
+
   const { handleWordList, closeSnackbar, checkList, isChecked, snackbarActive } = useWordSave();
 
   //get translation if user addes a word to learning list
@@ -42,8 +47,12 @@ function Frequency(props) {
     if (isLoggedIn) {
       const langs = currentInputLang.code + '-' + currentOutputLang.code;
       const inDictionary = dictionLangs.some((i) => i.languages === langs);
+
       const response = await translate({ langs, text, inDictionary });
-      if (response.length > 0) {
+
+      if (response.error) {
+        dispatch(showError(errorMessages.general));
+      } else if (response.length > 0) {
         const translation = response.text === undefined ? response[0].tr[0].text : response.text[0];
         return translation;
       } else {
@@ -64,12 +73,14 @@ function Frequency(props) {
   async function getFrequency(word) {
     const response = await checkFrequency(word);
 
-    if (response.length > 0) {
+    if (response.error) {
+      dispatch(showError(errorMessages.general));
+    } else if (response.length > 0) {
       const obj = response[0];
       const frequencyNumber = obj.fr;
 
         //for feat search frequency (without translate)
-        setFrequency({ word, fr: frequencyNumber, text: getFreqCat(frequencyNumber), filmPer: obj.filmPer });
+      setFrequency({ word, fr: frequencyNumber, text: getFreqCat(frequencyNumber), filmPer: obj.filmPer });
     } else {
       setFrequency({ word: '', fr: 0, text: '', filmPer: 0 });
       setNotFound(true);

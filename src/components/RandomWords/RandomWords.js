@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import Slider from '@mui/material/Slider';
 import RefTooltip from '../RefTooltip/RefTooltip';
 import Spinner from '../Spinner/Spinner';
@@ -21,6 +22,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setFilters } from '../../store/filters';
 import useRandomWordsFetch from '../../hooks/useRandomWordsFetch';
 import useWordSave from '../../hooks/useWordSave';
+import Bookmark from '../Bookmark/Bookmark';
+import Snackbar from '../Snackbar/Snackbar';
 
 function RandomWords(props) {
 
@@ -66,9 +69,12 @@ function RandomWords(props) {
   const randomWords = useSelector((state) => state.randomWords.data);
   const randomWordsInLoading = useSelector((state) => state.randomWords.isLoading);
   const filters = useSelector((state) => state.filters);
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const userWords = useSelector((state) => state.userWords);
 
   const dispatch = useDispatch();
 
+  const { handleWordList, closeSnackbar, snackbarActive } = useWordSave();
 
   //handle event changing part of speech select
   function handleChangePos(event) {
@@ -88,36 +94,6 @@ function RandomWords(props) {
       setPerValue(newValue);
     }
   };
-
-  //handle checkbox in header for manage all checkboxes in the table
-  function handleAllCheck(e) {
-    const currentState = e.target.checked;
-
-    const updatedData = words.map((obj) => {
-      return {
-        ...obj,
-        checked: currentState,
-      };
-    });
-
-    setWords(updatedData);
-    props.handleLearnList(updatedData);
-  }
-
-  function handleCheck(i) {
-    const updatedData = words.map((obj) => {
-      if (obj._id === i._id) {
-        return {
-          ...obj,
-          checked: !obj.checked,
-        };
-      }
-      return obj;
-    });
-
-    setWords(updatedData);
-    props.handleLearnList(updatedData.find((el) => el._id === i._id ));
-  }
 
   //handle filter words on tag btn click
   function handleBtnFilter(e) {
@@ -175,6 +151,8 @@ function RandomWords(props) {
     setPerValue([0, 100]);
     setPos([]);
 
+    closeSnackbar();
+
     searchWords(filters);
   }
 
@@ -189,6 +167,7 @@ function RandomWords(props) {
     };
     setActiveBtn('');
     searchWords(filters);
+    closeSnackbar();
   }
 
   //execute search
@@ -243,7 +222,6 @@ function RandomWords(props) {
       window.removeEventListener('scroll', runAnimationFilter);
     };
   }, []);
-
 
   return (
     <div className='words' id='random'>
@@ -374,20 +352,21 @@ function RandomWords(props) {
 
         </div>
 
+        {/* table of words */}
         <div className={`words__table-wrapper${animationFilter ? ' words__table-wrapper_active' : ''}`}>
           <table className='wtable'>
 
             <thead>
               <tr>
                 <th className='wtable__th wtable__th_checkbox'>
-                  <Tooltip title='add all words to the learning list' componentsProps={{ tooltip: { sx: tooltipOption, } }}>
+                  {/* <Tooltip title='add all words to the learning list' componentsProps={{ tooltip: { sx: tooltipOption, } }}>
                     <Checkbox
                       className='wtable__checkbox'
                       icon={<BookmarkBorderIcon sx={{ fontSize: '1.4rem', color: '#7575759c' }} />}
                       checkedIcon={<BookmarkIcon sx={{ fontSize: '1.4rem'}} />}
                       onChange={handleAllCheck}
                     />
-                  </Tooltip>
+                  </Tooltip> */}
                   {/* list of available languages */}
                   {/* <Languages
                     languages={languages}
@@ -420,13 +399,13 @@ function RandomWords(props) {
               {words.map((i) => (
                 <tr key={i.word}>
                   <td>
-                    <Checkbox
-                      className='wtable__checkbox'
-                      icon={<BookmarkBorderIcon sx={{ fontSize: '1.4rem', color: '#7575759c' }}/>}
-                      checkedIcon={<BookmarkIcon sx={{ fontSize: '1.4rem' }}/>}
-                      onChange={() => handleCheck(i)}
-                      checked={i.checked || false}
-                      title='add to the learning list'
+                    <Bookmark
+                      toggleBookmark={() => handleWordList(i.word, i.translation, userWords.some(u => u.word === i.word), true)}
+                      isChecked={userWords.some(u => u.word === i.word)}
+                      title={!userWords.some(u => u.word === i.word) ? 'add to the learning list' : 'remove from the learning list'}
+                      propClass='words__save-btn'
+                      width='17px'
+                      height='17px'
                     />
                   </td>
                   <td className='wtable__td wtable__td_emph'>{i.word}</td>
@@ -434,8 +413,6 @@ function RandomWords(props) {
                   <td className='wtable__td'>
                     <span className={`wtable__fr-btn${i.fr >= 4 ? ' wtable__fr-btn_high' : ''}`}>{i.frCat}</span>
                   </td>
-                  {/* <td>{i.filmPer.toFixed(1)}%</td> */}
-
                 </tr>
               ))}
             </tbody>
@@ -453,6 +430,21 @@ function RandomWords(props) {
         </div>
 
       </div>
+
+      {/* show message if user is not logged in and tries to save word */}
+      {!isLoggedIn &&
+        <Snackbar
+          snackbarActive={snackbarActive}
+          elClass='words__snack translator__snack'
+          closeSnack={closeSnackbar}
+          transformPos='_left'
+        >
+          <p className='translator__snack-text'>
+            <Link to='/signup'>Sign up</Link> / <Link to='/login'>Log in</Link>
+            &nbsp;to create your own word list and much more
+          </p>
+        </Snackbar>
+      }
 
     </div>
   )
