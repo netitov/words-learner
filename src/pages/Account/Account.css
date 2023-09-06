@@ -232,3 +232,9 @@
       }
   }
 }
+
+@media (max-width: 580px) {
+  .account-page__heading {
+    font-size: 3em;
+  }
+}

@@ -66,6 +66,7 @@
 
 .frequency__card-box {
   display: flex;
+  flex-wrap: wrap;
   margin-top: 35px;
   gap: 35px;
   visibility: hidden;
@@ -221,7 +222,6 @@
 @media (max-width: 768px) {
   .frequency__card-box {
     gap: 15px;
-    flex-wrap: wrap;
   }
 
   .frequency__card {

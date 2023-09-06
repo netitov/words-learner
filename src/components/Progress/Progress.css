@@ -1,7 +1,7 @@
 .progress {
   flex: 1;
-
   animation: fade-in 0.5s ease-out;
+  width: var(--page-width);
 }
 
 .progress__chart-container {
@@ -11,9 +11,11 @@
 }
 
 .progress .area-chart, .bar-chart {
-  width: 45%;
+  width: 100vw;
+  height: 100%;
+  box-sizing: border-box;
   max-width: 450px;
-  min-width: 350px;
+  min-width: 300px;
   padding: 10px;
   box-sizing: border-box;
   background-color: var(--darker-blue);
@@ -37,5 +39,21 @@
   font-weight: 300;
   margin: 10px 0;
   text-align: center;
+}
+
+@media (max-width: 780px) {
+  .progress__chart-container {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 580px) {
+  .progress .area-chart, .bar-chart {
+    padding: 5px;
+  }
+
+  .progress .area-chart > h3, .bar-chart > h3 {
+    font-size: 1.1em;
+  }
 }
 

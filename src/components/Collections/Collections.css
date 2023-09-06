@@ -289,6 +289,26 @@ div.collection__cxt-menu li:hover {
   background-color: var(--light-red);
 }
 
+@media (max-width: 780px) {
+  .collections {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .collection {
+    width: 165px;
+  }
+
+  .collection__overlay {
+    border-radius: 10px;
+  }
+
+  .collection__title {
+    font-size: 1em;
+  }
+}
+
 
 @keyframes slideAndFadeIn {
   0% {
