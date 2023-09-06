@@ -62,7 +62,7 @@ function CollectionSummary({ totalWords, learnedWords }) {
 
       {/* show chart if words amount more than 0 */}
       {totalWords > 0 &&
-        <div className='c-sum__card'>
+        <div className='c-sum__card c-sum__card_chart'>
           <Doughnut data={data} options={options}/>
           <span className='c-sum__result'>{totalWords !== 0 ? Math.round(learnedWords / totalWords * 100) : 0}%</span>
           <p className='c-sum__category'>% learned words</p>

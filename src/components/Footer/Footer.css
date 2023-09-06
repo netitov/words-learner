@@ -53,7 +53,13 @@
 
 @media (max-width: 780px) {
   .footer {
-    min-height: 90px;
+    min-height: 115px;
     align-items: flex-start;
+  }
+}
+
+@media (max-width: 580px) {
+  .footer__container {
+    font-size: 1em;
   }
 }

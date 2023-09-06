@@ -20,17 +20,25 @@ canvas{
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  width: 200px;
-  min-width: 200px;
+
+  min-width: 150px;
+  max-width: 240px;
   min-height: 110px;
-  /* width: 200px;
-  height: 130px; */
+
   padding: 10px 5px;
   position: relative;
   color: #fff;
   background-color: var(--darker-blue);
   border-radius: 10px;
   gap: 10px;
+}
+
+.c-sum__card:not(.c-sum__card_chart) {
+  flex: 1;
+}
+
+.c-sum__card_chart {
+  width: 240px;
 }
 
 .c-sum__value {
@@ -54,12 +62,20 @@ canvas{
 
 .c-sum__result {
   position: absolute;
-  bottom: 39px;
-  font-size: 1.4em;
+  bottom: 41px;
+  font-size: 1.5em;
 }
 
 .c-sum__tlt {
   position: absolute;
   top: 5px;
   right: 5px;
+}
+
+@media (max-width: 580px) {
+  .c-sum__card {
+
+    /* width: 150px; */
+    max-height: 200px;
+  }
 }

@@ -245,7 +245,7 @@ function WordList() {
             >
               translation{/* ({currentInputLang.code === 'en' ? currentOutputLang.code : currentInputLang.code}) */}
             </th>
-            <th>collection</th>
+            <th className='wordlist-table__th wordlist-table__th_tag'>collection</th>
             <th className='wordlist-table__th'>
               <div className='wordlist-table__progress-head'>
                 <span>progress</span>
@@ -272,13 +272,13 @@ function WordList() {
                   isChecked={true}
                   title='remove from the learning list'
                   propClass='wordlist-table__checkbox'
-                  width='18px'
-                  height='18px'
+                  /* width='16px'
+                  height='16px' */
                 />
               </td>
               <td className='wordlist-table__td wordlist-table__td_emph'>{i.word}</td>
               <td>{i.translation}</td>
-              <td className='wordlist-table__td'>
+              <td className='wordlist-table__td wordlist-table__td_tag'>
 
                 {/* active reference to other collection if current location is not equal*/}
                 {i.source?.length === 0 ? (

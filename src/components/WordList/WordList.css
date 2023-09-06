@@ -8,7 +8,7 @@
 
 .wordlist-table {
   width: 100%;
-  min-width: 400px;
+  min-width: 300px;
   max-width: 900px;
   color: #fff;
 
@@ -144,9 +144,12 @@
   color: var(--super-light-green);
   border: none;
   overflow: hidden;
-  text-overflow: ellipsis;
-  padding: 1px 5px;
 
+  padding: 1px 5px;
+}
+
+.wordlist-table td:not(.wordlist-table__td_tag) {
+  text-overflow: ellipsis;
 }
 
 .wordlist-table__td_emph {
@@ -221,4 +224,51 @@ a.wordlist-table__tag:hover {
 
 .wordlist-table__checkbox > svg {
   color: var(--prime-yellow);
+  width: 16px;
+  height: 16px;
+}
+
+@media (max-width: 580px) {
+
+  .wordlist-table {
+    padding: 5px;
+  }
+
+  .wordlist-table td {
+    font-size: 0.9em;
+  }
+
+  .wordlist-table__td_tag {
+    display: none;
+  }
+
+  .wordlist-table th {
+    font-size: 0.9em;
+  }
+
+  .wordlist-table__th_tag {
+    display: none;
+  }
+
+  .wordlist-table__checkbox > svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .wordlist-table__progress {
+    gap: 4px;
+  }
+
+  .wordlist-table__progress-chart {
+    width: 45px;
+  }
+
+  .wordlist-table__progress > span {
+    font-size: 0.8em;
+  }
+
+  .wordlist__btn {
+    font-size: 1em;
+  }
+
 }
