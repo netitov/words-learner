@@ -9,9 +9,9 @@
   animation: fade-in 0.5s ease-out;
 }
 
-canvas{
-  position:relative;
-  z-index:1;
+canvas {
+  position: relative;
+  z-index: 1;
 }
 
 .c-sum__card {
@@ -74,7 +74,6 @@ canvas{
 
 @media (max-width: 580px) {
   .c-sum__card {
-
     /* width: 150px; */
     max-height: 200px;
   }

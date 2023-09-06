@@ -1,4 +1,3 @@
-
 import { VscAccount } from 'react-icons/vsc';
 import { MdTranslate } from 'react-icons/md';
 import { TfiStatsUp } from 'react-icons/tfi';
@@ -24,16 +23,20 @@ export const tooltipOption = {
 
 export const defaultLang = {
   lang: 'Spanish',
-  code: 'es'
+  code: 'es',
 };
 
 export const filterBtns = [
-  'common verbs', 'common nouns', 'in every movie', 'average frequency', 'low frequency'
+  'common verbs',
+  'common nouns',
+  'in every movie',
+  'average frequency',
+  'low frequency',
 ];
 
 export const defaultFilters = {
   lang: 'Spanish',
-  code: 'es'
+  code: 'es',
 };
 
 export const accountNav = [
@@ -42,42 +45,42 @@ export const accountNav = [
     title: 'My account',
     shortTitle: 'Account',
     icon: <RxDashboard />,
-    menu: 'context'
+    menu: 'context',
   },
   {
     route: '/account/translator',
     title: 'Translator',
     shortTitle: 'Translator',
     icon: <MdTranslate />,
-    menu: 'mobile'
+    menu: 'mobile',
   },
   {
     route: '/account/frequency',
     title: 'Usage data',
     shortTitle: 'Usage',
     icon: <GiFilmStrip />,
-    menu: 'context'
+    menu: 'context',
   },
   {
     route: '/account/words',
     title: 'Word list',
     shortTitle: 'Words',
     icon: <BsBookmark />,
-    menu: 'mobile'
+    menu: 'mobile',
   },
   {
     route: '/account/collections',
     title: 'Collections',
     shortTitle: 'Collections',
     icon: <BsBookmarks />,
-    menu: 'context'
+    menu: 'context',
   },
   {
     route: '/account/progress',
     title: 'Progress',
     shortTitle: 'Progress',
     icon: <TfiStatsUp />,
-    menu: 'mobile'
+    menu: 'mobile',
   },
   /* {
     route: '/account/info',
@@ -86,113 +89,109 @@ export const accountNav = [
   }, */
 ];
 
-
 export function getStyle(obj) {
-
   const { frontColor, backColor } = obj;
 
   const patterns = [
     {
-      pattern:'rhombus',
+      pattern: 'rhombus',
       style: {
         backgroundColor: backColor,
-        backgroundImage:  `linear-gradient(135deg, ${frontColor} 25%, transparent 25%), linear-gradient(225deg, ${frontColor} 25%, transparent 25%), linear-gradient(45deg, ${frontColor} 25%, transparent 25%), linear-gradient(315deg, ${frontColor} 25%, ${backColor} 25%)`,
+        backgroundImage: `linear-gradient(135deg, ${frontColor} 25%, transparent 25%), linear-gradient(225deg, ${frontColor} 25%, transparent 25%), linear-gradient(45deg, ${frontColor} 25%, transparent 25%), linear-gradient(315deg, ${frontColor} 25%, ${backColor} 25%)`,
         backgroundPosition: '32px 0, 32px 0, 0 0, 0 0',
-        backgroundSize: '16px 16px'
-      }
-
+        backgroundSize: '16px 16px',
+      },
     },
     {
-      pattern:'zigzag',
+      pattern: 'zigzag',
       style: {
         backgroundColor: backColor,
-        backgroundImage:  `linear-gradient(135deg, ${frontColor} 25%, transparent 25%), linear-gradient(225deg, ${frontColor} 25%, transparent 25%), linear-gradient(45deg, ${frontColor} 25%, transparent 25%), linear-gradient(315deg, ${frontColor} 25%, ${backColor} 25%)`,
-        backgroundPosition:  '24px 0, 24px 0, 0 0, 0 0',
-        backgroundSize: '48px 48px'
-      }
+        backgroundImage: `linear-gradient(135deg, ${frontColor} 25%, transparent 25%), linear-gradient(225deg, ${frontColor} 25%, transparent 25%), linear-gradient(45deg, ${frontColor} 25%, transparent 25%), linear-gradient(315deg, ${frontColor} 25%, ${backColor} 25%)`,
+        backgroundPosition: '24px 0, 24px 0, 0 0, 0 0',
+        backgroundSize: '48px 48px',
+      },
     },
     {
-      pattern:'paper',
+      pattern: 'paper',
       style: {
         backgroundColor: backColor,
-        backgroundImage:  `linear-gradient(${frontColor} 2.6px, transparent 2.6px), linear-gradient(90deg, ${frontColor} 2.6px, transparent 2.6px), linear-gradient(${frontColor} 1.3px, transparent 1.3px), linear-gradient(90deg, ${frontColor} 1.3px, ${backColor} 1.3px)`,
-        backgroundPosition:  '-2.6px -2.6px, -2.6px -2.6px, -1.3px -1.3px, -1.3px -1.3px',
-        backgroundSize: '65px 65px, 65px 65px, 13px 13px, 13px 13px'
-      }
+        backgroundImage: `linear-gradient(${frontColor} 2.6px, transparent 2.6px), linear-gradient(90deg, ${frontColor} 2.6px, transparent 2.6px), linear-gradient(${frontColor} 1.3px, transparent 1.3px), linear-gradient(90deg, ${frontColor} 1.3px, ${backColor} 1.3px)`,
+        backgroundPosition: '-2.6px -2.6px, -2.6px -2.6px, -1.3px -1.3px, -1.3px -1.3px',
+        backgroundSize: '65px 65px, 65px 65px, 13px 13px, 13px 13px',
+      },
     },
     {
-      pattern:'isometric',
+      pattern: 'isometric',
       style: {
         backgroundColor: backColor,
-        backgroundImage:  `linear-gradient(30deg, ${frontColor} 12%, transparent 12.5%, transparent 87%, ${frontColor} 87.5%, ${frontColor}), linear-gradient(150deg, ${frontColor} 12%, transparent 12.5%, transparent 87%, ${frontColor} 87.5%, ${frontColor}), linear-gradient(30deg, ${frontColor} 12%, transparent 12.5%, transparent 87%, ${frontColor} 87.5%, ${frontColor}), linear-gradient(150deg, ${frontColor} 12%, transparent 12.5%, transparent 87%, ${frontColor} 87.5%, ${frontColor}), linear-gradient(60deg, ${frontColor}77 25%, transparent 25.5%, transparent 75%, ${frontColor}77 75%, ${frontColor}77), linear-gradient(60deg, ${frontColor}77 25%, transparent 25.5%, transparent 75%, ${frontColor}77 75%, ${frontColor}77)`,
-        backgroundPosition:  '0 0, 0 0, 30px 53px, 30px 53px, 0 0, 30px 53px',
-        backgroundSize: '60px 105px'
-      }
+        backgroundImage: `linear-gradient(30deg, ${frontColor} 12%, transparent 12.5%, transparent 87%, ${frontColor} 87.5%, ${frontColor}), linear-gradient(150deg, ${frontColor} 12%, transparent 12.5%, transparent 87%, ${frontColor} 87.5%, ${frontColor}), linear-gradient(30deg, ${frontColor} 12%, transparent 12.5%, transparent 87%, ${frontColor} 87.5%, ${frontColor}), linear-gradient(150deg, ${frontColor} 12%, transparent 12.5%, transparent 87%, ${frontColor} 87.5%, ${frontColor}), linear-gradient(60deg, ${frontColor}77 25%, transparent 25.5%, transparent 75%, ${frontColor}77 75%, ${frontColor}77), linear-gradient(60deg, ${frontColor}77 25%, transparent 25.5%, transparent 75%, ${frontColor}77 75%, ${frontColor}77)`,
+        backgroundPosition: '0 0, 0 0, 30px 53px, 30px 53px, 0 0, 30px 53px',
+        backgroundSize: '60px 105px',
+      },
     },
     {
-      pattern:'lines',
+      pattern: 'lines',
       style: {
         backgroundColor: backColor,
-        backgroundImage:  `linear-gradient(0deg, ${backColor} 50%, ${frontColor} 50%)`,
-        backgroundSize: '37px 37px'
-      }
+        backgroundImage: `linear-gradient(0deg, ${backColor} 50%, ${frontColor} 50%)`,
+        backgroundSize: '37px 37px',
+      },
     },
     {
-      pattern:'lines2',
+      pattern: 'lines2',
       style: {
         backgroundColor: backColor,
-        backgroundImage:  `linear-gradient(to right, ${frontColor}, ${frontColor} 18.5px, ${backColor} 18.5px, ${backColor} )`,
-        backgroundSize: '37px 37px'
-      }
+        backgroundImage: `linear-gradient(to right, ${frontColor}, ${frontColor} 18.5px, ${backColor} 18.5px, ${backColor} )`,
+        backgroundSize: '37px 37px',
+      },
     },
     {
-      pattern:'polka',
+      pattern: 'polka',
       style: {
         backgroundColor: backColor,
-        backgroundImage:  `radial-gradient(${frontColor} 2px, ${backColor} 2px)`,
-        backgroundSize: '16px 16px'
-      }
+        backgroundImage: `radial-gradient(${frontColor} 2px, ${backColor} 2px)`,
+        backgroundSize: '16px 16px',
+      },
     },
     {
-      pattern:'polka2',
+      pattern: 'polka2',
       style: {
         backgroundColor: backColor,
-        backgroundImage:  `radial-gradient(${frontColor} 1.45px, transparent 1.45px), radial-gradient(${frontColor} 1.45px, ${backColor} 1.45px)`,
-        backgroundSize: '16px 16px'
-      }
+        backgroundImage: `radial-gradient(${frontColor} 1.45px, transparent 1.45px), radial-gradient(${frontColor} 1.45px, ${backColor} 1.45px)`,
+        backgroundSize: '16px 16px',
+      },
     },
     {
-      pattern:'diagonal3',
+      pattern: 'diagonal3',
       style: {
         backgroundColor: backColor,
-        backgroundImage:  `repeating-linear-gradient(45deg, ${frontColor} 0, ${frontColor} 2.6px, ${backColor} 0, ${backColor} 50%)`,
-        backgroundSize: '26px 26px'
-      }
+        backgroundImage: `repeating-linear-gradient(45deg, ${frontColor} 0, ${frontColor} 2.6px, ${backColor} 0, ${backColor} 50%)`,
+        backgroundSize: '26px 26px',
+      },
     },
     {
-      pattern:'line3',
+      pattern: 'line3',
       style: {
         backgroundColor: backColor,
-        backgroundImage:  `repeating-linear-gradient(0deg, ${frontColor}, ${frontColor} 1px, ${backColor} 1px, ${backColor})`,
-        backgroundSize: '20px 20px'
-      }
+        backgroundImage: `repeating-linear-gradient(0deg, ${frontColor}, ${frontColor} 1px, ${backColor} 1px, ${backColor})`,
+        backgroundSize: '20px 20px',
+      },
     },
     {
-      pattern:'line4',
+      pattern: 'line4',
       style: {
         backgroundColor: backColor,
-        backgroundImage:  `repeating-linear-gradient(to right, ${frontColor}, ${frontColor} 1px, ${backColor} 1px, ${backColor})`,
-        backgroundSize: '20px 20px'
-      }
-
-    }
+        backgroundImage: `repeating-linear-gradient(to right, ${frontColor}, ${frontColor} 1px, ${backColor} 1px, ${backColor})`,
+        backgroundSize: '20px 20px',
+      },
+    },
   ];
   return patterns;
 }
 
 export const errorMessages = {
-  general: 'Something went wrong 😞. Please try again later'
-}
+  general: 'Something went wrong 😞. Please try again later',
+};
 
 //min number of tests to learn a word
 export const minPassedTests = 3;

@@ -27,7 +27,6 @@
   transition: var(--transition);
 }
 
-
 .collection-chart__progress > span {
   font-size: 0.8em;
 }

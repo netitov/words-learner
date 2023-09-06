@@ -7,7 +7,9 @@
   transform-origin: top;
   -webkit-transform-origin: top;
   height: 0;
-  transition: visibility 0.2s ease, transform 0.3s ease;
+  transition:
+    visibility 0.2s ease,
+    transform 0.3s ease;
 }
 
 .chart-wrapper_active {
@@ -40,4 +42,3 @@
     grid-row: auto;
   }
 }
-

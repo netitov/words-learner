@@ -16,7 +16,7 @@ function LinkRequest() {
     const response = await linkRequest(data);
     const { serverError } = response;
     if (response.error) {
-      //error text
+      // error text
       setError({ serverError });
     } else {
       setIsSent(true);
@@ -34,7 +34,11 @@ function LinkRequest() {
       route='/signup'
       refBtn='Sign up'
       btnText='Send reset link'
-      addElement={<p className='auth__description'>Enter your account email, and we'll send you a link to reset your password</p>}
+      addElement={
+        <p className='auth__description'>
+          Enter your account email, and we&apos;ll send you a link to reset your password
+        </p>
+      }
       error={error}
       setError={setError}
     >
@@ -48,7 +52,7 @@ function LinkRequest() {
         </button>
       </div>
     </AuthForm>
-  )
+  );
 }
 
 export default LinkRequest;

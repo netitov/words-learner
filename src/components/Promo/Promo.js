@@ -7,7 +7,8 @@ function Promo() {
     <div className='promo'>
       <div className='promo__container'>
         <h1>
-          EXPAND YOUR VOCABULARY<br />
+          EXPAND YOUR VOCABULARY
+          <br />
           WITH <span>WORDS LEARNER</span>
         </h1>
 
@@ -23,12 +24,11 @@ function Promo() {
           <p>Track your progress</p>
         </div>
 
-        <MdTranslate size={200} className='promo__svg promo__svg_right'/>
+        <MdTranslate size={200} className='promo__svg promo__svg_right' />
         <TfiStatsUp size={200} className='promo__svg promo__svg_left' />
-
       </div>
     </div>
-  )
+  );
 }
 
 export default Promo;

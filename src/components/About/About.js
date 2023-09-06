@@ -1,14 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-scroll';
-import { MdTranslate } from 'react-icons/md';
+import { MdTranslate, MdOutlineCompareArrows, MdOutlineQuiz } from 'react-icons/md';
 import { TfiStatsUp } from 'react-icons/tfi';
-import { MdOutlineCompareArrows } from 'react-icons/md';
 import { GiFilmStrip } from 'react-icons/gi';
-import { MdOutlineQuiz } from 'react-icons/md';
 import { BsBookmarks } from 'react-icons/bs';
 
 function About() {
-
   const [animation, setAnimation] = useState(false);
   const pathRef = useRef();
 
@@ -18,7 +15,7 @@ function About() {
       const elementHeight = pathRef.current.offsetHeight;
       const windowHeight = window.innerHeight;
 
-      if (elementPos < windowHeight - (elementHeight * 0.4)) {
+      if (elementPos < windowHeight - elementHeight * 0.4) {
         setAnimation(true);
       } /* else {
         setAnimation(false);
@@ -52,34 +49,34 @@ function About() {
       icon: <MdOutlineQuiz />,
       title: 'Take the tests',
       description: 'Select words or use random',
-      to: 'quiz'
+      to: 'quiz',
     },
     {
       icon: <TfiStatsUp />,
       title: 'Track your progress',
       description: 'View learning stats',
-      to: 'quiz'
+      to: 'quiz',
     },
     {
       icon: <BsBookmarks />,
       title: 'Create learning lists',
       description: 'Add any words',
-      to: 'random'
+      to: 'random',
     },
   ];
 
   return (
-    <nav >
+    <nav>
       <ul className={`about${animation ? ' about_active' : ''}`} ref={pathRef}>
         {cards.map((card, index) => (
-          <li key={index} className="about__item">
+          <li key={index} className='about__item'>
             <Link
-              className="about__card"
+              className='about__card'
               to={card.to || ''}
-              smooth={true}
+              smooth
               /* duration={400} */
             >
-              <div className="about__svg-wrapper">{card.icon}</div>
+              <div className='about__svg-wrapper'>{card.icon}</div>
               <h3>{card.title}</h3>
               <p>{card.description}</p>
             </Link>
@@ -87,7 +84,7 @@ function About() {
         ))}
       </ul>
     </nav>
-  )
+  );
 }
 
 export default About;

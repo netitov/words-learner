@@ -92,7 +92,7 @@
   align-items: center;
   /* margin-right: 35px; */
   background: var(--darker-blue);
-  color:#fff;
+  color: #fff;
   max-width: 300px;
   min-width: 200px;
   min-height: 140px;
@@ -101,7 +101,6 @@
   padding: 5px;
   position: relative;
   flex: 1;
-
 }
 
 .frequency__card:last-of-type {
@@ -144,7 +143,7 @@
 }
 
 .frequency__tlt > svg {
-  color: var(--super-light-green)
+  color: var(--super-light-green);
 }
 
 .frequency__not-found {
@@ -174,7 +173,10 @@
   visibility: hidden;
   color: var(--light-grey);
   opacity: 0;
-  transition: visibility 0.2s ease, opacity 0.3s, background 0.3s;
+  transition:
+    visibility 0.2s ease,
+    opacity 0.3s,
+    background 0.3s;
 }
 
 .frequency__lst-btn:hover {
@@ -197,7 +199,7 @@
 }
 
 .frequency__svg {
-  color: var(--super-light-green)
+  color: var(--super-light-green);
 }
 
 .frequency__snack {
@@ -234,5 +236,3 @@
     opacity: 0.2;
   }
 }
-
-

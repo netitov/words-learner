@@ -14,7 +14,6 @@ import Progress from '../../components/Progress/Progress';
 import MobNav from '../../components/Navigation/MobNav';
 
 function Account() {
-
   const [collectLocation, setCollectLocation] = useState('');
   const location = useLocation().pathname;
   const collectionPattern = /^\/account\/words\/collections\/.*/;
@@ -23,9 +22,8 @@ function Account() {
 
   //current route for display in heading and navigation
   const getCurrentElement = useMemo(() => {
-      return accountNav.find((i) => location.startsWith(i.route));
+    return accountNav.find((i) => location.startsWith(i.route));
   }, [location]);
-
 
   //update current collection
   useEffect(() => {
@@ -38,7 +36,6 @@ function Account() {
   }, [location, collections]);
 
   return (
-
     <div className='account-page'>
       <AuthHeader />
       <div className='account-page__heading-box'>
@@ -50,13 +47,12 @@ function Account() {
             <span>{collectLocation}</span>
           </p>
         )}
-
       </div>
 
       <MobNav route={getCurrentElement?.route} />
 
       <div className='account-page__box'>
-        <SideNav route={getCurrentElement?.route}/>
+        <SideNav route={getCurrentElement?.route} />
 
         <Routes>
           <Route path='/navigation' element={<CardNav />} />
@@ -83,7 +79,7 @@ function Account() {
 
       <Footer />
     </div>
-  )
+  );
 }
 
 export default Account;

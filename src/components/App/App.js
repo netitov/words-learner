@@ -4,7 +4,13 @@ import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
 
-import { translate, getLanguages, getDictionary, checkFrequency, getRandomWords } from '../../utils/api';
+import {
+  translate,
+  getLanguages,
+  getDictionary,
+  checkFrequency,
+  getRandomWords,
+} from '../../utils/api';
 import { defaultLang } from '../../utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -15,7 +21,6 @@ import useLangsFetch from '../../hooks/useLangsFetch';
 import { useInitLang } from '../../hooks/useInitLang';
 
 function App() {
-
   const [isLoading, setIsLoading] = useState(false);
   const [translation, setTranslation] = useState('');
   const [chars, setChars] = useState('');
@@ -40,7 +45,7 @@ function App() {
   const [randomlangListActive, setRandomlangListActive] = useState({ type: '', value: false });
   const [filters, setFilters] = useState({
     frSt: 3,
-    frEn: 5.5
+    frEn: 5.5,
   });
   const [quizActive, setQuizActive] = useState(false);
   const [quizQuestions, setQuizQuestions] = useState([]);
@@ -107,16 +112,15 @@ function App() {
       const userLang = JSON.parse(localStorage.getItem('userLang'));
       if (userLang) {
         dispatch(selectOutputLang(userLang));
-
       } else {
         setInitLang(languages);
-        console.log('lang added')
+        console.log('lang added');
       }
     }
   }, [dataIsLoading]);
 
   //get data from server
- /*  useEffect(() => {
+  /*  useEffect(() => {
     Promise.all([
       getLanguages(),
       getDictionary()
@@ -172,7 +176,7 @@ function App() {
   } */
 
   // get inital list of random words/ update word list if languages was changed
-/*   useEffect(() => {
+  /*   useEffect(() => {
     const currLang = JSON.parse(localStorage.getItem('userLang'));
     if (currLang) {
 
@@ -282,7 +286,7 @@ function App() {
   }, [chars, activeLangInput, activeLangOutput]); */
 
   //call search frequency function
- /*  useEffect(() => {
+  /*  useEffect(() => {
     //drop error 'no data'
     setFrNoData(false);
 
@@ -342,8 +346,8 @@ function App() {
     }
   } */
 
-   //open/close popup available languages list on lang btn click from table Random words
- /*  function openLangListWords(type) {
+  //open/close popup available languages list on lang btn click from table Random words
+  /*  function openLangListWords(type) {
     if (type === randomlangListActive.type) {
       setRandomlangListActive({ type: '', value: false });
     }
@@ -384,7 +388,7 @@ function App() {
   } */
 
   //search language through translator
- /*  function searchLang(data) {
+  /*  function searchLang(data) {
     const languages = randomlangListActive.value ? enDicLangsInit : languages;
     setInputText(data);
     const text = data.toLowerCase();
@@ -435,7 +439,7 @@ function App() {
     const foundFreqs = !response.some(i => i.word === frequency.word) ? [frequency, ...response] : response;
     setTranslFreqs(foundFreqs);
   } */
-/*
+  /*
   function updateQuizQuestions() {
     const quizArr = createQuizQuestions();
     setQuizQuestions(quizArr);
@@ -460,7 +464,7 @@ function App() {
     }
   } */
 
- /*  function startQuiz() {
+  /*  function startQuiz() {
     setQuizActive(true);
   }
 
@@ -468,9 +472,7 @@ function App() {
     setQuizActive(false);
   } */
 
-
   //create questions and answers for quiz (from random words)
-
 
   //update quiz questions of randomWords were changed
   /* useEffect(() => {
@@ -504,8 +506,8 @@ function App() {
 
   }, [randomWords]) */
 
-   //close quiz on esc and overlay
-   /* useEffect(() => {
+  //close quiz on esc and overlay
+  /* useEffect(() => {
     function handleEscClose(e) {
       if (e.key === 'Escape') {
         setQuizActive(false);
@@ -525,7 +527,6 @@ function App() {
       document.removeEventListener('click', handleOverlayClose);
     };
   }, []) */
-
 
   return (
     <div className='page'>
@@ -574,7 +575,7 @@ function App() {
         <Footer />
       </div>
     </div>
-  )
+  );
 }
 
 export default App;

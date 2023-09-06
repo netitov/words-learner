@@ -4,7 +4,6 @@ import { login, logout } from '../store/user';
 import { useNavigate } from 'react-router-dom';
 
 function useAuth() {
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -13,7 +12,7 @@ function useAuth() {
     dispatch(login({ userData: { email, userName } }));
     navigate('/account/navigation');
     window.scrollTo(0, 0);
-  };
+  }
 
   //clean storage after logout
   function droppStorage() {
@@ -21,7 +20,6 @@ function useAuth() {
     sessionStorage.removeItem('userWords');
     sessionStorage.removeItem('quizResults');
     sessionStorage.removeItem('collections');
-
   }
 
   function handleLogout() {
@@ -29,9 +27,9 @@ function useAuth() {
     dispatch(logout());
     navigate('/');
     window.scrollTo(0, 0);
-  };
+  }
 
   return { handleLogin, handleLogout };
-};
+}
 
 export default useAuth;

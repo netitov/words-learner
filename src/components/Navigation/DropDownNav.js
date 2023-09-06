@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import useAuth from '../../hooks/useAuth';
 import { FiLogOut } from 'react-icons/fi';
+import useAuth from '../../hooks/useAuth';
 
 function DropdownNav({ closeMenu, items, route, menuActive }) {
-
   const { handleLogout } = useAuth();
 
   function logout() {
@@ -15,11 +14,11 @@ function DropdownNav({ closeMenu, items, route, menuActive }) {
 
   // close menu on overlay click
   useEffect(() => {
-    function handleOverlayClick (e) {
+    function handleOverlayClick(e) {
       if (e.target.classList[0] === 'dropdown-overlay') {
         closeMenu();
       }
-    };
+    }
 
     if (menuActive) {
       document.addEventListener('click', handleOverlayClick);
@@ -60,9 +59,8 @@ function DropdownNav({ closeMenu, items, route, menuActive }) {
           </li>
         </ul>
       </nav>
-
     </motion.div>
-  )
+  );
 }
 
 export default DropdownNav;

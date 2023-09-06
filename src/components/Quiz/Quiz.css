@@ -13,7 +13,9 @@
   -webkit-backdrop-filter: blur(25px);
   visibility: hidden;
   opacity: 0;
-  transition: visibility 0.2s, opacity 0.2s;
+  transition:
+    visibility 0.2s,
+    opacity 0.2s;
 }
 
 .quiz_active {
@@ -62,7 +64,7 @@
 
 .quiz__quest-box_active h3 {
   animation: slide-in-left 0.4s;
-  -webkit-animation: slide-in-left 0.4s;;
+  -webkit-animation: slide-in-left 0.4s;
 }
 
 .quiz__quest > h3 {
@@ -182,7 +184,7 @@
   z-index: 0;
   top: 9%;
   left: 5%;
-  border: 1px solid #dcb869;;
+  border: 1px solid #dcb869;
 }
 
 .quiz__progress_inactive {
@@ -236,7 +238,6 @@
   border-bottom: 2px solid var(--yellow);
   padding: 0 27px 5px;
   margin: 15px 0 60px;
-
 }
 
 .quiz__progress-comment {
@@ -250,11 +251,11 @@
 }
 
 .quiz__btn-box {
- display: flex;
- gap: 15px;
- flex-wrap: wrap;
- align-items: center;
- justify-content: center;
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
 }
 
 .quiz__btn-result {
@@ -266,7 +267,6 @@
   margin-right: 0;
 
   background-color: #f9dda4;
-
 }
 
 .quiz__btn-result:hover {
@@ -318,7 +318,9 @@
   backdrop-filter: blur(0px);
   -webkit-backdrop-filter: blur(0);
   opacity: 0;
-  transition: visibility 0.2s, opacity 0.3s;
+  transition:
+    visibility 0.2s,
+    opacity 0.3s;
   visibility: hidden;
 }
 

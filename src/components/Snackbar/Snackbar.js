@@ -1,11 +1,20 @@
 import React from 'react';
 import CloseBtn from '../CloseBtn/CloseBtn';
 
-function Snackbar({ snackbarActive, elClass, text, children, closeSnack, closeBtnColor, transformPos }) {
-
+function Snackbar({
+  snackbarActive,
+  elClass,
+  text,
+  children,
+  closeSnack,
+  closeBtnColor,
+  transformPos,
+}) {
   return (
     <div
-      className={`snackbar${snackbarActive ? ' snackbar_active' : ''} ${transformPos || '_bottom'} ${elClass || ''}`}
+      className={`snackbar${snackbarActive ? ' snackbar_active' : ''} ${
+        transformPos || '_bottom'
+      } ${elClass || ''}`}
     >
       <div className='snackbar__container'>
         {children}
@@ -17,9 +26,8 @@ function Snackbar({ snackbarActive, elClass, text, children, closeSnack, closeBt
         strokeWidth='7px'
         onBtnClick={closeSnack}
       />
-
     </div>
-  )
+  );
 }
 
 export default Snackbar;

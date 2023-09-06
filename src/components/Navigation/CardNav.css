@@ -34,7 +34,7 @@
   display: flex;
   flex-direction: column;
   background: var(--darker-blue);
-  color:#fff;
+  color: #fff;
   /* max-width: 300px; */
   min-width: 200px;
   min-height: 140px;
@@ -64,7 +64,7 @@
 }
 
 .cardnav__link:hover > svg {
-  color: var(--prime-yellow)
+  color: var(--prime-yellow);
 }
 
 .cardnav svg {

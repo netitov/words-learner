@@ -1,13 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Slider from '@mui/material/Slider';
-import RefTooltip from '../RefTooltip/RefTooltip';
-import Spinner from '../Spinner/Spinner';
-import Languages from '../Languages/Languages';
-
-import Checkbox from '@mui/material/Checkbox';
-import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
-import BookmarkIcon from '@mui/icons-material/Bookmark';
 import Box from '@mui/material/Box';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
@@ -15,26 +8,20 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
-import Tooltip from '@mui/material/Tooltip';
-import { tooltipOption, filterBtns } from '../../utils/constants';
 import { GiSettingsKnobs } from 'react-icons/gi';
-import { useSelector, useDispatch } from 'react-redux';
-import { setFilters } from '../../store/filters';
+import { useSelector } from 'react-redux';
+import { filterBtns } from '../../utils/constants';
+import Spinner from '../Spinner/Spinner';
+import RefTooltip from '../RefTooltip/RefTooltip';
 import useRandomWordsFetch from '../../hooks/useRandomWordsFetch';
 import useWordSave from '../../hooks/useWordSave';
 import Bookmark from '../Bookmark/Bookmark';
 import Snackbar from '../Snackbar/Snackbar';
 
-function RandomWords(props) {
-
-  const initPos = [
-    'Noun',
-    'Adjective',
-    'Verb',
-  ];
+function RandomWords() {
+  const initPos = ['Noun', 'Adjective', 'Verb'];
 
   const marks = [
-
     {
       value: 2,
       label: 'low',
@@ -57,7 +44,7 @@ function RandomWords(props) {
   const [filtersActive, setFiltersActive] = useState(false);
   const [animationFilter, setAnimationFilter] = useState(false);
   const [langListActive, setLangListActive] = useState({ type: '', value: false });
-  const [activeLangBtn, setActiveLangBtn] = useState({ lang: '', type: '' });
+  // const [activeLangBtn, setActiveLangBtn] = useState({ lang: '', type: '' });
 
   const { requestRandomWords } = useRandomWordsFetch();
 
@@ -65,18 +52,15 @@ function RandomWords(props) {
 
   const currentInputLang = useSelector((state) => state.inputLang);
   const currentOutputLang = useSelector((state) => state.outputLang);
-  const languages = useSelector((state) => state.enDictionLangs);
   const randomWords = useSelector((state) => state.randomWords.data);
   const randomWordsInLoading = useSelector((state) => state.randomWords.isLoading);
   const filters = useSelector((state) => state.filters);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const userWords = useSelector((state) => state.userWords);
 
-  const dispatch = useDispatch();
-
   const { handleWordList, closeSnackbar, snackbarActive } = useWordSave();
 
-  //handle event changing part of speech select
+  // handle event changing part of speech select
   function handleChangePos(event) {
     const {
       target: { value },
@@ -85,7 +69,7 @@ function RandomWords(props) {
       // On autofill we get a stringified value.
       typeof value === 'string' ? value.split(',') : value,
     );
-  };
+  }
 
   function handleChangeSLider(e, newValue) {
     if (e.target.name === 'frequency') {
@@ -93,90 +77,89 @@ function RandomWords(props) {
     } else {
       setPerValue(newValue);
     }
-  };
+  }
 
-  //handle filter words on tag btn click
+  // execute search
+  async function searchWords(filts) {
+    // check of words are not already loaded
+    if (!randomWordsInLoading) {
+      const newFilters = { ...(filts === undefined ? filters : filts) };
+      await requestRandomWords(newFilters);
+    }
+  }
+
+  // handle filter words on tag btn click
   function handleBtnFilter(e) {
-
-    let filters = {};
+    let updatedFilters = {};
 
     if (e.target.textContent === 'highest frequency') {
-      filters = {
+      updatedFilters = {
         frSt: 5,
         frEn: 8,
       };
-    };
+    }
 
     if (e.target.textContent === 'common verbs') {
-      filters = {
+      updatedFilters = {
         frSt: 4,
         frEn: 8,
-        pos: ['Verb']
+        pos: ['Verb'],
       };
-    };
+    }
 
     if (e.target.textContent === 'common nouns') {
-      filters = {
+      updatedFilters = {
         frSt: 4,
         frEn: 8,
-        pos: ['Noun']
+        pos: ['Noun'],
       };
-    };
+    }
 
     if (e.target.textContent === 'in every movie') {
-      filters = {
+      updatedFilters = {
         filmPerSt: 70,
-        filmPerEn: 100
+        filmPerEn: 100,
       };
-    };
+    }
 
     if (e.target.textContent === 'average frequency') {
-      filters = {
+      updatedFilters = {
         frSt: 2,
-        frEn: 3
+        frEn: 3,
       };
-    };
+    }
 
     if (e.target.textContent === 'low frequency') {
-      filters = {
+      updatedFilters = {
         frSt: 1,
-        frEn: 3
+        frEn: 3,
       };
-    };
+    }
 
     setActiveBtn(e.target.textContent);
 
-    //dropp other filters
+    // dropp other filters
     setFrValue([0, 7]);
     setPerValue([0, 100]);
     setPos([]);
 
     closeSnackbar();
 
-    searchWords(filters);
+    searchWords(updatedFilters);
   }
 
-  //handle filter words on search btn click
+  // handle filter words on search btn click
   function handleSearchClick() {
-    const filters = {
+    const newfilters = {
       frSt: frValue[0],
       frEn: frValue[1] === 7 ? 8 : frValue[1],
-      pos: pos,
+      pos,
       filmPerSt: perValue[0],
-      filmPerEn: perValue[1]
+      filmPerEn: perValue[1],
     };
     setActiveBtn('');
-    searchWords(filters);
+    searchWords(newfilters);
     closeSnackbar();
-  }
-
-  //execute search
-  async function searchWords(filts) {
-    //check of words are not already loaded
-    if (!randomWordsInLoading) {
-      const newFilters = { ...filts === undefined ? filters : filts };
-      await requestRandomWords(newFilters);
-    }
   }
 
   function handleFilters() {
@@ -188,33 +171,32 @@ function RandomWords(props) {
     const elementHeight = filterRef.current.offsetHeight;
     const windowHeight = window.innerHeight;
 
-    if (elementPos < windowHeight - (elementHeight * 0.4)) {
+    if (elementPos < windowHeight - elementHeight * 0.4) {
       setAnimationFilter(true);
     } /* else {
       setAnimationFilter(false);
     } */
   }
 
-  function toggleLangList(e) {
-    const lang = currentInputLang.code === 'en' ? currentOutputLang.lang : currentInputLang.lang;
-    setActiveLangBtn({ lang, type: 'random' });
+  function toggleLangList() {
+    // const lang = currentInputLang.code === 'en' ? currentOutputLang.lang : currentInputLang.lang;
+    // setActiveLangBtn({ lang, type: 'random' });
     if (langListActive.type === 'random') {
       setLangListActive({ type: '', value: false });
-    }
-    else {
+    } else {
       setLangListActive({ type: 'random', value: true });
     }
   }
 
-  function closeLangList() {
+  /* function closeLangList() {
     setLangListActive({ value: false });
-  }
+  } */
 
   useEffect(() => {
     setWords(randomWords);
-  }, [randomWords])
+  }, [randomWords]);
 
-  //run animation
+  // run animation
   useEffect(() => {
     window.addEventListener('scroll', runAnimationFilter);
 
@@ -225,7 +207,6 @@ function RandomWords(props) {
 
   return (
     <div className='words' id='random'>
-
       <h2 className='words__heading heading2'>Find words</h2>
 
       <div className={`words__dis-cont${animationFilter ? ' words__dis-cont_active' : ''}`}>
@@ -234,10 +215,11 @@ function RandomWords(props) {
       </div>
 
       <div className='words__container'>
-
         {/* btn filters */}
-        <div className={`words__btn-box${animationFilter ? ' words__btn-box_active' : ''}`} ref={filterRef}>
-
+        <div
+          className={`words__btn-box${animationFilter ? ' words__btn-box_active' : ''}`}
+          ref={filterRef}
+        >
           {filterBtns.map((i) => (
             <button
               type='button'
@@ -254,13 +236,15 @@ function RandomWords(props) {
         <div className={`words__filter-box${animationFilter ? ' words__filter-box_active' : ''}`}>
           {/* container with table filters */}
           <div className='words__filter-cont'>
-
             <div className='words__btn-cont'>
               <button
-                className={`words__search-btn${randomWordsInLoading ? ' words__search-btn_inactive' : ''}`}
+                className={`words__search-btn${
+                  randomWordsInLoading ? ' words__search-btn_inactive' : ''
+                }`}
                 type='button'
-                onClick={handleSearchClick}>
-                  Search / update
+                onClick={handleSearchClick}
+              >
+                Search / update
               </button>
               <button className='words__filter-icon' type='button' onClick={handleFilters}>
                 <GiSettingsKnobs />
@@ -268,7 +252,6 @@ function RandomWords(props) {
             </div>
 
             <div className={`words__filters${filtersActive ? ' words__filters_active' : ''}`}>
-
               <FormControl className='words__select'>
                 <InputLabel id='demo-multiple-chip-label'>Part of speech</InputLabel>
                 <Select
@@ -287,10 +270,7 @@ function RandomWords(props) {
                   )}
                 >
                   {initPos.map((i) => (
-                    <MenuItem
-                      key={i}
-                      value={i}
-                    >
+                    <MenuItem key={i} value={i}>
                       {i}
                     </MenuItem>
                   ))}
@@ -301,7 +281,9 @@ function RandomWords(props) {
                 <div className='words__heading-box'>
                   <h3 className='words__slider-heading'>Frequency</h3>
                   <RefTooltip class='words__fr-tlt' color='#757575'>
-                    <p>Word frequency measure on the basis of American subtitle in Zipf format (scale 1-7).&nbsp;
+                    <p>
+                      Word frequency measure on the basis of American subtitle in Zipf format (scale
+                      1-7).&nbsp;
                       <a
                         href='https://www.ugent.be/pp/experimentele-psychologie/en/research/documents/subtlexus/overview.htm'
                         target='_blank'
@@ -330,7 +312,7 @@ function RandomWords(props) {
               <div className='words__slider-wrapper'>
                 <div className='words__heading-box'>
                   <h3 className='words__slider-heading'>Film percent</h3>
-                  <RefTooltip  class='words__fr-tlt' color='#757575'>
+                  <RefTooltip class='words__fr-tlt' color='#757575'>
                     <p>Indicates in how many percent of films the word appears</p>
                   </RefTooltip>
                 </div>
@@ -345,17 +327,15 @@ function RandomWords(props) {
                   max={100}
                 />
               </div>
-
             </div>
-
-        </div>
-
+          </div>
         </div>
 
         {/* table of words */}
-        <div className={`words__table-wrapper${animationFilter ? ' words__table-wrapper_active' : ''}`}>
+        <div
+          className={`words__table-wrapper${animationFilter ? ' words__table-wrapper_active' : ''}`}
+        >
           <table className='wtable'>
-
             <thead>
               <tr>
                 <th className='wtable__th wtable__th_checkbox'>
@@ -380,19 +360,16 @@ function RandomWords(props) {
                   /> */}
                 </th>
                 <th>word</th>
-                <th className='wtable__th wtable__th_btn' /* onClick={() => props.openLangListWords('random')} */
+                <th
+                  className='wtable__th wtable__th_btn' /* onClick={() => props.openLangListWords('random')} */
                   onClick={toggleLangList}
                 >
-                  translation ({currentInputLang.code === 'en' ? currentOutputLang.code : currentInputLang.code})
-
+                  translation (
+                  {currentInputLang.code === 'en' ? currentOutputLang.code : currentInputLang.code})
                 </th>
                 <th>frequency</th>
                 {/* <th>film %</th> */}
-
-
-
               </tr>
-
             </thead>
 
             <tbody>
@@ -400,9 +377,20 @@ function RandomWords(props) {
                 <tr key={i.word}>
                   <td>
                     <Bookmark
-                      toggleBookmark={() => handleWordList(i.word, i.translation, userWords.some(u => u.word === i.word), true)}
-                      isChecked={userWords.some(u => u.word === i.word)}
-                      title={!userWords.some(u => u.word === i.word) ? 'add to the learning list' : 'remove from the learning list'}
+                      toggleBookmark={() =>
+                        handleWordList(
+                          i.word,
+                          i.translation,
+                          userWords.some((u) => u.word === i.word),
+                          true,
+                        )
+                      }
+                      isChecked={userWords.some((u) => u.word === i.word)}
+                      title={
+                        !userWords.some((u) => u.word === i.word)
+                          ? 'add to the learning list'
+                          : 'remove from the learning list'
+                      }
                       propClass='words__save-btn'
                       width='17px'
                       height='17px'
@@ -411,28 +399,35 @@ function RandomWords(props) {
                   <td className='wtable__td wtable__td_emph'>{i.word}</td>
                   <td>{i.translation}</td>
                   <td className='wtable__td'>
-                    <span className={`wtable__fr-btn${i.fr >= 4 ? ' wtable__fr-btn_high' : ''}`}>{i.frCat}</span>
+                    <span className={`wtable__fr-btn${i.fr >= 4 ? ' wtable__fr-btn_high' : ''}`}>
+                      {i.frCat}
+                    </span>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
 
-          <div className={`words__table-overlay${randomWordsInLoading ? ' words__table-overlay_active' : ''}`}>
-            <Spinner isLoading={randomWordsInLoading}/>
+          <div
+            className={`words__table-overlay${
+              randomWordsInLoading ? ' words__table-overlay_active' : ''
+            }`}
+          >
+            <Spinner isLoading={randomWordsInLoading} />
           </div>
 
           <span
-            className={`words__not-found${!randomWordsInLoading && words.length === 0 ? ' words__not-found_active' : ''}`}
+            className={`words__not-found${
+              !randomWordsInLoading && words.length === 0 ? ' words__not-found_active' : ''
+            }`}
           >
             Sorry, data not found. &#128532; Please try different filters <br />
           </span>
         </div>
-
       </div>
 
       {/* show message if user is not logged in and tries to save word */}
-      {!isLoggedIn &&
+      {!isLoggedIn && (
         <Snackbar
           snackbarActive={snackbarActive}
           elClass='words__snack translator__snack'
@@ -444,10 +439,9 @@ function RandomWords(props) {
             &nbsp;to create your own word list and much more
           </p>
         </Snackbar>
-      }
-
+      )}
     </div>
-  )
+  );
 }
 
 export default RandomWords;

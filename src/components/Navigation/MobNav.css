@@ -42,7 +42,8 @@
   flex-direction: column;
 }
 
-.mobnav__link:hover, .mobnav__link_active {
+.mobnav__link:hover,
+.mobnav__link_active {
   background-color: var(--prime-blue);
 }
 
@@ -52,7 +53,8 @@
   font-size: 1.4em;
 }
 
-.mobnav__link:hover > svg, .mobnav__link_active > svg {
+.mobnav__link:hover > svg,
+.mobnav__link_active > svg {
   color: var(--prime-yellow);
 }
 
@@ -79,4 +81,3 @@
     display: none;
   } */
 }
-

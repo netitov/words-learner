@@ -19,8 +19,8 @@ function useRandomWordsFetch() {
     //add user lang in filters
     const newFilters = {
       ...filters,
-      lang: currLang.code
-    }
+      lang: currLang.code,
+    };
     //fetch random words
     const response = await getRandomWords(newFilters);
 
@@ -29,9 +29,9 @@ function useRandomWordsFetch() {
       dispatch(setFilters(newFilters));
       //convert object
       const newObj = response.map((i) => {
-        const frCat = getFreqCat(i.fr)
-        return { ...i, frCat }
-      })
+        const frCat = getFreqCat(i.fr);
+        return { ...i, frCat };
+      });
       //save to storage to avoid repeated fetch
       sessionStorage.setItem('randomWords', JSON.stringify(newObj));
       dispatch(setRandomWords(newObj));
@@ -46,6 +46,6 @@ function useRandomWordsFetch() {
   }
 
   return { requestRandomWords };
-};
+}
 
 export default useRandomWordsFetch;

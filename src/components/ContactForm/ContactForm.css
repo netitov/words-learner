@@ -13,7 +13,9 @@
   -webkit-backdrop-filter: blur(25px);
   visibility: hidden;
   opacity: 0;
-  transition: visibility 0.2s, opacity 0.2s;
+  transition:
+    visibility 0.2s,
+    opacity 0.2s;
 }
 
 .contact_active {
@@ -79,7 +81,7 @@
   width: var(--content-width);
 }
 
-.contact__links  a {
+.contact__links a {
   color: #ddd;
   font-size: 1.1em;
   text-decoration: none;
@@ -104,10 +106,9 @@
   border-radius: 15px;
   position: relative;
   z-index: 3;
-
 }
 
-.form *{
+.form * {
   outline: none;
 }
 
@@ -115,7 +116,6 @@
   width: 100%;
   padding: 35px 30px 20px 30px;
   color: #fff;
-
 }
 
 .form__item {
@@ -192,7 +192,8 @@ textarea.form__input {
   box-shadow: 0px 0px 11px 1px #696969;
 }
 
-.form__input:focus ~ .form__label, .form__input:valid ~ .form__label {
+.form__input:focus ~ .form__label,
+.form__input:valid ~ .form__label {
   bottom: 100%;
   color: #878787;
   font-size: 14px;
@@ -205,7 +206,8 @@ textarea.form__input {
 }
 
 /*классы для Textarea при фокусировании, отдельно, т.к. поле больше*/
-.form__input:focus ~ .form__label-area, .form__input:valid ~ .form__label {
+.form__input:focus ~ .form__label-area,
+.form__input:valid ~ .form__label {
   bottom: 100%;
   color: #7b7b7b;
   font-size: 14px;
@@ -298,7 +300,6 @@ textarea.form__input {
   .contact__links .contacts {
     justify-content: flex-start;
   }
-
 }
 
 @keyframes opaccity {

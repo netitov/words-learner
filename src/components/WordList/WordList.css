@@ -97,7 +97,7 @@
 }
 
 .wordlist__btn:hover > svg > line {
-  stroke: var(--prime-yellow)
+  stroke: var(--prime-yellow);
 }
 
 .wordlist__btn_active {
@@ -106,7 +106,7 @@
 }
 
 .wordlist__btn_active > svg > line {
-  stroke: var(--prime-yellow)
+  stroke: var(--prime-yellow);
 }
 
 .wordlist-table th {
@@ -211,7 +211,6 @@ a.wordlist-table__tag:hover {
   transition: var(--transition);
 }
 
-
 .wordlist-table__progress > span {
   /* position: absolute;
   right: -10px; */
@@ -229,7 +228,6 @@ a.wordlist-table__tag:hover {
 }
 
 @media (max-width: 580px) {
-
   .wordlist-table {
     padding: 5px;
   }
@@ -270,5 +268,4 @@ a.wordlist-table__tag:hover {
   .wordlist__btn {
     font-size: 1em;
   }
-
 }

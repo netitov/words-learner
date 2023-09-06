@@ -86,7 +86,11 @@
 }
 
 .collection__overlay {
-  background-position: 40px 0, 40px 0, 0 0, 0 0;
+  background-position:
+    40px 0,
+    40px 0,
+    0 0,
+    0 0;
   background-size: 40px 40px;
   background-repeat: repeat;
   position: absolute;
@@ -172,7 +176,9 @@
   background-color: var(--super-light-green);
   width: 95%;
   box-sizing: border-box;
-  transition: background-color 0.3s, box-shadow 0.2s;
+  transition:
+    background-color 0.3s,
+    box-shadow 0.2s;
   cursor: pointer;
 
   box-shadow: 0px 4px 5px 1px #494949;
@@ -230,7 +236,6 @@ div.collection__cxt-menu {
   color: #fff;
   box-shadow: 0px 2px 6px 0px #2f2f2f6b;
   z-index: 1;
-
 }
 
 div.collection__cxt-menu li:hover {
@@ -309,7 +314,6 @@ div.collection__cxt-menu li:hover {
   }
 }
 
-
 @keyframes slideAndFadeIn {
   0% {
     opacity: 0;
@@ -326,4 +330,3 @@ div.collection__cxt-menu li:hover {
     width: 200px;
   }
 }
-

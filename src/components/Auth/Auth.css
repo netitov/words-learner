@@ -167,7 +167,8 @@
   height: 20px;
 }
 
-.auth__sbt-btn:not(.auth__sbt-btn_loading):hover, .auth__sbt-btn:active {
+.auth__sbt-btn:not(.auth__sbt-btn_loading):hover,
+.auth__sbt-btn:active {
   box-shadow: 0px 0px 20px 0px #ffd98755;
 }
 
@@ -200,7 +201,6 @@
 }
 
 .auth__err-box_active {
-
   padding: 10px;
   min-height: 45px;
   height: auto;
@@ -301,13 +301,13 @@
   margin-bottom: 20px;
 }
 
-.auth__modal-box .auth__mode-btn  {
+.auth__modal-box .auth__mode-btn {
   font-size: 19px;
   margin-right: 5px;
   box-shadow: 0px 0px 12px 1px #25444a;
 }
 
-.auth__modal-box .auth__mode-btn:hover  {
+.auth__modal-box .auth__mode-btn:hover {
   box-shadow: 0px 0px 12px 1px #ffd98729;
 }
 
@@ -339,8 +339,6 @@
   stroke-width: 6;
 }
 
-
-
 /* thanks to https://codepen.io/petsto/pen/XaZRGZ */
 
 .success-icon {
@@ -358,7 +356,6 @@
 }
 
 .success-icon {
-
   & .success-icon__tip,
   & .success-icon__long {
     display: block;
@@ -382,14 +379,13 @@
   & .success-icon__long {
     width: 4em;
     transform: rotate(-45deg);
-    top: 3.70em;
+    top: 3.7em;
     left: 2.75em;
     animation: longInPlace 140ms ease-in-out;
     animation-fill-mode: forwards;
     visibility: hidden;
     animation-delay: calc(300ms + 140ms);
   }
-
 }
 
 @keyframes showSuccess {
@@ -423,7 +419,7 @@
   }
   to {
     width: 4em;
-    top: 3.70em;
+    top: 3.7em;
     left: 2.75em;
     visibility: visible;
   }

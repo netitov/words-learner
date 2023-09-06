@@ -4,9 +4,21 @@ import { VscAccount } from 'react-icons/vsc';
 import TextField from '@mui/material/TextField';
 import Spinner from '../Spinner/Spinner';
 
-function AuthForm({ textFieldsData, data, setData, submitForm, children, form, question,
-  route, refBtn, btnText, addElement, error, setError }) {
-
+function AuthForm({
+  textFieldsData,
+  data,
+  setData,
+  submitForm,
+  children,
+  form,
+  question,
+  route,
+  refBtn,
+  btnText,
+  addElement,
+  error,
+  setError,
+}) {
   const [isValid, setIsValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorActive, setErrorActive] = useState(false);
@@ -22,11 +34,16 @@ function AuthForm({ textFieldsData, data, setData, submitForm, children, form, q
       return 'Please fill in all fields';
     }
 
-    if (name === 'password' && value !== '' && message !== '')  {
+    if (name === 'password' && value !== '' && message !== '') {
       return 'Password must be at least 7 characters long';
     }
 
-    if (name === 'password' && value !== '' && data?.confirmPassword && value !== data.confirmPassword) {
+    if (
+      name === 'password' &&
+      value !== '' &&
+      data?.confirmPassword &&
+      value !== data.confirmPassword
+    ) {
       return 'Passwords do not match';
     }
 
@@ -35,30 +52,32 @@ function AuthForm({ textFieldsData, data, setData, submitForm, children, form, q
     }
 
     return '';
-  };
+  }
 
   function handleChange(e) {
     const { name, value } = e.target;
     setData({
       ...data,
-      [name]: value
+      [name]: value,
     });
-    //show error onBlur
+    // show error onBlur
     const validation = checkValidation(name, value, e.target.validationMessage);
     if (validation !== '') {
-      //set auto validation message
+      // set auto validation message
       setError({ ...error, [name]: validation });
     }
   }
 
-  //hide error on input change
+  // hide error on input change
   async function hideError(e) {
     const { name, value } = e.target;
 
-    if ((name === 'password' && value === data.confirmPassword) || (name === 'confirmPassword' && value === data.password)) {
+    if (
+      (name === 'password' && value === data.confirmPassword) ||
+      (name === 'confirmPassword' && value === data.password)
+    ) {
       const { confirmPassword: confirmPass, password: pass, ...rest } = error;
       setError(rest);
-      console.log(name, value, data.password)
     } else if (e.target.validationMessage === '' && error[name]) {
       const { [name]: removedErr, ...rest } = error;
       setError(rest);
@@ -81,15 +100,9 @@ function AuthForm({ textFieldsData, data, setData, submitForm, children, form, q
       await submitForm();
       setIsLoading(false);
     }
-
   }
 
-  function test() {
-    //console.log(data)
-    //console.log(error)
-  }
-
-  //toggle error
+  // toggle error
   useEffect(() => {
     if (Object.values(error).some((i) => i !== '')) {
       setErrorActive(true);
@@ -98,17 +111,20 @@ function AuthForm({ textFieldsData, data, setData, submitForm, children, form, q
       setErrorActive(false);
       setIsValid(true);
     }
-  }, [error])
+  }, [error]);
 
   return (
-    <div className='auth' onClick={test}>
+    <div className='auth'>
       <div className='auth__form-wrapper'>
         <div className='auth__img-box'>
           <VscAccount />
           <h2>{form}</h2>
         </div>
-        <p className='auth__mode-switch'>{question}
-          <Link to={route} className='auth__mode-btn'>{refBtn}</Link>
+        <p className='auth__mode-switch'>
+          {question}
+          <Link to={route} className='auth__mode-btn'>
+            {refBtn}
+          </Link>
         </p>
 
         <form className='auth__form' ref={formRef} onSubmit={onSubmit}>
@@ -143,16 +159,18 @@ function AuthForm({ textFieldsData, data, setData, submitForm, children, form, q
               </svg>
             </button>
           </div>
-          <button type='submit' className={`auth__sbt-btn${isLoading ? ' auth__sbt-btn_loading' : ''}`}>
+          <button
+            type='submit'
+            className={`auth__sbt-btn${isLoading ? ' auth__sbt-btn_loading' : ''}`}
+          >
             {btnText}
             <Spinner isLoading={isLoading} />
           </button>
           {children}
         </form>
-
       </div>
     </div>
-  )
+  );
 }
 
 export default AuthForm;

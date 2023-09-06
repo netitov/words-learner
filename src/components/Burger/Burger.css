@@ -31,7 +31,6 @@
   transform: rotate(0deg);
   background-color: var(--white);
   transition: 0.25s ease-in-out;
-
 }
 
 .burger_active .burger-line {

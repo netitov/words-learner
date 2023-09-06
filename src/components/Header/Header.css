@@ -23,7 +23,6 @@ header {
   color: #fff;
 }
 
-
 .nav__li {
   /* margin-right: 4em; */
   cursor: pointer;
@@ -79,7 +78,7 @@ header {
   -webkit-transform: scaleX(1.1);
 }
 
-.nav__li_active:after  {
+.nav__li_active:after {
   transform: scaleX(1.1);
   -webkit-transform: scaleX(1.1);
 }
@@ -117,7 +116,6 @@ header {
 }
 
 @media (max-width: 860px) {
-
   .header {
     height: 100%;
   }

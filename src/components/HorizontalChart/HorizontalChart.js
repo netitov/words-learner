@@ -1,26 +1,10 @@
 import React from 'react';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip } from 'chart.js';
 
 import { Bar } from 'react-chartjs-2';
 
 function HorizontalChart(props) {
-
-  ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    Title,
-    Tooltip,
-
-  );
+  ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip);
 
   ChartJS.defaults.font.family = "'Noto Sans Display', 'Sans-serif', 'Arial', 'Helvetica'";
   ChartJS.defaults.color = props.chartFontColor;
@@ -39,19 +23,19 @@ function HorizontalChart(props) {
         text: 'Chart.js Horizontal Bar Chart',
       },
       legend: {
-        display: false
-     },
+        display: false,
+      },
     },
     scales: {
       y: {
         grid: {
-          display: false
+          display: false,
         },
         ticks: {
           font: {
             size: 15,
-          }
-        }
+          },
+        },
       },
       x: {
         grid: {
@@ -67,10 +51,9 @@ function HorizontalChart(props) {
         ticks: {
           autoSkip: false,
           maxRotation: 0,
-        }
-      }
-  },
-
+        },
+      },
+    },
   };
 
   const data = {
@@ -78,7 +61,7 @@ function HorizontalChart(props) {
     datasets: [
       {
         data: props.translFreqs.map((i) => parseFloat(i.fr.toFixed(1))),
-        backgroundColor: props.chartColor, //#fcc5546e
+        backgroundColor: props.chartColor, // #fcc5546e
         barThickness: 'flex',
         maxBarThickness: 30,
       },
@@ -102,16 +85,12 @@ function HorizontalChart(props) {
 
   return (
     <div className={`chart-wrapper${props.translFreqs.length > 0 ? ' chart-wrapper_active' : ''}`}>
-      <h2 className='chart-wrapper__heading'>Frequency
-      </h2>
+      <h2 className='chart-wrapper__heading'>Frequency</h2>
       <div className='horizontal-chart'>
-        <Bar
-          data={data}
-          options={options}
-        />
+        <Bar data={data} options={options} />
       </div>
     </div>
-  )
+  );
 }
 
 export default HorizontalChart;

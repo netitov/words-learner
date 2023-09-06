@@ -3,7 +3,10 @@
   padding: 7px 15px;
   visibility: hidden;
   opacity: 0;
-  transition: visibility 0.2s, transform 0.3s, opacity 0.3s;
+  transition:
+    visibility 0.2s,
+    transform 0.3s,
+    opacity 0.3s;
   z-index: 10;
   color: #000;
   display: flex;
@@ -44,4 +47,3 @@
   align-items: center;
   gap: 5px;
 }
-

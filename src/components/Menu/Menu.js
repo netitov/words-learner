@@ -5,24 +5,19 @@ import { VscGitCompare } from 'react-icons/vsc';
 import { MdTranslate } from 'react-icons/md';
 
 function Menu(props) {
-
   const [offset, setOffset] = useState({});
   const menuRef = useRef(null);
 
-  //change menu possition if it overflows the page
+  // change menu possition if it overflows the page
   useEffect(() => {
     const elementPoss = menuRef.current.getBoundingClientRect().x + menuRef.current.offsetWidth;
-    if (elementPoss > (window.innerWidth - 15)) {
+    if (elementPoss > window.innerWidth - 15) {
       setOffset({ right: 0, left: 'auto' });
     }
-  }, [props.menuActive])
+  }, [props.menuActive]);
 
   return (
-    <div
-      className={`menu${props.menuActive ? ' menu_active' : ''}`}
-      ref={menuRef}
-      style={offset}
-    >
+    <div className={`menu${props.menuActive ? ' menu_active' : ''}`} ref={menuRef} style={offset}>
       <ul className='menu__ul'>
         <li className='menu__li' onClick={props.addTranslate}>
           <MdTranslate />
@@ -30,7 +25,9 @@ function Menu(props) {
         </li>
         <li className='menu__li' onClick={props.handleList}>
           <BsBookmarks />
-          <span>{props.isSaved() ? 'remove from the learning list' : 'add to the learning list'}</span>
+          <span>
+            {props.isSaved() ? 'remove from the learning list' : 'add to the learning list'}
+          </span>
         </li>
         <li
           className={`menu__li${!props.compareFreqActive ? ' menu__li_inactive' : ''}`}
@@ -41,7 +38,7 @@ function Menu(props) {
         </li>
       </ul>
     </div>
-  )
+  );
 }
 
 export default Menu;

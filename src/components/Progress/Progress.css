@@ -10,7 +10,8 @@
   flex-wrap: wrap;
 }
 
-.progress .area-chart, .bar-chart {
+.progress .area-chart,
+.bar-chart {
   width: 100vw;
   height: 100%;
   box-sizing: border-box;
@@ -33,7 +34,8 @@
   max-width: 350px; */
 }
 
-.progress .area-chart > h3, .bar-chart > h3 {
+.progress .area-chart > h3,
+.bar-chart > h3 {
   font-size: 1.3em;
   color: #fff;
   font-weight: 300;
@@ -48,12 +50,13 @@
 }
 
 @media (max-width: 580px) {
-  .progress .area-chart, .bar-chart {
+  .progress .area-chart,
+  .bar-chart {
     padding: 5px;
   }
 
-  .progress .area-chart > h3, .bar-chart > h3 {
+  .progress .area-chart > h3,
+  .bar-chart > h3 {
     font-size: 1.1em;
   }
 }
-

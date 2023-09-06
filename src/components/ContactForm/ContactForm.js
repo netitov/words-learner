@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
-import Spinner from '../Spinner/Spinner';
-import Snackbar from '../Snackbar/Snackbar';
 import { IoCheckmarkCircleOutline } from 'react-icons/io5';
 import emailjs from '@emailjs/browser';
+import Spinner from '../Spinner/Spinner';
+import Snackbar from '../Snackbar/Snackbar';
 
 function ContactForm(props) {
   const [isValid, setIsValid] = useState(false);
@@ -18,7 +18,6 @@ function ContactForm(props) {
   const [isSent, setIsSent] = useState(false);
   const [snackbarActive, setSnackbarActive] = useState(false);
   const [snackbarErrorActive, setSnackbarErrorActive] = useState(false);
-
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -45,32 +44,38 @@ function ContactForm(props) {
     e.preventDefault();
     setInSend(true);
 
-    emailjs.sendForm(process.env.REACT_APP_SERVICE_ID, process.env.REACT_APP_TEMPLATE_ID, form, process.env.REACT_APP_PUBLIC_KEY)
-      .then((result) => {
-        setInSend(false);
-        setIsSent(true);
-        setSnackbarActive(true);
+    emailjs
+      .sendForm(
+        process.env.REACT_APP_SERVICE_ID,
+        process.env.REACT_APP_TEMPLATE_ID,
+        form,
+        process.env.REACT_APP_PUBLIC_KEY,
+      )
+      .then(
+        () => {
+          setInSend(false);
+          setIsSent(true);
+          setSnackbarActive(true);
 
-        setTimeout(() => {
-          setSnackbarActive(false);
+          setTimeout(() => {
+            setSnackbarActive(false);
+            setIsSent(false);
+          }, 3000);
+        },
+        () => {
           setIsSent(false);
+          setInSend(false);
+          setSnackbarActive(false);
 
-        }, 3000)
+          setSnackbarErrorActive(true);
+          setTimeout(() => {
+            setSnackbarErrorActive(false);
+          }, 3000);
+        },
+      );
+  }
 
-      }, (error) => {
-        setIsSent(false);
-        setInSend(false);
-        setSnackbarActive(false);
-
-        setSnackbarErrorActive(true);
-        setTimeout(() => {
-          setSnackbarErrorActive(false);
-        }, 3000)
-
-      });
-  };
-
-  //drop form data
+  // drop form data
   useEffect(() => {
     function resetForm() {
       if (isSent) {
@@ -81,15 +86,11 @@ function ContactForm(props) {
     resetForm();
   }, [isSent]);
 
-
   return (
     <div className={`contact${props.formActive ? ' contact_active' : ''}`}>
-
       <div className='contact__container'>
-
         <div className='form'>
           <form className='form__body' onSubmit={sendEmail} id='form'>
-
             <div className='form__item'>
               <input
                 id='formName'
@@ -102,11 +103,13 @@ function ContactForm(props) {
               />
               <label
                 htmlFor='formName'
-                className={error.name !== '' && error.name !== undefined ? 'form__label form__label_active' : 'form__label'}
+                className={
+                  error.name !== '' && error.name !== undefined
+                    ? 'form__label form__label_active'
+                    : 'form__label'
+                }
               >
-                Name*:
-                {' '}
-                {error.name}
+                Name*: {error.name}
               </label>
             </div>
 
@@ -121,11 +124,13 @@ function ContactForm(props) {
               />
               <label
                 htmlFor='formEmail'
-                className={error.email !== '' && error.email !== undefined ? 'form__label form__label_active' : 'form__label'}
+                className={
+                  error.email !== '' && error.email !== undefined
+                    ? 'form__label form__label_active'
+                    : 'form__label'
+                }
               >
-                E-mail*:
-                {' '}
-                {error.email}
+                E-mail*: {error.email}
               </label>
             </div>
 
@@ -140,21 +145,24 @@ function ContactForm(props) {
               <label
                 htmlFor='formMessage'
                 className={
-                  error.message !== '' && error.message !== undefined ? 'form__label form__label-area form__label-area_active'
+                  error.message !== '' && error.message !== undefined
+                    ? 'form__label form__label-area form__label-area_active'
                     : 'form__label form__label-area'
                 }
               >
                 {' '}
-                Message*:
-                {' '}
-                {error.message}
+                Message*: {error.message}
               </label>
             </div>
 
-            <button type='submit' className={isValid && !inSend ? 'form__button form__button_active' : 'form__button'}>Send</button>
-
+            <button
+              type='submit'
+              className={isValid && !inSend ? 'form__button form__button_active' : 'form__button'}
+            >
+              Send
+            </button>
           </form>
-          <Spinner isLoading={inSend}/>
+          <Spinner isLoading={inSend} />
           <p className='contact__text contact__text_form'>Please fill out the form</p>
           <button className='form__close-btn btn-cross' type='button' onClick={props.toggleForm}>
             <svg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'>
@@ -163,7 +171,6 @@ function ContactForm(props) {
             </svg>
           </button>
         </div>
-
       </div>
 
       {/* snackbar if message sent */}
@@ -185,7 +192,6 @@ function ContactForm(props) {
       >
         {/* <IoCheckmarkCircleOutline size={22} /> */}
       </Snackbar>
-
     </div>
   );
 }

@@ -70,7 +70,9 @@
   box-shadow: 0px 0px 10px 0px #89c4c45e;
   z-index: 1;
 
-  transition: opacity 0.6s 0.2s, transform 0.6s;
+  transition:
+    opacity 0.6s 0.2s,
+    transform 0.6s;
   transform: translateX(-100%);
   opacity: 0;
 }
@@ -84,7 +86,9 @@
   background: var(--super-light-green);
   box-shadow: 0px 0px 10px 0px #89c4c45e;
 
-  transition: opacity 0.6s 0.2s, transform 0.6s;
+  transition:
+    opacity 0.6s 0.2s,
+    transform 0.6s;
   transform: translateX(100%);
   opacity: 0;
 }
@@ -188,10 +192,10 @@
   cursor: pointer;
 }
 
-.translator__btn > svg, .translator__tlt-btn > svg {
+.translator__btn > svg,
+.translator__tlt-btn > svg {
   color: rgb(117, 117, 117);
 }
-
 
 .btn-cross {
   -webkit-transform: rotate(45deg);
@@ -236,7 +240,6 @@
 }
 
 .translator__bck-svg {
-
 }
 
 .translator__snack {
@@ -290,7 +293,6 @@
   }
 
   .translator__box_output {
-
   }
 
   .translator__swap-btn {

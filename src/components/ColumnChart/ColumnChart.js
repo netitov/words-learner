@@ -1,35 +1,50 @@
 import React from 'react';
 
 function ColumnChart(props) {
-
   return (
     <svg xmlns='http://www.w3.org/2000/svg' width='30' height='25'>
       <rect
-        x='2' y='20' width='5' height='5' rx='2'
+        x='2'
+        y='20'
+        width='5'
+        height='5'
+        rx='2'
         fill={props.value >= 0 ? props.columnChartColor : 'none'}
         stroke={props.columnChartStroke}
         strokeWidth='0.3'
       />
       <rect
-        x='9' y='15' width='5' height='10' rx='2'
+        x='9'
+        y='15'
+        width='5'
+        height='10'
+        rx='2'
         fill={props.value >= 2 ? props.columnChartColor : 'none'}
-
         stroke={props.columnChartStroke}
         strokeWidth='0.3'
       />
       <rect
-        x='16' y='10' width='5' height='15' rx='2'
+        x='16'
+        y='10'
+        width='5'
+        height='15'
+        rx='2'
         fill={props.value >= 4 ? props.columnChartColor : 'none'}
         stroke={props.columnChartStroke}
-        strokeWidth='0.3' />
+        strokeWidth='0.3'
+      />
       <rect
-        x='23' y='5' width='5' height='20' rx='2'
+        x='23'
+        y='5'
+        width='5'
+        height='20'
+        rx='2'
         fill={props.value >= 6 ? props.columnChartColor : 'none'}
         stroke={props.columnChartStroke}
         strokeWidth='0.3'
       />
     </svg>
-  )
+  );
 }
 
 export default ColumnChart;

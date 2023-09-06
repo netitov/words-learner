@@ -1,4 +1,3 @@
-
 .languages-wrapper {
   position: absolute;
   top: var(--lang-btn-height);
@@ -50,7 +49,6 @@
 
 .languages__list {
   column-count: 4;
-
 }
 
 .languages__list_filtered {
@@ -114,7 +112,6 @@
 }
 
 @media (max-width: 950px) {
-
   .languages-wrapper {
     top: 0;
   }

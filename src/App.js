@@ -7,8 +7,14 @@ import LinkRequestPage from './pages/Auth/LinkRequestPage';
 import PasswordResetPage from './pages/Auth/PasswordResetPage';
 import { login, userData } from './store/user';
 import { useSelector, useDispatch } from 'react-redux';
-import { getUserData, requestRandomWords,  getWordList,
-  addToList, getCollections, getQuizResultsAPI } from './utils/api';
+import {
+  getUserData,
+  requestRandomWords,
+  getWordList,
+  addToList,
+  getCollections,
+  getQuizResultsAPI,
+} from './utils/api';
 import Spinner from './components/Spinner/Spinner';
 import Account from './pages/Account/Account';
 import useLangsFetch from './hooks/useLangsFetch';
@@ -23,9 +29,7 @@ import ErrorPopup from './components/ErrorPopup/ErrorPopup';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProtectedRoute from './components/ProtectedRoute';
 
-
 function App() {
-
   const [isLoading, setIsLoading] = useState(true);
 
   const dispatch = useDispatch();
@@ -41,11 +45,10 @@ function App() {
   const currentInputLang = useSelector((state) => state.inputLang);
   const currentOutputLang = useSelector((state) => state.outputLang);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-  const randomWordsInLoading = useSelector((state) => state.randomWords.isLoading);//remove?
+  const randomWordsInLoading = useSelector((state) => state.randomWords.isLoading); //remove?
   const randomWords = useSelector((state) => state.randomWords.data);
   const userWords = useSelector((state) => state.userWords);
   const errorMessage = useSelector((state) => state.error.errorMessage);
-
 
   async function tokenCheck(token) {
     const response = await getUserData(token);
@@ -58,13 +61,12 @@ function App() {
       localStorage.removeItem('token');
     }
     setIsLoading(false);
-
   }
 
   //get user data if token exists
   useEffect(() => {
     //switch on loading overlay
-    setIsLoading(true)
+    setIsLoading(true);
     const token = localStorage.getItem('token');
 
     if (token && !isLoggedIn) {
@@ -73,14 +75,13 @@ function App() {
       //switch off loading overlay
       setIsLoading(false);
     }
-
-  }, [])
+  }, []);
 
   //get init user language after language list is fetched
   useEffect(() => {
     if (!langsLoaded) {
       const userLang = JSON.parse(localStorage.getItem('userLang'));
-      console.log(userLang)
+      console.log(userLang);
       if (userLang) {
         dispatch(selectOutputLang(userLang));
       } else {
@@ -98,10 +99,10 @@ function App() {
         word: i.word,
         translation: i.translation,
         translationLang: i.lang,
-        source: []
+        source: [],
       };
       return newObj;
-    })
+    });
     const response = await addToList(newWords, token);
     return response;
   }
@@ -194,7 +195,7 @@ function App() {
       //get and set user word list
       initializeUserWords();
     }
-  }, [randomWords, isLoggedIn])
+  }, [randomWords, isLoggedIn]);
 
   //set initial list of user collections and quiz results
   useEffect(() => {
@@ -204,8 +205,7 @@ function App() {
       //get and set user quiz results
       initializeQuizResults();
     }
-  }, [isLoggedIn])
-
+  }, [isLoggedIn]);
 
   //RANDOM WORDS
   //get initial list of random words
@@ -213,7 +213,6 @@ function App() {
     const currLang = JSON.parse(localStorage.getItem('userLang'));
     //run function of current language defined
     if (currLang) {
-
       const wordStorage = JSON.parse(sessionStorage.getItem('randomWords'));
       //if languages were not changed, use list of words from session storage
       if (wordStorage?.some((i) => i.lang === currLang.code)) {
@@ -229,23 +228,21 @@ function App() {
     getInitRandomWords();
   }, [currentInputLang, currentOutputLang]);
 
-
   return (
     <div className='page'>
       <div className='page__wrapper'>
-
         {/* loading overlay */}
         <AnimatePresence>
-          {isLoading &&
+          {isLoading && (
             <motion.div
               className={`page__loading-overlay`}
               initial={{ opacity: 1 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
-              <Spinner isLoading={isLoading}/>
+              <Spinner isLoading={isLoading} />
             </motion.div>
-          }
+          )}
         </AnimatePresence>
 
         <Routes>
@@ -254,7 +251,8 @@ function App() {
           <Route path='/signup' element={<SignupPage />} />
           <Route path='/password-reset' element={<LinkRequestPage />} />
           <Route path='/password-reset/:userId/:token' element={<PasswordResetPage />} />
-          <Route path='/account/*'
+          <Route
+            path='/account/*'
             element={
               <ProtectedRoute isLoggedIn={isLoggedIn} isLoading={isLoading}>
                 <Account />
@@ -264,15 +262,11 @@ function App() {
           {!isLoading && <Route path='/*' element={<Navigate to='/' />} />}
         </Routes>
 
-
         {/* error overlay */}
-        <AnimatePresence>
-          { errorMessage && <ErrorPopup /> }
-        </AnimatePresence>
-
+        <AnimatePresence>{errorMessage && <ErrorPopup />}</AnimatePresence>
       </div>
     </div>
-  )
+  );
 }
 
 export default App;

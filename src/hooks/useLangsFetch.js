@@ -8,7 +8,6 @@ import { setEnDictionLangs } from '../store/enDictionLangs';
 import { getLanguages, getDictionary } from '../utils/api';
 
 function useLangsFetch() {
-
   const dispatch = useDispatch();
   const [langsLoaded, setLangsLoaded] = useState(true);
   const data = useSelector((state) => state.langList);
@@ -19,12 +18,8 @@ function useLangsFetch() {
 
   useEffect(() => {
     if (data.length === 0) {
-
       if (!langList || !dictionLangs || !enDictionLangs) {
-        Promise.all([
-          getLanguages(),
-          getDictionary()
-        ])
+        Promise.all([getLanguages(), getDictionary()])
           .then(([lang, dict]) => {
             //list of languages for translation
             const sortedLangs = lang.sort((a, b) => a.language.localeCompare(b.language));
@@ -35,8 +30,8 @@ function useLangsFetch() {
             //list of languages for translation in feat RandomWords (available for dictionary from english)
             const engDictionary = dict.filter((i) => i.languages.includes('en-'));
             const filteredLangs = sortedLangs.filter((i) => {
-              return engDictionary.some((el) => i.code === el.languages.split('-')[1])
-            })
+              return engDictionary.some((el) => i.code === el.languages.split('-')[1]);
+            });
 
             dispatch(setDictionLangs(dict));
             localStorage.setItem('dictionLangs', JSON.stringify(dict));
@@ -45,11 +40,10 @@ function useLangsFetch() {
             localStorage.setItem('enDictionLangs', JSON.stringify(filteredLangs));
 
             setLangsLoaded(false);
-
           })
           .catch((err) => {
             console.log(err);
-          })
+          });
       } else {
         dispatch(setLangList(langList));
         dispatch(setDictionLangs(dictionLangs));
@@ -63,6 +57,6 @@ function useLangsFetch() {
   }, []);
 
   return { langsLoaded };
-};
+}
 
 export default useLangsFetch;

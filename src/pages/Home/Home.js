@@ -12,7 +12,6 @@ import useHandleQuiz from '../../hooks/useHandleQuiz';
 import { AnimatePresence } from 'framer-motion';
 
 function Home() {
-
   const [animation, setAnimation] = useState(false);
   //const [quizActive, setQuizActive] = useState(false);
 
@@ -21,9 +20,7 @@ function Home() {
 
   const randomWords = useSelector((state) => state.randomWords.data);
 
-  function handleLearnList() {
-
-  }
+  function handleLearnList() {}
 
   //run animation
   useEffect(() => {
@@ -32,7 +29,7 @@ function Home() {
       const elementHeight = pathRef.current.offsetHeight;
       const windowHeight = window.innerHeight;
 
-      if (elementPos < windowHeight - (elementHeight * 0.4)) {
+      if (elementPos < windowHeight - elementHeight * 0.4) {
         setAnimation(true);
       } /* else {
         setAnimation(false);
@@ -48,7 +45,6 @@ function Home() {
       <Header />
 
       <main className='main'>
-
         <Promo />
 
         <About />
@@ -61,40 +57,36 @@ function Home() {
           columnChartStroke='#757575'
         />
 
-        <Frequency
-          handleLearnList={handleLearnList}
-        />
+        <Frequency handleLearnList={handleLearnList} />
 
-        <RandomWords
-          handleLearnList={handleLearnList}
-        />
+        <RandomWords handleLearnList={handleLearnList} />
 
         <div className='main__quiz' id='quiz'>
           <h2 className='main__heading heading2'>Learn and test yourself</h2>
-          <div className={`main__quiz-container${animation ? ' main__quiz-container_active' : ''}`} ref={pathRef}>
+          <div
+            className={`main__quiz-container${animation ? ' main__quiz-container_active' : ''}`}
+            ref={pathRef}
+          >
             <div className='main__block-disciption'>
               <p>Take the tests and check your progress.</p>
               <p>Use filters above to update the word list</p>
             </div>
-            <button className='main__quiz-btn' type='button' onClick={startQuiz}>Start test</button>
+            <button className='main__quiz-btn' type='button' onClick={startQuiz}>
+              Start test
+            </button>
           </div>
           {/* quiz modal */}
           <AnimatePresence>
-            {quizActive &&
-              <Quiz
-                quizActive={quizActive}
-                closeQuiz={closeQuiz}
-                quizWords={randomWords}
-              />
-            }
+            {quizActive && (
+              <Quiz quizActive={quizActive} closeQuiz={closeQuiz} quizWords={randomWords} />
+            )}
           </AnimatePresence>
         </div>
-
       </main>
 
       <Footer />
     </>
-  )
+  );
 }
 
 export default Home;

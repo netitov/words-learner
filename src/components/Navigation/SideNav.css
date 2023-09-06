@@ -35,7 +35,8 @@
   cursor: pointer;
 }
 
-.sidenav__link:hover, .sidenav__link_active {
+.sidenav__link:hover,
+.sidenav__link_active {
   background-color: var(--prime-blue);
 }
 
@@ -44,7 +45,8 @@
   transition: color 0.3s;
 }
 
-.sidenav__link:hover > svg, .sidenav__link_active > svg {
+.sidenav__link:hover > svg,
+.sidenav__link_active > svg {
   color: var(--prime-yellow);
 }
 
@@ -67,4 +69,3 @@
     flex-direction: row;
   }
 }
-

@@ -43,7 +43,8 @@
   width: 130px;
 }
 
-.dropdown__link:hover, .dropdown__link_active {
+.dropdown__link:hover,
+.dropdown__link_active {
   background-color: var(--prime-blue);
 }
 
@@ -52,14 +53,13 @@
   transition: color 0.3s;
 }
 
-.dropdown__link:hover > svg, .dropdown__link_active > svg {
+.dropdown__link:hover > svg,
+.dropdown__link_active > svg {
   color: var(--prime-yellow);
 }
 
 @media (max-width: 780px) {
-
   .dropdown-overlay {
     display: flex;
   }
 }
-

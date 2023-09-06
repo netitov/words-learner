@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -22,15 +22,12 @@ ChartJS.register(
   Tooltip,
   Filler,
   Legend,
-  ChartDataLabels
+  ChartDataLabels,
 );
 
 ChartJS.defaults.font.family = "'Noto Sans Display', 'Sans-serif', 'Arial', 'Helvetica'";
 
-
 function AreaChart({ title, labels, values }) {
-
-
   const options = {
     responsive: true,
     plugins: {
@@ -46,7 +43,6 @@ function AreaChart({ title, labels, values }) {
         font: {
           size: 14,
         }, */
-
       },
       datalabels: {
         display: true,
@@ -93,11 +89,10 @@ function AreaChart({ title, labels, values }) {
       },
     },
     redraw: false,
-
   };
 
   const data = {
-    labels: labels,
+    labels,
     datasets: [
       {
         /* label: option, */
@@ -116,18 +111,13 @@ function AreaChart({ title, labels, values }) {
         lineTension: 0.3,
         fill: true,
       },
-
     ],
   };
 
   return (
     <div className='area-chart'>
       <h3>{title}</h3>
-      <Line
-        data={data}
-        options={options}
-      />
-
+      <Line data={data} options={options} />
     </div>
   );
 }

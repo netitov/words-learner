@@ -1,12 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getStyle, tooltipOption, errorMessages } from '../../utils/constants';
 import { BsBookmarksFill } from 'react-icons/bs';
 import { GoKebabHorizontal } from 'react-icons/go';
-import CloseBtn from '../CloseBtn/CloseBtn';
 import { useSelector, useDispatch } from 'react-redux';
-import { addCollection, updateCollectionState, updateDefaultState, deleteCollection } from '../../store/collections';
-import { createCollectionAPI, deleteCollectionAPI, updateCollectionAPI } from '../../utils/api';
 import Tooltip from '@mui/material/Tooltip';
 import Popper from '@mui/material/Popper';
 import Paper from '@mui/material/Paper';
@@ -14,12 +10,15 @@ import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Grow from '@mui/material/Grow';
+import { createCollectionAPI, deleteCollectionAPI, updateCollectionAPI } from '../../utils/api';
+import { addCollection, updateDefaultState, deleteCollection } from '../../store/collections';
+import CloseBtn from '../CloseBtn/CloseBtn';
+import { getStyle, tooltipOption, errorMessages } from '../../utils/constants';
 import useWordSave from '../../hooks/useWordSave';
-import { showError, closeError } from '../../store/error';
+import { showError } from '../../store/error';
 import CollectionProgress from '../CollectionProgress/CollectionProgress';
 
 function Collections() {
-
   const [formActive, setFormAсtive] = useState(false);
   const [collectName, setCollectName] = useState('');
   const [styles, setStyles] = useState({});
@@ -36,56 +35,58 @@ function Collections() {
 
   const { removeWordList, updateCollectionData } = useWordSave();
 
-  const anchorRef = useRef(null);
-
   const patternColors = [
     {
       frontColor: '#2e5760',
-      backColor: '#7da1a9'
+      backColor: '#7da1a9',
     },
     {
       frontColor: '#FFD987',
-      backColor: '#FFE8B7'
+      backColor: '#FFE8B7',
     },
     {
       frontColor: '#757575',
-      backColor: '#A8A8A8'
-    }
+      backColor: '#A8A8A8',
+    },
   ];
 
   function openMenu(i, e) {
     setAnchorEl(e.currentTarget);
     setMenuActive(true);
-    //set collection where menu was opened
+    // set collection where menu was opened
     setTargetCollection(i);
-    //drop preveious form
+    // drop preveious form
     setDeleteFormActive(false);
   }
 
-  function closeMenu(e) {
+  function closeMenu() {
     setAnchorEl(null);
     setMenuActive(false);
   }
 
-  //open form for creating new collection
+  function generateRandomNumber(maxNumber) {
+    return Math.floor(Math.random() * maxNumber);
+  }
+
+  // open form for creating new collection
   function openForm() {
     setFormAсtive(true);
     const randomColors = patternColors[generateRandomNumber(patternColors.length)];
-    //get random pattern with random color. 11 - amount of patterns
+    // get random pattern with random color. 11 - amount of patterns
     const collectionStyle = getStyle(randomColors)[generateRandomNumber(11)];
     setFormStyle(collectionStyle.style);
     setStyles({ colors: randomColors, pattern: collectionStyle.pattern });
   }
 
-  //close form for new collection and clear input
+  // close form for new collection and clear input
   function closeForm() {
     setFormAсtive(false);
     setCollectName('');
   }
 
-  //remove default value in array
+  // remove default value in array
   function droppDefaultStateStorage(initCollects) {
-    return initCollects.map(col => {
+    return initCollects.map((col) => {
       if (col.default) {
         return { ...col, default: false };
       }
@@ -93,50 +94,51 @@ function Collections() {
     });
   }
 
-  //update collections data array for storage
-  function updateCollectionsStorage(collections, updatedCollection) {
-    return collections.map(i => {
+  // update collections data array for storage
+  function updateCollectionsStorage(collects, updatedCollection) {
+    return collects.map((i) => {
       if (updatedCollection.default) {
         return i._id === updatedCollection._id ? updatedCollection : { ...i, default: false };
-      } else {
-        return i._id === updatedCollection._id ? updatedCollection : i;
       }
-
+      return i._id === updatedCollection._id ? updatedCollection : i;
     });
   }
 
-  //create new collection
+  // create new collection
   async function handleSubmit(e) {
     e.preventDefault();
 
-    //check if user entered a collection name
+    // check if user entered a collection name
     if (!collectName) {
       dispatch(showError('Please fill in a collection name'));
-      //check if collection already taken, show error
-    } else if (collections.some(i => i.collectionName === collectName)) {
+      // check if collection already taken, show error
+    } else if (collections.some((i) => i.collectionName === collectName)) {
       dispatch(showError('Sorry, this name is already taken. Please try another one'));
     } else {
       const token = localStorage.getItem('token');
       const collectObj = {
         collectionName: collectName,
         style: styles,
-        default: true
+        default: true,
       };
 
-      //create collection in API
+      // create collection in API
       const createdCollection = await createCollectionAPI(collectObj, token);
 
-      //handle error
+      // handle error
       if (createdCollection.error) {
         dispatch(showError(errorMessages.general));
       } else {
         closeForm();
 
-        //update session storage (add new collection and remove current default value)
+        // update session storage (add new collection and remove current default value)
         const updatedCollections = droppDefaultStateStorage(collections);
-        sessionStorage.setItem('collections', JSON.stringify([createdCollection, ...updatedCollections]));
+        sessionStorage.setItem(
+          'collections',
+          JSON.stringify([createdCollection, ...updatedCollections]),
+        );
 
-        //add new collection and remove current default
+        // add new collection and remove current default
         dispatch(addCollection(createdCollection));
       }
     }
@@ -157,29 +159,30 @@ function Collections() {
     const deletedCollection = await deleteCollectionAPI(targetCollection._id, token);
 
     if (deletedCollection.error) {
-      //error handler - display error snack
+      // error handler - display error snack
       dispatch(showError(errorMessages.general));
-
     } else {
-      //update state and storage
+      // update state and storage
       dispatch(deleteCollection(deletedCollection._id));
       const collectionStorage = JSON.parse(sessionStorage.getItem('collections'));
-      const updatedCollectionList = collectionStorage.filter(i => i._id !== deletedCollection._id);
+      const updatedCollectionList = collectionStorage.filter(
+        (i) => i._id !== deletedCollection._id,
+      );
       sessionStorage.setItem('collections', JSON.stringify(updatedCollectionList));
 
-      //update collection data in user words
+      // update collection data in user words
       if (deleteWords) {
-        //remove words from deleted collection
+        // remove words from deleted collection
         await removeWordList(targetCollection._id);
       } else {
-        //update collection in word list
+        // update collection in word list
         await updateCollectionData(targetCollection._id);
       }
     }
     closeDeleteForm();
   }
 
-  //edit collection data: title, default state
+  // edit collection data: title, default state
   async function handleUpdate(collectionObj) {
     const token = localStorage.getItem('token');
     const updatedCollection = await updateCollectionAPI(targetCollection._id, token, collectionObj);
@@ -187,25 +190,19 @@ function Collections() {
     closeMenu();
 
     if (updatedCollection.error) {
-      //error text
+      // error text
       dispatch(showError(errorMessages.general));
-      console.log(updatedCollection.error);
     } else {
       dispatch(updateDefaultState(updatedCollection));
 
-      //update session storage (add new collection and remove current default value)
-      const updatedCollections =  updateCollectionsStorage(collections, updatedCollection);
+      // update session storage (add new collection and remove current default value)
+      const updatedCollections = updateCollectionsStorage(collections, updatedCollection);
       sessionStorage.setItem('collections', JSON.stringify(updatedCollections));
     }
   }
 
-  function generateRandomNumber(maxNumber) {
-    return Math.floor(Math.random() * maxNumber);
-  }
-
   return (
     <div className='collections'>
-
       {/* btn: add new collection */}
       <div className='collection-new'>
         <button className='collection-new__btn' type='button' onClick={() => openForm()}>
@@ -221,15 +218,16 @@ function Collections() {
 
       {/* collection: all saved words */}
       <Link className='collection collection_all' to='/account/words'>
-        <BsBookmarksFill className='collection__bm-icon'/>
+        <BsBookmarksFill className='collection__bm-icon' />
         <h3 className='collection__title collection__title_all'>All saved words</h3>
       </Link>
 
       {/* form for new collection */}
       {formActive && (
-        <div className={`collection collections__form${formActive ? ' collections__form_active' : ''}`}
+        <div
+          className={`collection collections__form${formActive ? ' collections__form_active' : ''}`}
         >
-          <div className='collection__overlay' style={formStyle}></div>
+          <div className='collection__overlay' style={formStyle} />
           <form className='collection__form' onSubmit={handleSubmit}>
             <input
               type='text'
@@ -239,7 +237,9 @@ function Collections() {
               onChange={(e) => setCollectName(e.target.value)}
               maxLength='60'
             />
-            <button type='submit' className='collection__btn'>Create collection</button>
+            <button type='submit' className='collection__btn'>
+              Create collection
+            </button>
           </form>
           <CloseBtn
             width='13px'
@@ -253,22 +253,25 @@ function Collections() {
 
       {/* created collections by user */}
       {collections.map((i) => (
-        <div className='collection' key={i._id} >
+        <div className='collection' key={i._id}>
           <Link to={`/account/words/collections/${i._id}`}>
-            {i.default &&
-              <Tooltip title='Words will be saved in this collection by default' componentsProps={{ tooltip: { sx: tooltipOption, } }}>
-                <span className='collection__def' >default</span>
+            {i.default && (
+              <Tooltip
+                title='Words will be saved in this collection by default'
+                componentsProps={{ tooltip: { sx: tooltipOption } }}
+              >
+                <span className='collection__def'>default</span>
               </Tooltip>
-            }
+            )}
             {/* pattern and collection name */}
-            <div className='collection__overlay' style={getStyle(i.style.colors).find((s) => s.pattern === i.style.pattern).style}></div>
+            <div
+              className='collection__overlay'
+              style={getStyle(i.style.colors).find((s) => s.pattern === i.style.pattern).style}
+            />
             <h3 className='collection__title'>{i.collectionName}</h3>
 
             {/* learning progress data */}
-            <CollectionProgress
-              userWords={userWords}
-              collection={i}
-            />
+            <CollectionProgress userWords={userWords} collection={i} />
           </Link>
 
           {/* context menu */}
@@ -295,8 +298,7 @@ function Collections() {
                   <Grow
                     {...TransitionProps}
                     style={{
-                      transformOrigin:
-                        placement === 'bottom-start' ? 'left top' : 'left bottom',
+                      transformOrigin: placement === 'bottom-start' ? 'left top' : 'left bottom',
                     }}
                   >
                     <Paper className='collection__cxt-menu'>
@@ -311,13 +313,14 @@ function Collections() {
                           </MenuItem>
                           <MenuItem onClick={openDeleteForm}>Delete</MenuItem>
                           {i.default ? (
-                            <MenuItem onClick={() => handleUpdate({ default: false })}>Reset default</MenuItem>
+                            <MenuItem onClick={() => handleUpdate({ default: false })}>
+                              Reset default
+                            </MenuItem>
                           ) : (
-                            <MenuItem onClick={() => handleUpdate({ default: true })}>Set as default</MenuItem>
-                          )
-
-                          }
-
+                            <MenuItem onClick={() => handleUpdate({ default: true })}>
+                              Set as default
+                            </MenuItem>
+                          )}
                         </MenuList>
                       </ClickAwayListener>
                     </Paper>
@@ -328,23 +331,23 @@ function Collections() {
           </div>
 
           {/* deleting overlay */}
-          {targetCollection._id === i._id && deleteFormActive &&
+          {targetCollection._id === i._id && deleteFormActive && (
             <div className='collection__dlt-overlay'>
               <p>What would you like to delete?</p>
               <button
                 className='collection__dlt-btn'
                 type='button'
-                onClick={() => handleDeleteCollection(false)} //false - don't delete words
+                onClick={() => handleDeleteCollection(false)} // false - don't delete words
               >
                 Collection only
               </button>
               <button
                 className='collection__dlt-btn'
                 type='button'
-                onClick={() => handleDeleteCollection(true)} //true - delete collection and words
+                onClick={() => handleDeleteCollection(true)} // true - delete collection and words
               >
-                  Collection and words
-                </button>
+                Collection and words
+              </button>
               <CloseBtn
                 width='13px'
                 color='#fff'
@@ -353,13 +356,11 @@ function Collections() {
                 elClass='collection__close-btn'
               />
             </div>
-          }
-
+          )}
         </div>
       ))}
-
     </div>
-  )
+  );
 }
 
 export default Collections;

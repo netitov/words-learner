@@ -4,18 +4,15 @@ const initialState = [];
 
 //remove default value from all collections exept selected
 const handleUpdateDefaultState = (collections, updatedCollection) => {
-  return collections.map(i => ({
+  return collections.map((i) => ({
     ...i,
-    default: i._id === updatedCollection._id ? updatedCollection.default : false
+    default: i._id === updatedCollection._id ? updatedCollection.default : false,
   }));
 };
 
 const handleUpdateCollection = (collections, updatedCollection) => {
-  return collections.map(i => (
-    i._id === updatedCollection._id ? updatedCollection : i
-  ));
+  return collections.map((i) => (i._id === updatedCollection._id ? updatedCollection : i));
 };
-
 
 const collectionsSlice = createSlice({
   name: 'collections',
@@ -41,10 +38,16 @@ const collectionsSlice = createSlice({
     },
     deleteCollection(state, action) {
       const collectionIdToDelete = action.payload;
-      return state.filter(i => i._id !== collectionIdToDelete);
+      return state.filter((i) => i._id !== collectionIdToDelete);
     },
   },
 });
 
-export const { setCollections, addCollection, deleteCollection, updateDefaultState, updateCollectionState } = collectionsSlice.actions;
+export const {
+  setCollections,
+  addCollection,
+  deleteCollection,
+  updateDefaultState,
+  updateCollectionState,
+} = collectionsSlice.actions;
 export default collectionsSlice.reducer;

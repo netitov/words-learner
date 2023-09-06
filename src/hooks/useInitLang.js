@@ -3,7 +3,6 @@ import { selectOutputLang } from '../store/outputLang';
 import { defaultLang } from '../utils/constants';
 
 export function useInitLang() {
-
   const dispatch = useDispatch();
 
   function getUserLang() {

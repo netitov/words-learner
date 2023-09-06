@@ -25,7 +25,7 @@
 
 .promo__svg {
   position: absolute;
- /*  fill: #ffd98717; */
+  /*  fill: #ffd98717; */
   fill: var(--darker-blue);
   z-index: 0;
 }
@@ -103,28 +103,29 @@
 }
 
 .arrow {
-	cursor: pointer;
-	position: relative;
-	width: 19px;
-	height: 13px;
+  cursor: pointer;
+  position: relative;
+  width: 19px;
+  height: 13px;
 
-	&::before {
-		transform: rotate(-135deg);
-	}
+  &::before {
+    transform: rotate(-135deg);
+  }
 
-	&::after {
-		transform: rotate(135deg);
-	}
+  &::after {
+    transform: rotate(135deg);
+  }
 }
 
-.arrow::before, .arrow::after  {
+.arrow::before,
+.arrow::after {
   content: '';
   left: 8px;
   width: 1.7px;
   height: 9px;
   position: absolute;
   border-bottom: 10.7px solid var(--black-secodary);
-  transition: transform .2s ease;
+  transition: transform 0.2s ease;
 }
 
 .promo__btn_active .arrow::before {
@@ -168,7 +169,7 @@
 
   .promo__add-info > div > span {
     margin-left: 10px;
-}
+  }
 }
 
 @media (max-width: 370px) {

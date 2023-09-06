@@ -6,7 +6,6 @@ import RefTooltip from '../RefTooltip/RefTooltip';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 function CollectionSummary({ totalWords, learnedWords }) {
-
   const data = {
     labels: ['learned words', 'words to learn'],
 
@@ -14,8 +13,8 @@ function CollectionSummary({ totalWords, learnedWords }) {
       {
         data: [learnedWords, totalWords === 0 ? 0 : totalWords - learnedWords],
         backgroundColor: [
-          '#fcc554', //#ffd987
-          '#ffd98726', //# ffdd9770
+          '#fcc554', // #ffd987
+          '#ffd98726', // # ffdd9770
         ],
       },
     ],
@@ -31,22 +30,21 @@ function CollectionSummary({ totalWords, learnedWords }) {
         display: false,
       },
       datalabels: {
-        display: false
-      }
+        display: false,
+      },
     },
     elements: {
       arc: {
-        borderWidth: 0
-      }
+        borderWidth: 0,
+      },
     },
     rotation: -90,
     circumference: 180,
-    cutout: '83%'
-  }
+    cutout: '83%',
+  };
 
   return (
     <div className='c-sum'>
-
       <div className='c-sum__card'>
         <h3 className='c-sum__value'>{totalWords}</h3>
         <p className='c-sum__category'>total words</p>
@@ -61,16 +59,17 @@ function CollectionSummary({ totalWords, learnedWords }) {
       </div>
 
       {/* show chart if words amount more than 0 */}
-      {totalWords > 0 &&
+      {totalWords > 0 && (
         <div className='c-sum__card c-sum__card_chart'>
-          <Doughnut data={data} options={options}/>
-          <span className='c-sum__result'>{totalWords !== 0 ? Math.round(learnedWords / totalWords * 100) : 0}%</span>
+          <Doughnut data={data} options={options} />
+          <span className='c-sum__result'>
+            {totalWords !== 0 ? Math.round((learnedWords / totalWords) * 100) : 0}%
+          </span>
           <p className='c-sum__category'>% learned words</p>
         </div>
-      }
-
+      )}
     </div>
-  )
+  );
 }
 
 export default CollectionSummary;

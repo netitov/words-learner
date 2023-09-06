@@ -7,7 +7,9 @@
   transform-origin: top;
   -webkit-transform-origin: top;
   height: 0;
-  transition: visibility 0.2s ease, transform 0.3s ease;
+  transition:
+    visibility 0.2s ease,
+    transform 0.3s ease;
 }
 
 .dictionary_active {
@@ -31,7 +33,7 @@
   margin-top: 20px;
 }
 
-.dictionary__pos-card  {
+.dictionary__pos-card {
   margin-top: 13px;
 }
 
@@ -54,7 +56,6 @@
   background: var(--super-light-green);
   border-radius: var(--translate-radius);
 }
-
 
 /* .table {
   display: grid;
@@ -125,7 +126,6 @@ td {
   text-align: center;
   width: min-content;
 
-
   /* white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis; */
@@ -164,7 +164,6 @@ div.table__btn-word > .table__btn-transl_active {
 
 .table__btn-word {
   position: relative;
-
 }
 
 .table__btn > span {
@@ -192,7 +191,10 @@ div.table__btn-word > .table__btn-transl_active {
 
 .table__row {
   visibility: visible;
-  transition: visibility 0.2s, transform 0.3s, opacity 0.3s;
+  transition:
+    visibility 0.2s,
+    transform 0.3s,
+    opacity 0.3s;
   height: auto;
   /* transform: scaleY(1);
   -webkit-transform: scaleY(1); */
@@ -227,11 +229,8 @@ div.table__btn-word > .table__btn-transl_active {
     padding: 5px 5px 5px 0;
   }
 
-  .dictionary__translations td:first-of-type, .dictionary__translations th:first-of-type {
+  .dictionary__translations td:first-of-type,
+  .dictionary__translations th:first-of-type {
     display: none;
   }
-
-
 }
-
-

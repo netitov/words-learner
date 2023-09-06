@@ -10,7 +10,6 @@ import {
   Filler,
   Legend,
 } from 'chart.js';
-import Chart from 'chart.js/auto';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Bar } from 'react-chartjs-2';
 
@@ -26,13 +25,9 @@ ChartJS.register(
   ChartDataLabels,
 );
 
-//ChartJS.defaults.font.family = "'Noto Sans Display', 'Sans-serif', 'Arial', 'Helvetica'";
-ChartJS.defaults.color = '#bebebe'
-
+ChartJS.defaults.color = '#bebebe';
 
 function BarChart({ title, labels, dataset1, dataset2 }) {
-
-
   const options = {
     indexAxis: 'y',
     responsive: true,
@@ -64,7 +59,7 @@ function BarChart({ title, labels, dataset1, dataset2 }) {
           drawTicks: false,
         },
         ticks: {
-          display: false
+          display: false,
         },
         stacked: true,
       },
@@ -76,7 +71,7 @@ function BarChart({ title, labels, dataset1, dataset2 }) {
         },
         ticks: {
           /* display: false, */
-          color: '#bebebe'
+          color: '#bebebe',
         },
         stacked: true,
       },
@@ -90,11 +85,10 @@ function BarChart({ title, labels, dataset1, dataset2 }) {
       },
     },
     redraw: false,
-
   };
 
   const data = {
-    labels: labels,
+    labels,
     datasets: [
       {
         label: 'learned words',
@@ -102,8 +96,7 @@ function BarChart({ title, labels, dataset1, dataset2 }) {
         backgroundColor: '#7da1a9',
         barThickness: 'flex',
         maxBarThickness: 20,
-        borderRadius: [20, 20, 20, 20]
-
+        borderRadius: [20, 20, 20, 20],
       },
       {
         label: 'not learned',
@@ -111,20 +104,15 @@ function BarChart({ title, labels, dataset1, dataset2 }) {
         backgroundColor: '#7da1a92e',
         barThickness: 'flex',
         maxBarThickness: 20,
-        borderRadius: [20, 20, 20, 20]
-      }
-
+        borderRadius: [20, 20, 20, 20],
+      },
     ],
   };
 
   return (
     <div className='bar-chart'>
       <h3>{title}</h3>
-      <Bar
-        data={data}
-        options={options}
-      />
-
+      <Bar data={data} options={options} />
     </div>
   );
 }

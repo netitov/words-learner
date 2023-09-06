@@ -6,10 +6,10 @@ async function fetchAPI(path, method, headers, body) {
       method: method,
       headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        ...headers
+        Accept: 'application/json',
+        ...headers,
       },
-      body: method === 'GET' ? undefined : JSON.stringify(body) //body must be an object
+      body: method === 'GET' ? undefined : JSON.stringify(body), //body must be an object
     };
 
     const response = await fetch(`${SERVER_API}/${path}`, options);
@@ -58,7 +58,7 @@ export async function checkFrequency(word) {
 export async function getLanguages() {
   try {
     const response = await fetch(`${SERVER_API}/languages`, {
-      method: 'GET'
+      method: 'GET',
     });
     const result = await response.json();
     return result;
@@ -71,7 +71,7 @@ export async function getLanguages() {
 export async function getDictionary() {
   try {
     const response = await fetch(`${SERVER_API}/dictionary`, {
-      method: 'GET'
+      method: 'GET',
     });
     const result = await response.json();
     return result;
@@ -81,7 +81,7 @@ export async function getDictionary() {
 }
 
 export async function getUserData(token) {
-  const headers = {'Authorization': `Bearer ${token}`};
+  const headers = { Authorization: `Bearer ${token}` };
   return fetchAPI('users/me', 'GET', headers);
 }
 
@@ -104,43 +104,43 @@ export async function updatePassword(params, body) {
 
 //add words to user learning list
 export async function addToList(arr, token) {
-  const headers = {'Authorization': `Bearer ${token}`};
+  const headers = { Authorization: `Bearer ${token}` };
   return fetchAPI('userwords', 'POST', headers, arr);
 }
 
 //delete word from user learning list
 export async function deleteFromList(word, token) {
-  const headers = {'Authorization': `Bearer ${token}`};
+  const headers = { Authorization: `Bearer ${token}` };
   return fetchAPI(`userwords/${word}`, 'DELETE', headers);
 }
 
 //delete array of words from user learning list
 export async function deleteArrayFromListDB(collectionId, token) {
-  const headers = {'Authorization': `Bearer ${token}`};
+  const headers = { Authorization: `Bearer ${token}` };
   return fetchAPI('userwords', 'DELETE', headers, collectionId);
 }
 
 //delete array of words from user learning list
 export async function updateListDB(collectionId, token) {
-  const headers = {'Authorization': `Bearer ${token}`};
+  const headers = { Authorization: `Bearer ${token}` };
   return fetchAPI('userwords', 'PATCH', headers, collectionId);
 }
 
 //update translation of a word in DB
 export async function updateWordTranslationAPI(wordObj, token) {
-  const headers = {'Authorization': `Bearer ${token}`};
+  const headers = { Authorization: `Bearer ${token}` };
   return fetchAPI(`userwords/${wordObj.word}`, 'PATCH', headers, wordObj);
 }
 
 //get user learning list
 export async function getWordList(token) {
-  const headers = {'Authorization': `Bearer ${token}`};
+  const headers = { Authorization: `Bearer ${token}` };
   return fetchAPI('userwords', 'GET', headers);
 }
 
 //add quiz result to word list
 export async function addResultToListAPI(wordObj, token) {
-  const headers = {'Authorization': `Bearer ${token}`};
+  const headers = { Authorization: `Bearer ${token}` };
   return fetchAPI('userwords/result', 'POST', headers, wordObj);
 }
 
@@ -151,25 +151,25 @@ export async function getRandomWords(obj) {
 
 //get user collections of words
 export async function getCollections(token) {
-  const headers = {'Authorization': `Bearer ${token}`};
+  const headers = { Authorization: `Bearer ${token}` };
   return fetchAPI('collections', 'GET', headers);
 }
 
 //creare user colletions of words
 export async function createCollectionAPI(collectionObj, token) {
-  const headers = {'Authorization': `Bearer ${token}`};
+  const headers = { Authorization: `Bearer ${token}` };
   return fetchAPI('collections', 'POST', headers, collectionObj);
 }
 
 //delete user collection
 export async function deleteCollectionAPI(collectionId, token) {
-  const headers = {'Authorization': `Bearer ${token}`};
+  const headers = { Authorization: `Bearer ${token}` };
   return fetchAPI(`collections/${collectionId}`, 'DELETE', headers);
 }
 
 //update user collection
 export async function updateCollectionAPI(collectionId, token, collectionObj) {
-  const headers = {'Authorization': `Bearer ${token}`};
+  const headers = { Authorization: `Bearer ${token}` };
   return fetchAPI(`collections/${collectionId}`, 'PATCH', headers, collectionObj);
 }
 
@@ -179,16 +179,11 @@ export async function getQuizWordsAPI(wordsArr) {
 }
 
 export async function getQuizResultsAPI(token) {
-  const headers = {'Authorization': `Bearer ${token}`};
+  const headers = { Authorization: `Bearer ${token}` };
   return fetchAPI('test', 'GET', headers);
 }
 
 export async function saveQuizDataAPI(token) {
-  const headers = {'Authorization': `Bearer ${token}`};
+  const headers = { Authorization: `Bearer ${token}` };
   return fetchAPI('test', 'POST', headers);
 }
-
-
-
-
-
