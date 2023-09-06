@@ -225,6 +225,7 @@ function WordList() {
       </div>
 
       {/* words table */}
+      <div>
       <table className='wordlist__table wordlist-table' ref={pathRef}>
         <thead>
           <tr>
@@ -242,7 +243,7 @@ function WordList() {
             <th className='wordlist-table__th wordlist-table__th_btn'
               onClick={toggleLangList}
             >
-              translation ({currentInputLang.code === 'en' ? currentOutputLang.code : currentInputLang.code})
+              translation{/* ({currentInputLang.code === 'en' ? currentOutputLang.code : currentInputLang.code}) */}
             </th>
             <th>collection</th>
             <th className='wordlist-table__th'>
@@ -278,6 +279,7 @@ function WordList() {
               <td className='wordlist-table__td wordlist-table__td_emph'>{i.word}</td>
               <td>{i.translation}</td>
               <td className='wordlist-table__td'>
+
                 {/* active reference to other collection if current location is not equal*/}
                 {i.source?.length === 0 ? (
                   <span className='wordlist-table__tag'>All words</span>
@@ -288,12 +290,18 @@ function WordList() {
                         {!s.collectionName ? 'All words' : s.collectionName}
                       </span>
                     ) : (
-                      <Link className='wordlist-table__tag' to={`/account/words/collections/${s.collectionId}`} key={s.collectionId}>
+                      <Link
+                        className='wordlist-table__tag'
+                        to={`/account/words/collections/${s.collectionId}`}
+                        key={s.collectionId}
+                        title={!s.collectionName ? 'All words' : s.collectionName}
+                      >
                         {!s.collectionName ? 'All words' : s.collectionName}
                       </Link>
                     )
                   ))
                 )}
+
               </td>
               <td>
                 <div className='wordlist-table__progress'>
@@ -308,6 +316,7 @@ function WordList() {
           ))}
         </tbody>
       </table>
+      </div>
 
       {/* quiz */}
       <AnimatePresence>

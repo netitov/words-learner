@@ -4,6 +4,7 @@
   position: -webkit-sticky;
   top: 5px;
   height: 500px;
+  display: block;
 }
 
 .sidenav > ul {
@@ -45,5 +46,25 @@
 
 .sidenav__link:hover > svg, .sidenav__link_active > svg {
   color: var(--prime-yellow);
+}
+
+@media (max-width: 780px) {
+  .sidenav {
+    display: none;
+    /* width: 100%;
+    height: auto;
+    position: fixed;
+    bottom: 0;
+    top: auto;
+    z-index: 5;
+    box-shadow: -1px -4px 4px #30303061; */
+  }
+
+  .sidenav > ul {
+    min-height: auto;
+    width: 100%;
+    background-color: #315b64;
+    flex-direction: row;
+  }
 }
 

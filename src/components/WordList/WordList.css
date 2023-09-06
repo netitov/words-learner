@@ -20,12 +20,6 @@
 }
 
 .wordlist-table__row {
-  /* visibility: visible;
-  transition: all 0.3s ease-out;
-  height: auto;
-  transform-origin: top;
-  -webkit-transform-origin: top;
-  opacity: 1; */
   opacity: 1;
   animation: fade-in 0.5s ease-out;
 }
@@ -42,9 +36,7 @@
   align-items: center;
   margin-bottom: 10px;
   gap: 10px;
-  /* position: absolute;
-  top: -42px;
-  gap: 10px; */
+  flex-wrap: wrap;
 }
 
 .wordlist__btn {
@@ -118,7 +110,7 @@
 }
 
 .wordlist-table th {
-  padding: 10px 0;
+  padding: 10px 5px;
   font-weight: 300;
   text-align: left;
   color: var(--super-light-green);
@@ -130,7 +122,7 @@
 }
 
 .wordlist-table th:first-of-type {
-  width: 70px;
+  width: 35px;
 }
 
 .wordlist-table__progress-head {
@@ -151,6 +143,10 @@
   font-size: 1.1em;
   color: var(--super-light-green);
   border: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 1px 5px;
+
 }
 
 .wordlist-table__td_emph {
@@ -174,11 +170,17 @@
 
 .wordlist-table__tag {
   border-radius: 10px;
-  padding: 2px 6px;
+  padding: 3px 8px;
   background-color: var(--bck-svg-color);
   color: var(--super-light-green);
   font-size: 0.9em;
   transition: background-color 0.3s;
+
+  display: inline-block;
+  max-width: 70px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 a.wordlist-table__tag:hover {

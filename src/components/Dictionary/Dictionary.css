@@ -216,7 +216,7 @@ div.table__btn-word > .table__btn-transl_active {
 
 @media (max-width: 580px) {
   .dictionary {
-    padding: 10px 0 0 0;
+    padding: 35px 0 0 0;
   }
 
   .table__btn {

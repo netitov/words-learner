@@ -50,3 +50,10 @@
 .footer__fb-btn:hover {
   color: var(--prime-yellow);
 }
+
+@media (max-width: 780px) {
+  .footer {
+    min-height: 90px;
+    align-items: flex-start;
+  }
+}

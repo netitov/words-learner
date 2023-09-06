@@ -445,7 +445,10 @@ function Translate(props) {
                     <AiOutlineQuestionCircle size='15'/*  color='#757575' */ />
                   </button>
                 </Tooltip>
+
+
               </div>
+
             </div>
 
             <Bookmark
@@ -473,6 +476,8 @@ function Translate(props) {
                 </p>
               </Snackbar>
             }
+
+            <a href='http://translate.yandex.com/' target='_blank' className='translator__ya-link'>Translated by Yandex.Translate</a>
 
           </div>
 

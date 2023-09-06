@@ -11,6 +11,7 @@ import WordList from '../../components/WordList/WordList';
 import { accountNav } from '../../utils/constants';
 import Collections from '../../components/Collections/Collections';
 import Progress from '../../components/Progress/Progress';
+import MobNav from '../../components/Navigation/MobNav';
 
 function Account() {
 
@@ -37,6 +38,7 @@ function Account() {
   }, [location, collections]);
 
   return (
+
     <div className='account-page'>
       <AuthHeader />
       <div className='account-page__heading-box'>
@@ -51,8 +53,11 @@ function Account() {
 
       </div>
 
+      <MobNav route={getCurrentElement?.route} />
+
       <div className='account-page__box'>
         <SideNav route={getCurrentElement?.route}/>
+
         <Routes>
           <Route path='/navigation' element={<CardNav />} />
           <Route

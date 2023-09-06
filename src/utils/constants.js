@@ -40,49 +40,52 @@ export const accountNav = [
   {
     route: '/account/navigation',
     title: 'My account',
-    icon: <RxDashboard />
+    shortTitle: 'Account',
+    icon: <RxDashboard />,
+    menu: 'context'
   },
   {
     route: '/account/translator',
     title: 'Translator',
-    icon: <MdTranslate />
+    shortTitle: 'Translator',
+    icon: <MdTranslate />,
+    menu: 'mobile'
   },
   {
     route: '/account/frequency',
     title: 'Usage data',
-    icon: <GiFilmStrip />
+    shortTitle: 'Usage',
+    icon: <GiFilmStrip />,
+    menu: 'context'
   },
   {
     route: '/account/words',
     title: 'Word list',
-    icon: <BsBookmark />
+    shortTitle: 'Words',
+    icon: <BsBookmark />,
+    menu: 'mobile'
   },
   {
     route: '/account/collections',
     title: 'Collections',
-    icon: <BsBookmarks />
+    shortTitle: 'Collections',
+    icon: <BsBookmarks />,
+    menu: 'context'
   },
-  /* {
-    route: '/account/quiz',
-    title: 'Tests',
-    icon: <MdOutlineQuiz />
-  }, */
   {
     route: '/account/progress',
     title: 'Progress',
-    icon: <TfiStatsUp />
+    shortTitle: 'Progress',
+    icon: <TfiStatsUp />,
+    menu: 'mobile'
   },
   /* {
     route: '/account/info',
     title: 'Account info',
     icon: <VscAccount />
   }, */
-  /* {
-    route: '/',
-    title: 'Signout',
-    icon: <FiLogOut />
-  }, */
 ];
+
 
 export function getStyle(obj) {
 

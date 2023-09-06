@@ -254,20 +254,14 @@ function App() {
           <Route path='/signup' element={<SignupPage />} />
           <Route path='/password-reset' element={<LinkRequestPage />} />
           <Route path='/password-reset/:userId/:token' element={<PasswordResetPage />} />
-
-          {/* wait for token verification */}
-          {!isLoading &&
-            <Route path='/account/*'
-              element={
-                <ProtectedRoute isLoggedIn={isLoggedIn}>
-                  <Account />
-                </ProtectedRoute>
-              }
-            />
-          }
-
+          <Route path='/account/*'
+            element={
+              <ProtectedRoute isLoggedIn={isLoggedIn} isLoading={isLoading}>
+                <Account />
+              </ProtectedRoute>
+            }
+          />
           {!isLoading && <Route path='/*' element={<Navigate to='/' />} />}
-
         </Routes>
 
 

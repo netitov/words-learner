@@ -33,5 +33,7 @@
 @import url(/src/components/CollectionProgress/CollectionProgress.css);
 @import url(/src/components/CollectionSummary/CollectionSummary.css);
 @import url(/src/components/Progress/Progress.css);
+@import url(/src/components/Navigation/MobNav.css);
+@import url(/src/components/Navigation/DropDownNav.css);
 
 

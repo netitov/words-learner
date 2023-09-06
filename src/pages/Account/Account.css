@@ -131,6 +131,10 @@
     fill: var(--light-grey);
   }
 
+  & .translator__ya-link {
+    color: #fff;
+  }
+
   & .languages {
     color: #fff;
     background: #315b64;
