@@ -126,7 +126,6 @@ function App() {
     //fetch words
     const collections = await getCollections(token);
     if (collections.error) {
-      console.log(collections.error);
       return [];
     } else {
       return collections;
