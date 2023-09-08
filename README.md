@@ -10,18 +10,19 @@ Backend repository: <https://github.com/netitov/words-learner-api>
 ### Features and content
 
 1. Translate and compare frequency
+   
 ![translate](https://github.com/netitov/words-learner/blob/main/src/images/translate.png)
 
-2. Check usages: in how many percent of movies word appears
+3. Check usages: in how many percent of movies word appears
 ![usage](https://github.com/netitov/words-learner/blob/main/src/images/frequency.png)
 
-3. Take the tests
+4. Take the tests
 ![quiz](https://github.com/netitov/words-learner/blob/main/src/images/quiz.png)
 
-4. Control the learning process
+5. Control the learning process
 ![wordlist](https://github.com/netitov/words-learner/blob/main/src/images/wordlist.png)
 
-5. Check progress
+6. Check progress
 ![progress](https://github.com/netitov/words-learner/blob/main/src/images/progress.png)
 
 ### Technologies
