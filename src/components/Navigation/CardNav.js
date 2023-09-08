@@ -1,11 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { accountNav } from '../../utils/constants';
+import { useSelector } from 'react-redux';
 
 function CardNav() {
+
+  const userData = useSelector((state) => state.user.userData);
+
   return (
     <div className='cardnav-wrapper'>
-      <h2>Welcome, user13!</h2>
+      <h2>{userData.userName !== '' ? `Welcome, ${userData.userName}!` : 'Welcome!'}</h2>
       <nav className='cardnav'>
         <ul>
           {accountNav
