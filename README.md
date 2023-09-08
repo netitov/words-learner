@@ -14,15 +14,19 @@ Backend repository: <https://github.com/netitov/words-learner-api>
 ![translate](https://github.com/netitov/words-learner/blob/main/src/images/translate.png)
 
 3. Check usages: in how many percent of movies word appears
+
 ![usage](https://github.com/netitov/words-learner/blob/main/src/images/frequency.png)
 
-4. Take the tests
+5. Take the tests
+
 ![quiz](https://github.com/netitov/words-learner/blob/main/src/images/quiz.png)
 
-5. Control the learning process
+7. Control the learning process
+
 ![wordlist](https://github.com/netitov/words-learner/blob/main/src/images/wordlist.png)
 
-6. Check progress
+9. Check progress
+
 ![progress](https://github.com/netitov/words-learner/blob/main/src/images/progress.png)
 
 ### Technologies
