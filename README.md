@@ -1,28 +1,34 @@
 # Words Learner
 
-![Project image](https://github.com/T-Nick-13/words-learner/blob/main/src/images/main-page.png)
+![Project image](https://github.com/netitov/words-learner/blob/main/src/images/main-page.png)
 
 Service helps to learn words and master languages efficiently: translate, controll process, check word usages and much more
 
-View the project: <https://wordslearner.site/>
+View the project: <https://wordslearner.site/>  
+
 Backend repository: <https://github.com/netitov/words-learner-api>
 
 ### Features and content
 
 1. Translate and compare frequency
-![translate](https://github.com/T-Nick-13/words-learner/blob/main/src/images/translate.png)
+   
+![translate](https://github.com/netitov/words-learner/blob/main/src/images/translate.png)
 
-2. Check usages: in how many percent of movies word appears
-![usage](https://github.com/T-Nick-13/words-learner/blob/main/src/images/frequency.png)
+3. Check usages: in how many percent of movies word appears
 
-3. Take the tests
-![quiz](https://github.com/T-Nick-13/words-learner/blob/main/src/images/quiz.png)
+![usage](https://github.com/netitov/words-learner/blob/main/src/images/frequency.png)
 
-4. Control the learning process
-![wordlist](https://github.com/T-Nick-13/words-learner/blob/main/src/images/wordlist.png)
+5. Take the tests
 
-5. Check progress
-![progress](https://github.com/T-Nick-13/words-learner/blob/main/src/images/progress.png)
+![quiz](https://github.com/netitov/words-learner/blob/main/src/images/quiz.png)
+
+7. Control the learning process
+
+![wordlist](https://github.com/netitov/words-learner/blob/main/src/images/wordlist.png)
+
+9. Check progress
+
+![progress](https://github.com/netitov/words-learner/blob/main/src/images/progress.png)
 
 ### Technologies
 
