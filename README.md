@@ -5,6 +5,7 @@
 Service helps to learn words and master languages efficiently: translate, controll process, check word usages and much more
 
 View the project: <https://wordslearner.site/>  
+
 Backend repository: <https://github.com/netitov/words-learner-api>
 
 ### Features and content
