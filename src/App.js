@@ -81,7 +81,6 @@ function App() {
   useEffect(() => {
     if (!langsLoaded) {
       const userLang = JSON.parse(localStorage.getItem('userLang'));
-      console.log(userLang);
       if (userLang) {
         dispatch(selectOutputLang(userLang));
       } else {
@@ -113,7 +112,6 @@ function App() {
     //fetch words
     const wordList = await getWordList(token);
     if (wordList.error) {
-      console.log(wordList.error);
       return [];
     } else {
       return wordList;
